@@ -10,10 +10,5 @@ namespace SorayaManagement.Domain.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual Company UserCompany { get; set; }
         public int CompanyId { get; set; }
-
-        public User()
-        {
-            NormalizedName = Name.Trim().ToUpper();
-        }
     }
 }
