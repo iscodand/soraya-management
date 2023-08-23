@@ -10,7 +10,7 @@ namespace SorayaManagement.Infrastructure.Identity
 {
     public static class ServicesExtension
     {
-        public static IServiceCollection AddIdentitySetup(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddIdentitySetup(this IServiceCollection services)
         {
             // Dependency Injection
             services.AddScoped<IAuthenticationService, AuthenticationService>();

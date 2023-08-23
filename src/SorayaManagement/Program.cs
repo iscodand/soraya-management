@@ -1,16 +1,19 @@
 using SorayaManagement.Infrastructure.Data;
 using SorayaManagement.Infrastructure.Identity;
+using SorayaManagement.Infrastructure.Identity.Contracts;
+using SorayaManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Dependency Injection
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
 // Setting up Database
 builder.Services.AddDatabaseContext(builder.Configuration);
 
 // Setting up Identity
-builder.Services.AddIdentitySetup(builder.Configuration);
+builder.Services.AddIdentitySetup();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -25,7 +28,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
