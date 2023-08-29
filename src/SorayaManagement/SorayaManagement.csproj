@@ -13,12 +13,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference
-		  Include="..\SorayaManagement.Infrastructure.Ioc\SorayaManagement.Infrastructure.Ioc.csproj" />
+		<ProjectReference Include="..\SorayaManagement.Infrastructure.Ioc\SorayaManagement.Infrastructure.Ioc.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Controllers\" />
+		<Folder Include="NewFolder\" />
 		<Folder Include="Views\" />
 	</ItemGroup>
 
