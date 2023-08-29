@@ -4,6 +4,6 @@ namespace SorayaManagement.Infrastructure.Identity.Contracts
 {
     public interface IAuthenticatedUserService
     {
-        public string GetAuthenticatedUserName();
+        public Task<User> GetAuthenticatedUser();
     }
 }
