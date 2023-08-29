@@ -4,10 +4,11 @@ namespace SorayaManagement.Infrastructure.Identity.Dtos
 {
     public class LoginUserDto
     {
+        [Required(ErrorMessage = "Seu nome de usuário é obrigatório.")]
         public string UserName { get; set; }
 
+        [Required(ErrorMessage = "Sua senha é obrigatória.")]
         [DataType(DataType.Password)]
-        [StringLength(32, MinimumLength = 8)]
         public string Password { get; set; }
     }
 }
