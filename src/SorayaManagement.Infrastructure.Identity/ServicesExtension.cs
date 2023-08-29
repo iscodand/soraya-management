@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ namespace SorayaManagement.Infrastructure.Identity
             // Dependency Injection
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            services.AddIdentityCore<User>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 // Password Options
                 options.Password.RequiredLength = 8;
@@ -28,6 +29,12 @@ namespace SorayaManagement.Infrastructure.Identity
                 // User Options
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Set application login url path
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/auth/login");
+            });
 
             return services;
         }
