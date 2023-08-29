@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SorayaManagement.Infrastructure.Identity.Contracts;
 using SorayaManagement.Infrastructure.Identity.Dtos;
@@ -16,6 +17,7 @@ namespace SorayaManagement.Controllers
         }
 
         // auth/cadastro/
+        [Authorize]
         [HttpGet]
         [Route("cadastro/")]
         public IActionResult Register()
@@ -23,6 +25,7 @@ namespace SorayaManagement.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("cadastro/")]
@@ -35,18 +38,37 @@ namespace SorayaManagement.Controllers
 
                 if (result.IsSuccess)
                 {
-                    return Redirect("login");
+                    return Redirect(nameof(Login));
                 }
             }
 
             return View();
         }
 
-        // auth/cadastro/
+        // auth/login
         [HttpGet]
         [Route("login/")]
         public IActionResult Login()
         {
+            return View();
+        }
+
+        // auth/login
+        [HttpPost]
+        [Route("login/")]
+        public async Task<IActionResult> Login(LoginUserDto loginUserDto)
+        {
+            if (ModelState.IsValid)
+            {
+                BaseResponse result = await _authenticationService.LoginAsync(loginUserDto);
+                ViewData["Message"] = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction("home", "Home");
+                }
+            }
+
             return View();
         }
 
