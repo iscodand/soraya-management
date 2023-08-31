@@ -1,34 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.ViewModels;
 
 namespace SorayaManagement.Controllers
 {
-    [Route("")]
+    [Route("/   ")]
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly IAuthenticatedUserService _authenticatedUserService;
-
-        public HomeController(IAuthenticatedUserService authenticatedUserService)
+        public HomeController()
         {
-            _authenticatedUserService = authenticatedUserService;
+
         }
 
-        [Route("home/")]
-        public async Task<IActionResult> Home()
+        [HttpGet]
+        [Route("/")]
+        public IActionResult Home()
         {
-            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUser();
-
-            HomeViewModel viewModel = new()
-            {
-                UserName = authenticatedUser.Name,
-                CompanyName = authenticatedUser.UserCompany.Name
-            };
-
-            return View(viewModel);
+            return View();
         }
     }
 }
