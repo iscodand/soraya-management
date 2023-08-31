@@ -31,10 +31,10 @@ namespace SorayaManagement.Controllers
             ICollection<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
             // todo => improve this logic (maybe with automapper inside service layer)
-            List<CustomerHomeViewModel> viewModelCollection = new();
+            List<GetCustomersViewModel> viewModelCollection = new();
             foreach (Customer customer in customers)
             {
-                CustomerHomeViewModel viewModel = new()
+                GetCustomersViewModel viewModel = new()
                 {
                     Name = customer.Name,
                     CreatedBy = customer.User.Name
