@@ -28,12 +28,16 @@ namespace SorayaManagement.Infrastructure.Identity
 
                 // User Options
                 options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
 
             // Set application login url path
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.LoginPath = new PathString("/auth/login");
+                options.SlidingExpiration = true;
             });
 
             return services;
