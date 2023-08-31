@@ -15,10 +15,10 @@ namespace SorayaManagement.Services
             _userRepository = userRepository;
         }
 
-        public async Task<User> GetAuthenticatedUser()
+        public async Task<User> GetAuthenticatedUserAsync()
         {
-            string userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-            User authenticatedUser = await _userRepository.GetUserByUsername(userName);
+            string username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            User authenticatedUser = await _userRepository.GetUserByUsernameAsync(username);
             return authenticatedUser;
         }
     }
