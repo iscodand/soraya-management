@@ -14,11 +14,12 @@ namespace SorayaManagement.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task<User> GetUserByUsername(string username)
+        public async Task<User> GetUserByUsernameAsync(string username)
         {
             return await _context.Users.AsNoTracking()
-                                               .Include(x => x.UserCompany).AsNoTracking()
-                                               .FirstOrDefaultAsync(x => x.NormalizedUserName == username.Trim().ToUpper());
+                                       .Include(x => x.UserCompany).AsNoTracking()
+                                       .FirstOrDefaultAsync(x => x.NormalizedUserName == username.Trim().ToUpper())
+                                       .ConfigureAwait(false);
         }
     }
 }
