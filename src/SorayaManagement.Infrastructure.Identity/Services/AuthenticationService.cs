@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using SorayaManagement.Domain.Entities;
 using SorayaManagement.Infrastructure.Identity.Contracts;
 using SorayaManagement.Infrastructure.Identity.Dtos;
 using SorayaManagement.Infrastructure.Identity.Responses;
-using System.Diagnostics;
 
 namespace SorayaManagement.Infrastructure.Identity.Services
 {
@@ -14,8 +14,8 @@ namespace SorayaManagement.Infrastructure.Identity.Services
         private readonly IAuthenticatedUserService _authenticatedUserService;
 
         public AuthenticationService(UserManager<User> userManager,
-                                                       IAuthenticatedUserService authenticatedUserService,
-                                                       SignInManager<User> signInManager)
+                                     IAuthenticatedUserService authenticatedUserService,
+                                     SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _authenticatedUserService = authenticatedUserService;
@@ -24,8 +24,7 @@ namespace SorayaManagement.Infrastructure.Identity.Services
 
         public async Task<BaseResponse> RegisterAsync(RegisterUserDto registerUserDto)
         {
-            // temporary for tests
-            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUser();
+            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
 
             if (registerUserDto == null)
             {
@@ -79,7 +78,6 @@ namespace SorayaManagement.Infrastructure.Identity.Services
 
             SignInResult signIn = await _signInManager.PasswordSignInAsync(user, loginUserDto.Password!,
                                                                            isPersistent: false, lockoutOnFailure: false);
-
             if (!signIn.Succeeded)
             {
                 return new BaseResponse()
