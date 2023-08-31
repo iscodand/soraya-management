@@ -2,12 +2,16 @@ using SorayaManagement.Infrastructure.Data;
 using SorayaManagement.Infrastructure.Identity;
 using SorayaManagement.Infrastructure.Identity.Contracts;
 using SorayaManagement.Services;
+using SorayaManagement.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Dependency Injection
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+
+// Setting up ApplicationLayer
+builder.Services.AddApplicationServices();
 
 // Setting up Database
 builder.Services.AddDatabaseContext(builder.Configuration);
