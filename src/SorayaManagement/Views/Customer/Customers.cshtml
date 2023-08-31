@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Clientes";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container mb-3">
+    <a class="btn btn-primary" asp-area="" asp-controller="Customer" asp-action="Create">Novo Cliente</a>
+</section>
