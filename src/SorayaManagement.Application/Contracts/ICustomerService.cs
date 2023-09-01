@@ -7,7 +7,7 @@ namespace SorayaManagement.Application.Contracts
 {
     public interface ICustomerService
     {
-        public Task<BaseResponse> CreateCustomerAsync(CreateCustomerDto createCustomerDto);
+        public Task<BaseResponse> CreateCustomerAsync(CreateCustomerDto createCustomerDto, User authenticatedUser);
         public Task<ICollection<Customer>> GetCustomersByCompanyAsync(int companyId);
     }
 }

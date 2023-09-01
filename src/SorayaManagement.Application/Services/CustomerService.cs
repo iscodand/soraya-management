@@ -2,6 +2,7 @@ using SorayaManagement.Application.Contracts;
 using SorayaManagement.Application.Dtos.Customer;
 using SorayaManagement.Domain.Entities;
 using SorayaManagement.Infrastructure.Data.Contracts;
+using SorayaManagement.Infrastructure.Identity.Contracts;
 using SorayaManagement.Infrastructure.Identity.Responses;
 
 namespace SorayaManagement.Application.Services
@@ -15,8 +16,7 @@ namespace SorayaManagement.Application.Services
             _customerRepository = customerRepository;
         }
 
-
-        public async Task<BaseResponse> CreateCustomerAsync(CreateCustomerDto createCustomerDto)
+        public async Task<BaseResponse> CreateCustomerAsync(CreateCustomerDto createCustomerDto, User authenticatedUser)
         {
             if (createCustomerDto == null)
             {
@@ -30,7 +30,8 @@ namespace SorayaManagement.Application.Services
             Customer newCustomer = new()
             {
                 Name = createCustomerDto.Name,
-                UserId = createCustomerDto.CreatedBy
+                UserId = authenticatedUser.Id,
+                CompanyId = authenticatedUser.CompanyId
             };
 
             await _customerRepository.CreateAsync(newCustomer);
@@ -49,7 +50,7 @@ namespace SorayaManagement.Application.Services
                 return null;
             }
 
-            ICollection<Customer> customers = await _customerRepository.GetCustomersByCompany(companyId);
+            ICollection<Customer> customers = await _customerRepository.GetCustomersByCompanyAsync(companyId);
 
             return customers;
         }
