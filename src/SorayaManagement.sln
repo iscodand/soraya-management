@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SorayaManagement", "SorayaManagement\SorayaManagement.csproj", "{E5F6F8EF-25BD-48AC-80FB-098F220A87BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SorayaManagement.Application", "SorayaManagement.Application\SorayaManagement.Application.csproj", "{9E020BFF-2BFF-43B7-99D8-6387A1E5ED2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SorayaManagement.Domain", "SorayaManagement.Domain\SorayaManagement.Domain.csproj", "{F9E02DD1-DBF0-4E43-BBEC-F9A040752F02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SorayaManagement.Infrastructure.Data", "SorayaManagement.Infrastructure.Data\SorayaManagement.Infrastructure.Data.csproj", "{1F03530C-87F3-41C3-90AB-E6A3DA538674}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SorayaManagement.Infrastructure.Identity", "SorayaManagement.Infrastructure.Identity\SorayaManagement.Infrastructure.Identity.csproj", "{1AF9432A-7BC6-452B-A3BF-704B9998FEF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SorayaManagement.Infrastructure.Ioc", "SorayaManagement.Infrastructure.Ioc\SorayaManagement.Infrastructure.Ioc.csproj", "{B9181930-33D9-4100-AE7F-E56DFC90D3AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5F6F8EF-25BD-48AC-80FB-098F220A87BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5F6F8EF-25BD-48AC-80FB-098F220A87BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5F6F8EF-25BD-48AC-80FB-098F220A87BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5F6F8EF-25BD-48AC-80FB-098F220A87BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E020BFF-2BFF-43B7-99D8-6387A1E5ED2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E020BFF-2BFF-43B7-99D8-6387A1E5ED2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E020BFF-2BFF-43B7-99D8-6387A1E5ED2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E020BFF-2BFF-43B7-99D8-6387A1E5ED2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9E02DD1-DBF0-4E43-BBEC-F9A040752F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9E02DD1-DBF0-4E43-BBEC-F9A040752F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9E02DD1-DBF0-4E43-BBEC-F9A040752F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9E02DD1-DBF0-4E43-BBEC-F9A040752F02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F03530C-87F3-41C3-90AB-E6A3DA538674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F03530C-87F3-41C3-90AB-E6A3DA538674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F03530C-87F3-41C3-90AB-E6A3DA538674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F03530C-87F3-41C3-90AB-E6A3DA538674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF9432A-7BC6-452B-A3BF-704B9998FEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF9432A-7BC6-452B-A3BF-704B9998FEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF9432A-7BC6-452B-A3BF-704B9998FEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF9432A-7BC6-452B-A3BF-704B9998FEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9181930-33D9-4100-AE7F-E56DFC90D3AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9181930-33D9-4100-AE7F-E56DFC90D3AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9181930-33D9-4100-AE7F-E56DFC90D3AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9181930-33D9-4100-AE7F-E56DFC90D3AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47FE1BA6-ECCC-4E34-83A4-2EF79D8E79DA}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,35 @@
+@model List<SorayaManagement.ViewModels.GetCustomersViewModel>;
+
+@{
+    ViewData["Title"] = "Clientes";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Customer" asp-action="Create">Novo Cliente</a>
+
+    <table class="table styled-table">
+        <caption>Total de clientes encontrados: <b>@Model.Count</b></caption>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome do Cliente</th>
+                <th>Adicionado por</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.ToList())
+            {
+                <tr>
+                    <th>@customer.Id</th>
+                    <td>@customer.Name</td>
+                    <td>@customer.CreatedBy</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</section>

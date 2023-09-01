@@ -1,0 +1,99 @@
+* {
+    font-family: 'Cabin', sans-serif;
+}
+
+/* Navbar Section */
+
+.navbar {
+    background-color: transparent !important;
+}
+
+.navbar .navbar-brand {
+    color: #009879;
+    font-weight: bolder;
+    font-size: 1.3em;
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link:after {
+    content: '';
+    opacity: 0;
+    transition: all 0.2s;
+    height: 2px;
+    width: 100%;
+    background-color: #009879;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.nav-link:hover::after {
+    opacity: 1;
+}
+
+/* Styled Table Section */
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+/* Some Elements */
+
+.btn-primary-custom {
+    color: #ffffff;
+    background-color: #009879;
+    font-weight: bolder;
+}
+
+.btn-primary-custom:active {
+    background-color: #009879;
+}
+
+.btn-primary-custom:hover {
+    color: #ffffff;
+    background-color: #3c9482
+}
+
+.fa-user {
+    color: #009879;
+}
+
+#authenticated-user-name {
+    color: #009879;
+}

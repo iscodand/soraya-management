@@ -1,0 +1,37 @@
+@model List<SorayaManagement.ViewModels.GetMealsViewModel>;
+
+@{
+    ViewData["Title"] = "Clientes";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Meal" asp-action="Create">Novo Sabor</a>
+
+    <table class="table styled-table">
+        <caption>Total de sabores encontrados: <b>@Model.Count</b></caption>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Descrição do Sabor</th>
+                <th>Acompanhamentos</th>
+                <th>Adicionado por</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var meal in Model.ToList())
+            {
+                <tr>
+                    <th>@meal.Id</th>
+                    <td>@meal.Description</td>
+                    <td>@meal.Accompaniments</td>
+                    <td>@meal.CreatedBy</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</section>
