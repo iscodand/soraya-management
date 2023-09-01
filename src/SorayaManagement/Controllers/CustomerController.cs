@@ -14,20 +14,20 @@ namespace SorayaManagement.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomerService _customerService;
-        private readonly IAuthenticatedUserService _authenticatedUserService;
+        private readonly ISessionService _sessionService;
 
         public CustomerController(ICustomerService customerService,
-                                                  IAuthenticatedUserService authenticatedUserService)
+                                  ISessionService sessionService)
         {
             _customerService = customerService;
-            _authenticatedUserService = authenticatedUserService;
+            _sessionService = sessionService;
         }
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Customers()
         {
-            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
+            User authenticatedUser = _sessionService.RetrieveUserSession();
             ICollection<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
             // todo => improve this logic (maybe with automapper inside service layer)
@@ -36,6 +36,7 @@ namespace SorayaManagement.Controllers
             {
                 GetCustomersViewModel viewModel = new()
                 {
+                    Id = customer.Id,
                     Name = customer.Name,
                     CreatedBy = customer.User.Name
                 };
@@ -55,19 +56,19 @@ namespace SorayaManagement.Controllers
 
         [HttpPost]
         [Route("novo/")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateCustomerDto createCustomerDto)
         {
-            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
-            createCustomerDto.CreatedBy = authenticatedUser.Id;
-
             if (ModelState.IsValid)
             {
-                BaseResponse response = await _customerService.CreateCustomerAsync(createCustomerDto);
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse response = await _customerService.CreateCustomerAsync(createCustomerDto, authenticatedUser);
                 ViewData["Message"] = response.Message;
 
                 if (response.IsSuccess)
                 {
-                    return RedirectToAction(nameof(Customer));
+                    ViewData["IsSuccess"] = true;
+                    return View();
                 }
             }
 
