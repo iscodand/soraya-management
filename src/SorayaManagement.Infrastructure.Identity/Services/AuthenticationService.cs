@@ -24,7 +24,7 @@ namespace SorayaManagement.Infrastructure.Identity.Services
 
         public async Task<BaseResponse> RegisterAsync(RegisterUserDto registerUserDto)
         {
-            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
+            // User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
 
             if (registerUserDto == null)
             {
@@ -41,7 +41,7 @@ namespace SorayaManagement.Infrastructure.Identity.Services
                 NormalizedName = registerUserDto.Name.Trim().ToUpper(),
                 UserName = registerUserDto.UserName,
                 Email = registerUserDto.Email,
-                CompanyId = authenticatedUser.CompanyId
+                CompanyId = 1
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerUserDto.Password);
