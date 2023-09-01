@@ -21,6 +21,8 @@ namespace SorayaManagement.Infrastructure.Data
             // Repositories Dependency Injection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IMealRepository, MealRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             return services;
         }
