@@ -21,6 +21,7 @@ namespace SorayaManagement.Infrastructure.Data.DataContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<User>(entity =>
             {
                 entity.ToTable(name: "Users");
@@ -66,6 +67,27 @@ namespace SorayaManagement.Infrastructure.Data.DataContext
                 {
                     Id = 2,
                     Description = "Dinheiro"
+                }
+            );
+
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "ADMIN"
+                },
+                new IdentityRole
+                {
+                    Name = "Manager",
+                    NormalizedName = "MANAGER",
+                    ConcurrencyStamp = "MANAGER"
+                },
+                new IdentityRole
+                {
+                    Name = "Employee",
+                    NormalizedName = "EMPLOYEE",
+                    ConcurrencyStamp = "EMPLOYEE"
                 }
             );
         }
