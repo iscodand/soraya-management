@@ -9,6 +9,8 @@ namespace SorayaManagement.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IMealService, MealService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
         }
