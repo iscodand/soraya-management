@@ -47,6 +47,29 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "130da2af-5e08-4486-952e-21fa1021f0e0",
+                            ConcurrencyStamp = "ADMIN",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "51ba88dd-5594-4c42-a276-5b5aeccc24d8",
+                            ConcurrencyStamp = "MANAGER",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "c662b2cb-77af-4c3a-b341-7674b05aa49b",
+                            ConcurrencyStamp = "EMPLOYEE",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -185,7 +208,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -221,7 +244,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Property<string>("Accompaniments")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -254,7 +277,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -460,44 +483,54 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("SorayaManagement.Domain.Entities.Customer", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", null)
+                    b.HasOne("SorayaManagement.Domain.Entities.Company", "Company")
                         .WithMany("Customers")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SorayaManagement.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("SorayaManagement.Domain.Entities.Meal", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", null)
+                    b.HasOne("SorayaManagement.Domain.Entities.Company", "Company")
                         .WithMany("Meals")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SorayaManagement.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("SorayaManagement.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", null)
+                    b.HasOne("SorayaManagement.Domain.Entities.Company", "Company")
                         .WithMany("Orders")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SorayaManagement.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SorayaManagement.Domain.Entities.Meal", "Meal")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -511,6 +544,8 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.HasOne("SorayaManagement.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("Customer");
 
@@ -541,6 +576,16 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("SorayaManagement.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("SorayaManagement.Domain.Entities.Meal", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
