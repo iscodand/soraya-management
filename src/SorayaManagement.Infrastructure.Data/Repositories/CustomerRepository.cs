@@ -14,13 +14,13 @@ namespace SorayaManagement.Infrastructure.Data.Repositories
             _customers = context.Customers;
         }
 
-        public async Task<ICollection<Customer>> GetCustomersByCompany(int companyId)
+        public async Task<ICollection<Customer>> GetCustomersByCompanyAsync(int companyId)
         {
             return await _customers.AsNoTracking()
-                                                   .Include(x => x.User)
-                                                   .ThenInclude(x => x.UserCompany).AsNoTracking()
-                                                   .Where(x => x.User.CompanyId == companyId)
-                                                   .ToListAsync();
+                                   .Include(x => x.User).AsNoTracking()
+                                   .Include(x => x.Company).AsNoTracking()
+                                   .Where(x => x.CompanyId == companyId)
+                                   .ToListAsync();
         }
     }
 }
