@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SorayaManagement.Infrastructure.Identity.Contracts;
 using SorayaManagement.Infrastructure.Identity.Dtos;
@@ -10,14 +9,15 @@ namespace SorayaManagement.Controllers
     public class AuthenticationController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly ISessionService _sessionService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService, ISessionService sessionService)
         {
             _authenticationService = authenticationService;
+            _sessionService = sessionService;
         }
 
         // auth/cadastro/
-        [Authorize]
         [HttpGet]
         [Route("cadastro/")]
         public IActionResult Register()
@@ -25,7 +25,6 @@ namespace SorayaManagement.Controllers
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("cadastro/")]
