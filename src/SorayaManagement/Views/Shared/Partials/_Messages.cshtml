@@ -6,7 +6,10 @@
             @ViewData["Message"]
         </div>
     }
-    <div class="alert alert-danger small" role="alert">
-        @ViewData["Message"]
-    </div>
+    else
+    {
+        <div class="alert alert-danger small" role="alert">
+            @ViewData["Message"]
+        </div>
+    }
 }

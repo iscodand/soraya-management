@@ -1,34 +1,43 @@
-@model SorayaManagement.Domain.Entities.User;
+@model SorayaManagement.ViewModels.GetUserDataViewModel;
 
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg mb-5">
     <div class="container">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Home"><b>@Model.UserCompany.Name</b></a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <button class="border-0 bg-transparent navbar-brand me-2" style="margin-top: -1px;" asp-area=""
+            asp-controller="Home" asp-action="Home">
+            @Model.CompanyName
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample"
+            aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarButtonsExample">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
+
                     <a class="nav-link" asp-area="" asp-controller="" asp-action="">Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Meal" asp-action="Meals">Sabores</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Customers">Clientes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="" asp-action="">Sabores</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="" asp-action="">Funcionários</a>
                 </li>
             </ul>
-            <div class="d-flex">
-                <li class="nav-item d-flex">
-                    <a class="nav-link me-4">Olá, <b>@Model.Name</b></a>
-                    <button class="btn btn-sm btn-danger" type="submit">Logout</button>
-                </li>
+
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-user"></i>
+                <button id="authenticated-user-name" class="px-3 me-2 border-0 bg-transparent">
+                    <b>@Model.Name</b>
+                </button>
+                <button type="button" class="btn btn-danger btn-sm me-3">
+                    Sair
+                </button>
             </div>
         </div>
     </div>
