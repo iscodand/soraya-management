@@ -10,7 +10,7 @@ namespace SorayaManagement.Domain.Entities
         [Column(TypeName = "decimal(18,4)")]
         public decimal Price { get; set; }
         public bool IsPaid { get; set; }
-        public DateTime PaidAt { get; set; }
+        public DateTime? PaidAt { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual PaymentType PaymentType { get; set; }
@@ -23,5 +23,9 @@ namespace SorayaManagement.Domain.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual Customer Customer { get; set; }
         public int CustomerId { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual Company Company { get; set; }
+        public int CompanyId { get; set; }
     }
 }
