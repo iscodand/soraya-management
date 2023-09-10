@@ -23,6 +23,7 @@ namespace SorayaManagement.Infrastructure.Data
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IMealRepository, MealRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
 
             return services;
         }
