@@ -1,31 +1,35 @@
 using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dtos;
+using SorayaManagement.Application.Dtos.Order;
+using SorayaManagement.Application.Responses;
 using SorayaManagement.Domain.Entities;
 using SorayaManagement.Infrastructure.Data.Contracts;
-using SorayaManagement.Infrastructure.Identity.Responses;
 
 namespace SorayaManagement.Application.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IPaymentTypeRepository _paymentTypeRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository,
+                            IPaymentTypeRepository paymentTypeRepository)
         {
             _orderRepository = orderRepository;
+            _paymentTypeRepository = paymentTypeRepository;
         }
 
-        public async Task<BaseResponse> CreateOrderAsync(CreateOrderDto createOrderDto, User authenticatedUser)
+        public async Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto, User authenticatedUser)
         {
             if (createOrderDto == null)
             {
-                return new BaseResponse()
+                return new BaseResponse<Order>()
                 {
                     Message = "O Pedido não pode ser nulo.",
-                    IsSuccess = false
+                    IsSuccess = false,
                 };
             }
 
+            // todo => add validation rules
             Order order = new()
             {
                 Description = createOrderDto.Description,
@@ -42,9 +46,40 @@ namespace SorayaManagement.Application.Services
 
             await _orderRepository.CreateAsync(order);
 
-            return new BaseResponse()
+            return new BaseResponse<Order>()
             {
                 Message = "Pedido criado com sucesso.",
+                IsSuccess = true
+            };
+        }
+
+        // todo => make a BaseResponse who returns Generic type (improve information result)
+        public async Task<BaseResponse<Order>> GetOrderDetailsAsync(int orderId, User authenticatedUser)
+        {
+            Order order = await _orderRepository.GetOrderDetailsAsync(orderId);
+
+            if (order == null)
+            {
+                return new BaseResponse<Order>()
+                {
+                    Message = "O pedido não foi encontrado.",
+                    IsSuccess = false,
+                };
+            }
+
+            if (authenticatedUser.CompanyId != order.CompanyId)
+            {
+                return new BaseResponse<Order>()
+                {
+                    Message = "O pedido não foi encontrado.",
+                    IsSuccess = false
+                };
+            }
+
+            return new BaseResponse<Order>()
+            {
+                Data = order,
+                Message = $"Pedido {order.Id} encontrado com sucesso.",
                 IsSuccess = true
             };
         }
@@ -59,6 +94,36 @@ namespace SorayaManagement.Application.Services
             ICollection<Order> orders = await _orderRepository.GetOrdersByCompanyAsync(companyId);
 
             return orders;
+        }
+
+        public async Task<ICollection<PaymentType>> GetPaymentTypesAsync()
+        {
+            return await _paymentTypeRepository.GetAllAsync();
+        }
+
+        public async Task<BaseResponse<Order>> MakeOrderPaymentAsync(int orderId, User authenticatedUser)
+        {
+            Order order = await _orderRepository.GetOrderDetailsAsync(orderId);
+
+            if (authenticatedUser.CompanyId != order.CompanyId)
+            {
+                return new BaseResponse<Order>()
+                {
+                    Message = "Este pedido não pertence a sua empresa. Verifique e tente novamente.",
+                    IsSuccess = true
+                };
+            }
+
+            order.IsPaid = true;
+            order.PaidAt = DateTime.Now;
+
+            await _orderRepository.UpdateAsync(order);
+
+            return new BaseResponse<Order>()
+            {
+                Message = "Pedido atualizado com sucesso.",
+                IsSuccess = true
+            };
         }
     }
 }
