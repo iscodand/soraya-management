@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-namespace SorayaManagement.Application.Dtos
+namespace SorayaManagement.Application.Dtos.Order
 {
     public class CreateOrderDto
     {
@@ -10,5 +9,6 @@ namespace SorayaManagement.Application.Dtos
         public int PaymentTypeId { get; set; }
         public int MealId { get; set; }
         public int CustomerId { get; set; }
+        public CreateOrderDropdown CreateOrderDropdown { get; set; }
     }
 }
