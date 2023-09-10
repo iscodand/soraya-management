@@ -1,7 +1,7 @@
 @model SorayaManagement.ViewModels.GetUserDataViewModel;
 
 <nav class="navbar navbar-expand-lg mb-5">
-    <div class="container">
+    <div class="container-fluid">
 
         <button class="border-0 bg-transparent navbar-brand me-2" style="margin-top: -1px;" asp-area=""
             asp-controller="Home" asp-action="Home">
@@ -16,8 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarButtonsExample">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-
-                    <a class="nav-link" asp-area="" asp-controller="" asp-action="">Pedidos</a>
+                    <a class="nav-link" asp-area="" asp-controller="Order" asp-action="Orders">Pedidos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Meal" asp-action="Meals">Sabores</a>

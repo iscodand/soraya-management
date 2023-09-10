@@ -5,20 +5,27 @@
 /* Navbar Section */
 
 .navbar {
-    background-color: transparent !important;
+    background-color: #1d5348 !important;
 }
 
 .navbar .navbar-brand {
-    color: #009879;
+    color: #dddddd;
     font-weight: bolder;
     font-size: 1.3em;
 }
 
 .nav-link {
     position: relative;
+    color: #dddddd;
+    font-weight: bolder;
+}
+
+.nav-link:hover {
+    color: #dddddd;
 }
 
 .nav-link:after {
+    color: #dddddd;
     content: '';
     opacity: 0;
     transition: all 0.2s;
@@ -91,9 +98,13 @@
 }
 
 .fa-user {
-    color: #009879;
+    color: #ffffff;
 }
 
 #authenticated-user-name {
-    color: #009879;
+    color: #ffffff;
+}
+
+.fa-circle-info {
+    color: #386d63;
 }

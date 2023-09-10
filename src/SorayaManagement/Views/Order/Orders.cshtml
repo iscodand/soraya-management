@@ -1,0 +1,97 @@
+@model List<SorayaManagement.ViewModels.GetOrdersViewModel>;
+
+@{
+    ViewData["Title"] = "Pedidos";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Order" asp-action="Create">Novo
+                Pedido</a>
+        </div>
+
+        <!-- Filtering stuff -->
+        <div class="form-outline col-md-6 mb-4">
+            <form asp-controller="Order" asp-action="Orders" method="GET">
+                <label for="isPaid" class="form-label">Filtrar por pagamento:</label>
+                <select id="isPaid" name="isPaid" class="form-select form-control">
+                    <option value="true">Pagos</option>
+                    <option value="false">Não Pagos</option>
+                </select>
+                <button type="submit" class="btn btn-primary-custom">Filtrar</button>
+            </form>
+        </div>
+
+    </div>
+
+    <table class="table styled-table">
+        <caption>Total de pedidos encontrados: <b>@Model.Count</b></caption>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Cliente</th>
+                <th>Sabor</th>
+                <th>Valor</th>
+                <th>Forma de Pagamento</th>
+                <th>Pago</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.ToList())
+            {
+                <tr>
+                    <th>
+                        <a href="pedidos/detalhes/@order.Id">
+                            <i class="fa-solid fa-circle-info fa-lg"></i>
+                        </a>
+                    </th>
+                    <td>@order.Customer</td>
+                    <td>@order.Meal</td>
+                    <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
+                    <td>@order.PaymentType</td>
+                    <td>
+                        @if (!order.IsPaid)
+                        {
+                            <form asp-action="MarkOrderAsPaid" method="post">
+                                <input type="hidden" name="orderId" value="@order.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                            </form>
+                        }
+                        else
+                        {
+                            @(order.IsPaid ? "Sim" : "Não")
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4">
+                    <table class="table mb-0">
+                        <thead>
+                            <th>Total de lucro do Dia: </th>
+                            <th>Total de vendas: </th>
+                        </thead>
+                        <tbody>
+                            <td>
+                                <h2><b>R$ @Math.Round(
+                                        @Model.Where(x => x.IsPaid == true)
+                                        .Select(x => x.Price)
+                                        .Sum(), 2)</b></h2>
+                            </td>
+                            <td>
+                                <h2><b></b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
+                            </td>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
