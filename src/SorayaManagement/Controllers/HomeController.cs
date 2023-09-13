@@ -24,36 +24,7 @@ namespace SorayaManagement.Controllers
         {
             User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
             _sessionService.AddUserSession(authenticatedUser);
-            return View();
+            return View(authenticatedUser);
         }
-
-        // // auth/cadastro/
-        // [Authorize]
-        // [HttpGet]
-        // [Route("cadastro/")]
-        // public IActionResult Register()
-        // {
-        //     return View();
-        // }
-
-        // [Authorize]
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // [Route("cadastro/")]
-        // public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         BaseResponse result = await _authenticationService.RegisterAsync(registerUserDto);
-        //         ViewData["Message"] = result.Message;
-
-        //         if (result.IsSuccess)
-        //         {
-        //             return Redirect(nameof(Login));
-        //         }
-        //     }
-
-        //     return View();
-        // }
     }
 }
