@@ -1,4 +1,4 @@
-@model List<SorayaManagement.ViewModels.GetOrdersViewModel>;
+@model List<SorayaManagement.ViewModels.GetOrderViewModel>;
 
 @{
     ViewData["Title"] = "Pedidos";
@@ -14,23 +14,30 @@
             <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Order" asp-action="Create">Novo
                 Pedido</a>
         </div>
-
-        <!-- Filtering stuff -->
-        <div class="form-outline col-md-6 mb-4">
-            <form asp-controller="Order" asp-action="Orders" method="GET">
-                <label for="isPaid" class="form-label">Filtrar por pagamento:</label>
-                <select id="isPaid" name="isPaid" class="form-select form-control">
-                    <option value="true">Pagos</option>
-                    <option value="false">Não Pagos</option>
-                </select>
-                <button type="submit" class="btn btn-primary-custom">Filtrar</button>
-            </form>
-        </div>
-
     </div>
 
-    <table class="table styled-table">
-        <caption>Total de pedidos encontrados: <b>@Model.Count</b></caption>
+    <div class="">
+        <form id="filterForm" asp-controller="Order" asp-action="Orders" method="GET">
+            <div class="justify-content-end row">
+                <div class="col-md-3">
+                    <label for="isPaid" class="form-label fw-bolder">Filtrar por pagamento:</label>
+                    <select id="isPaid" name="isPaid" class="form-select form-control" style="width: 250px;">
+                        <option>Selecione alguma opção</option>
+                        <option value="all">Todos</option>
+                        <option value="true">Pagos</option>
+                        <option value="false">Não Pagos</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="createdAt" class="form-label fw-bolder">Filtrar por data:</label>
+                    <input id="createdAt" name="createdAt" type="date" class="form-control">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table id="ordersTable" class="table styled-table">
+        <caption><b>@Model.Count</b> Pedidos Encontrados.</caption>
         <thead>
             <tr>
                 <th></th>
@@ -42,19 +49,28 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var order in Model.ToList())
+        <tbody id="ordersTableBody" class="table-group-divider">
+            @foreach (var order in Model)
             {
                 <tr>
                     <th>
-                        <a href="pedidos/detalhes/@order.Id">
+                        <a asp-action="Details" asp-route-orderId="@order.Id">
                             <i class="fa-solid fa-circle-info fa-lg"></i>
                         </a>
                     </th>
                     <td>@order.Customer</td>
                     <td>@order.Meal</td>
                     <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
-                    <td>@order.PaymentType</td>
+                    <td>
+                        @if (@order.PaymentType.Equals("PIX"))
+                        {
+                            <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" /> @order.PaymentType</p>
+                        }
+                        else
+                        {
+                            <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" /> @order.PaymentType</p>
+                        }
+                    </td>
                     <td>
                         @if (!order.IsPaid)
                         {
@@ -65,19 +81,19 @@
                         }
                         else
                         {
-                            @(order.IsPaid ? "Sim" : "Não")
+                            <i id="checkIcon" class="fa-solid fa-square-check fa-xl"></i>
                         }
                     </td>
                 </tr>
             }
             <tr>
                 <td colspan="4">
-                    <table class="table mb-0">
+                    <table id="ordersInfoTable" class="table mb-0">
                         <thead>
                             <th>Total de lucro do Dia: </th>
                             <th>Total de vendas: </th>
                         </thead>
-                        <tbody>
+                        <tbody id="ordersInfoTableBody">
                             <td>
                                 <h2><b>R$ @Math.Round(
                                         @Model.Where(x => x.IsPaid == true)
@@ -85,7 +101,7 @@
                                         .Sum(), 2)</b></h2>
                             </td>
                             <td>
-                                <h2><b></b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
+                                <h2><b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
                             </td>
                         </tbody>
                     </table>
@@ -95,3 +111,25 @@
     </table>
 
 </section>
+
+<script>
+    $(document).ready(function () {
+        $('#filterForm').change(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '/pedidos/filtering',
+                type: 'GET',
+                data: formData,
+                success: function (result) {
+                    $('#ordersTableBody').html(result);
+                },
+                error: function () {
+                    alert(`Ocorreu um erro ao processar a solicitação.`);
+                }
+            });
+        });
+    });
+</script>

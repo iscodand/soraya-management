@@ -14,52 +14,58 @@
         <form asp-action="Create" asp-antiforgery="true">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <h5 class="fw-normal" style="letter-spacing: 1px;">Realize um novo pedido</h5>
+            <h5 class="fw-normal" style="letter-spacing: 1px;">Cadastre um novo pedido</h5>
             <hr>
             <br>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fw-bolder">Descrição do Pedido (Não obrigatório)</label>
-                <textarea class="form-control form-control-lg" asp-for="Description"></textarea>
-                <span class="text-danger fw-bolder sm" asp-validation-for="Description"></span>
-            </div>
+            <div class="row">
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Descrição do Pedido (Não obrigatório)</label>
+                    <textarea class="form-control form-control-lg" asp-for="Description"></textarea>
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Description"></span>
+                </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fw-bolder">Cliente</label>
-                @Html.DropDownListFor(model => model.CustomerId, new
-                SelectList(Model.CreateOrderDropdown.Customers, "Id",
-                "Name")
-                , new { @class = "form-control" })
-            </div>
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Cliente</label>
+                    @Html.DropDownListFor(model => model.CustomerId, new
+                    SelectList(Model.CreateOrderDropdown.Customers, "Id",
+                    "Name")
+                    , new { @class = "form-control" })
+                </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fw-bolder">Sabor da Quentinha</label>
-                @Html.DropDownListFor(model => model.MealId, new
-                SelectList(Model.CreateOrderDropdown.Meals, "Id",
-                "Description")
-                , new { @class = "form-control" })
-            </div>
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Sabor da Quentinha</label>
+                    @Html.DropDownListFor(model => model.MealId, new
+                    SelectList(Model.CreateOrderDropdown.Meals, "Id",
+                    "Description")
+                    , new { @class = "form-control" })
+                </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fw-bolder">Valor</label>
-                <input class="form-control form-control-lg" asp-for="Price" />
-                <span class="text-danger fw-bolder sm" asp-validation-for="Price"></span>
-            </div>
+                <div class="form-outline mb-4 col-md-6">
+                    <label class="form-label fw-bolder">Valor</label>
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+                        <input class="form-control form-control-lg" asp-for="Price" placeholder="0.00">
+                    </div>
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Price"></span>
+                </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fw-bolder">Forma de Pagamento</label>
-                @Html.DropDownListFor(model => model.PaymentTypeId, new
-                SelectList(Model.CreateOrderDropdown.PaymentTypes, "Id",
-                "Description")
-                , new { @class = "form-control" })
-            </div>
+                <div class="form-outline mb-4 col-md-6">
+                    <label class="form-label fw-bolder">Forma de Pagamento</label>
+                    @Html.DropDownListFor(model => model.PaymentTypeId, new
+                    SelectList(Model.CreateOrderDropdown.PaymentTypes, "Id",
+                    "Description")
+                    , new { @class = "form-control form-control-lg" })
+                </div>
 
-            <partial name="../Shared/Partials/_Messages.cshtml" />
+                <partial name="../Shared/Partials/_Messages.cshtml" />
 
-            <div class="pt-1 mb-4">
-                <button class="btn btn-success btn-block" type="submit">Salvar</button>
-            </div>
+                <div class="pt-1 mb-4">
+                    <button class="btn btn-success btn-block" type="submit">Salvar</button>
+                </div>
         </form>
+
+        </div>
 
         <a asp-area="" asp-controller="Customer" asp-action="Customers"><button
                 class="btn btn-warning btn-block">Voltar</button></a>

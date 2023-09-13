@@ -80,6 +80,10 @@
     color: #009879;
 }
 
+.table-group-divider {
+    color: #198754;
+}
+
 /* Some Elements */
 
 .btn-primary-custom {
@@ -106,5 +110,15 @@
 }
 
 .fa-circle-info {
+    color: #386d63;
+}
+
+.payment-type-icons {
+    width: 15px;
+    margin-right: 10px;
+    color: #386d63;
+}
+
+#checkIcon {
     color: #386d63;
 }

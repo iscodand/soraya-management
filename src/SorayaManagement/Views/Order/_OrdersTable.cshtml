@@ -1,0 +1,59 @@
+@model List<SorayaManagement.ViewModels.GetOrderViewModel>;
+
+@foreach (var order in Model)
+{
+    <tr>
+        <th>
+            <a asp-action="Details" asp-route-orderId="@order.Id">
+                <i class="fa-solid fa-circle-info fa-lg"></i>
+            </a>
+        </th>
+        <td>@order.Customer</td>
+        <td>@order.Meal</td>
+        <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
+        <td>
+            @if (@order.PaymentType.Equals("PIX"))
+            {
+                <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" /> @order.PaymentType</p>
+            }
+            else
+            {
+                <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" /> @order.PaymentType</p>
+            }
+        </td>
+        <td>
+            @if (!order.IsPaid)
+            {
+                <form asp-action="MarkOrderAsPaid" method="post">
+                    <input type="hidden" name="orderId" value="@order.Id" />
+                    <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                </form>
+            }
+            else
+            {
+                <i class="fa-solid fa-square-check fa-xl"></i>
+            }
+        </td>
+    </tr>
+}
+<tr>
+    <td colspan="4">
+        <table id="ordersInfoTable" class="table mb-0">
+            <thead>
+                <th>Total de lucro do Dia: </th>
+                <th>Total de vendas: </th>
+            </thead>
+            <tbody id="ordersInfoTableBody">
+                <td>
+                    <h2><b>R$ @Math.Round(
+                            @Model.Where(x => x.IsPaid == true)
+                            .Select(x => x.Price)
+                            .Sum(), 2)</b></h2>
+                </td>
+                <td>
+                    <h2><b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
+                </td>
+            </tbody>
+        </table>
+    </td>
+</tr>
