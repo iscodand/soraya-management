@@ -31,16 +31,17 @@ namespace SorayaManagement.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Orders(string isPaid)
+        public async Task<IActionResult> Orders()
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
+            // todo => is loading ALL orders by company - try to load just today orders first
             ICollection<Order> orders = await _orderService.GetOrdersByCompanyAsync(authenticatedUser.CompanyId);
-            List<GetOrdersViewModel> viewModelCollection = new();
+            List<GetOrderViewModel> viewModelCollection = new();
 
             foreach (Order order in orders)
             {
-                GetOrdersViewModel viewModel = new()
+                GetOrderViewModel viewModel = new()
                 {
                     Id = order.Id,
                     Description = order.Description,
@@ -57,9 +58,40 @@ namespace SorayaManagement.Controllers
                 viewModelCollection.Add(viewModel);
             }
 
-            // filtering stuff 
-            // => maybe this should not be here
-            // => verify the best implementation for this
+            return View(viewModelCollection);
+        }
+
+        [HttpGet]
+        [Route("filtering/")]
+        public async Task<IActionResult> FilteringOrders(string isPaid, DateTime? createdAt)
+        {
+            // // filtering stuff
+            // // => maybe this should not be here
+            // // => verify the best implementation for this
+            User authenticatedUser = _sessionService.RetrieveUserSession();
+
+            ICollection<Order> orders = await _orderService.GetOrdersByCompanyAsync(authenticatedUser.CompanyId);
+            List<GetOrderViewModel> viewModelCollection = new();
+
+            foreach (Order order in orders)
+            {
+                GetOrderViewModel viewModel = new()
+                {
+                    Id = order.Id,
+                    Description = order.Description,
+                    Price = order.Price,
+                    IsPaid = order.IsPaid,
+                    PaidAt = order.PaidAt,
+                    PaymentType = order.PaymentType.Description,
+                    Meal = order.Meal.Description,
+                    Customer = order.Customer.Name,
+                    CreatedBy = order.User.Name,
+                    CreatedAt = order.CreatedAt
+                };
+
+                viewModelCollection.Add(viewModel);
+            }
+
             switch (isPaid)
             {
                 case "true":
@@ -72,7 +104,15 @@ namespace SorayaManagement.Controllers
                     break;
             }
 
-            return View(viewModelCollection);
+            if (createdAt != null)
+            {
+                viewModelCollection = viewModelCollection.Where(x => x.CreatedAt.Day == createdAt.Value.Day)
+                                                         .Where(x => x.CreatedAt.Month == createdAt.Value.Month)
+                                                         .Where(x => x.CreatedAt.Year == createdAt.Value.Year)
+                                                         .ToList();
+            }
+
+            return PartialView("_OrdersTable", viewModelCollection);
         }
 
         [HttpGet]
@@ -151,7 +191,21 @@ namespace SorayaManagement.Controllers
 
                 if (result.IsSuccess)
                 {
-                    return View(result.Data);
+                    GetOrderViewModel order = new()
+                    {
+                        Id = result.Data.Id,
+                        Description = result.Data.Description,
+                        Price = result.Data.Price,
+                        IsPaid = result.Data.IsPaid,
+                        PaidAt = result.Data.PaidAt,
+                        PaymentType = result.Data.PaymentType.Description,
+                        Meal = result.Data.Meal.Description,
+                        Customer = result.Data.Customer.Name,
+                        CreatedBy = result.Data.User.Name,
+                        CreatedAt = result.Data.CreatedAt
+                    };
+
+                    return View(order);
                 }
             }
 
