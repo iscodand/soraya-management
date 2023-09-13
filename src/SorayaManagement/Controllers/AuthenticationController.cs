@@ -17,33 +17,6 @@ namespace SorayaManagement.Controllers
             _sessionService = sessionService;
         }
 
-        // auth/cadastro/
-        [HttpGet]
-        [Route("cadastro/")]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("cadastro/")]
-        public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
-        {
-            if (ModelState.IsValid)
-            {
-                BaseResponse result = await _authenticationService.RegisterAsync(registerUserDto);
-                ViewData["Message"] = result.Message;
-
-                if (result.IsSuccess)
-                {
-                    return Redirect(nameof(Login));
-                }
-            }
-
-            return View();
-        }
-
         // auth/login
         [HttpGet]
         [Route("login/")]
@@ -71,5 +44,14 @@ namespace SorayaManagement.Controllers
             return View();
         }
 
+        // auth/logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationService.LogoutAsync();
+            _sessionService.RemoveUserSession();
+            return RedirectToAction("Login");
+        }
     }
 }
