@@ -1,8 +1,10 @@
 namespace SorayaManagement.Application.Responses
 {
-    // improve this inheritance
-    public class BaseResponse<T> : Infrastructure.Identity.Responses.BaseResponse
+    public class BaseResponse<T>
     {
+        public string Message { get; set; }
+        public IEnumerable<string> Errors { get; set; }
+        public bool IsSuccess { get; set; }
         public T Data { get; set; }
     }
 }
