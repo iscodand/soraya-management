@@ -1,6 +1,6 @@
 namespace SorayaManagement.ViewModels
 {
-    public class GetCustomersViewModel
+    public class GetCustomerViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

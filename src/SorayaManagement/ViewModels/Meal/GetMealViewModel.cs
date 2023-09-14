@@ -1,6 +1,6 @@
 namespace SorayaManagement.ViewModels
 {
-    public class GetMealsViewModel
+    public class GetMealViewModel
     {
         public int Id { get; set; }
         public string Description { get; set; }
