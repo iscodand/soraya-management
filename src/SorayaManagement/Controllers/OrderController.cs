@@ -38,7 +38,6 @@ namespace SorayaManagement.Controllers
             // todo => is loading ALL orders by company - try to load just today orders first
             ICollection<Order> orders = await _orderService.GetOrdersByCompanyAsync(authenticatedUser.CompanyId);
             List<GetOrderViewModel> viewModelCollection = new();
-
             foreach (Order order in orders)
             {
                 GetOrderViewModel viewModel = new()
@@ -71,8 +70,8 @@ namespace SorayaManagement.Controllers
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
             ICollection<Order> orders = await _orderService.GetOrdersByCompanyAsync(authenticatedUser.CompanyId);
-            List<GetOrderViewModel> viewModelCollection = new();
 
+            List<GetOrderViewModel> viewModelCollection = new();
             foreach (Order order in orders)
             {
                 GetOrderViewModel viewModel = new()
@@ -106,9 +105,7 @@ namespace SorayaManagement.Controllers
 
             if (createdAt != null)
             {
-                viewModelCollection = viewModelCollection.Where(x => x.CreatedAt.Day == createdAt.Value.Day)
-                                                         .Where(x => x.CreatedAt.Month == createdAt.Value.Month)
-                                                         .Where(x => x.CreatedAt.Year == createdAt.Value.Year)
+                viewModelCollection = viewModelCollection.Where(x => x.CreatedAt.Date == createdAt.Value.Date)
                                                          .ToList();
             }
 
@@ -121,33 +118,47 @@ namespace SorayaManagement.Controllers
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
-            ICollection<PaymentType> paymentTypes = await _orderService.GetPaymentTypesAsync();
-            ICollection<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
-            ICollection<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
+            BaseResponse<PaymentType> paymentTypes = await _orderService.GetPaymentTypesAsync();
+            BaseResponse<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+            BaseResponse<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
 
             CreateOrderDropdown createOrderDropdown = new()
             {
-                PaymentTypes = paymentTypes,
-                Customers = customers,
-                Meals = meals
+                PaymentTypes = paymentTypes.DataCollection,
+                Customers = customers.DataCollection,
+                Meals = meals.DataCollection
             };
 
-            CreateOrderDto createOrderDto = new()
+            CreateOrderViewModel createOrderViewModel = new()
             {
                 CreateOrderDropdown = createOrderDropdown
             };
 
-            return View(createOrderDto);
+            // returning ViewModel instead dropdown directly to avoid some View problems
+            // maybe it's incorrect, but whatever, this works
+            return View(createOrderViewModel);
         }
 
         [HttpPost]
         [Route("novo/")]
-        public async Task<IActionResult> Create(CreateOrderDto createOrderDto)
+        public async Task<IActionResult> Create(CreateOrderViewModel createOrderViewModel)
         {
             if (ModelState.IsValid)
             {
                 User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<Order> result = await _orderService.CreateOrderAsync(createOrderDto, authenticatedUser);
+
+                CreateOrderDto createOrderDto = new()
+                {
+                    Description = createOrderViewModel.Description,
+                    CustomerId = createOrderViewModel.CustomerId,
+                    MealId = createOrderViewModel.MealId,
+                    PaymentTypeId = createOrderViewModel.PaymentTypeId,
+                    Price = createOrderViewModel.Price,
+                    CompanyId = authenticatedUser.CompanyId,
+                    UserId = authenticatedUser.Id
+                };
+
+                BaseResponse<Order> result = await _orderService.CreateOrderAsync(createOrderDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)

@@ -18,7 +18,7 @@ namespace SorayaManagement.Application.Services
             _paymentTypeRepository = paymentTypeRepository;
         }
 
-        public async Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto, User authenticatedUser)
+        public async Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto)
         {
             if (createOrderDto == null)
             {
@@ -34,14 +34,13 @@ namespace SorayaManagement.Application.Services
             {
                 Description = createOrderDto.Description,
                 Price = createOrderDto.Price,
-                IsPaid = createOrderDto.IsPaid,
-                PaidAt = createOrderDto.PaidAt,
+                IsPaid = false,
+                PaidAt = null,
                 PaymentTypeId = createOrderDto.PaymentTypeId,
                 MealId = createOrderDto.MealId,
                 CustomerId = createOrderDto.CustomerId,
-
-                CompanyId = authenticatedUser.CompanyId,
-                UserId = authenticatedUser.Id
+                CompanyId = createOrderDto.CompanyId,
+                UserId = createOrderDto.UserId
             };
 
             await _orderRepository.CreateAsync(order);
@@ -96,9 +95,16 @@ namespace SorayaManagement.Application.Services
             return orders;
         }
 
-        public async Task<ICollection<PaymentType>> GetPaymentTypesAsync()
+        public async Task<BaseResponse<PaymentType>> GetPaymentTypesAsync()
         {
-            return await _paymentTypeRepository.GetAllAsync();
+            ICollection<PaymentType> paymentTypes = await _paymentTypeRepository.GetAllAsync();
+
+            return new BaseResponse<PaymentType>()
+            {
+                Message = "Tipos de Pagamento encontrados com sucesso",
+                IsSuccess = true,
+                DataCollection = paymentTypes
+            };
         }
 
         public async Task<BaseResponse<Order>> MakeOrderPaymentAsync(int orderId, User authenticatedUser)

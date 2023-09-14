@@ -6,10 +6,10 @@ namespace SorayaManagement.Application.Contracts
 {
     public interface IOrderService
     {
-        public Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto, User authenticatedUser);
+        public Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto);
         public Task<ICollection<Order>> GetOrdersByCompanyAsync(int companyId);
         public Task<BaseResponse<Order>> GetOrderDetailsAsync(int orderId, User authenticatedUser);
         public Task<BaseResponse<Order>> MakeOrderPaymentAsync(int orderId, User authenticatedUser);
-        public Task<ICollection<PaymentType>> GetPaymentTypesAsync();
+        public Task<BaseResponse<PaymentType>> GetPaymentTypesAsync();
     }
 }
