@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SorayaManagement.Application.Contracts;
 using SorayaManagement.Application.Dtos.Meal;
+using SorayaManagement.Application.Responses;
 using SorayaManagement.Domain.Entities;
 using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Infrastructure.Identity.Responses;
 using SorayaManagement.ViewModels;
 
 namespace SorayaManagement.Controllers
@@ -27,13 +27,12 @@ namespace SorayaManagement.Controllers
         public async Task<IActionResult> Meals()
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
-            ICollection<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
+            BaseResponse<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
 
-            // todo => improve and clean this logic
-            List<GetMealsViewModel> viewModelCollection = new();
-            foreach (Meal meal in meals)
+            List<GetMealViewModel> viewModelCollection = new();
+            foreach (Meal meal in meals.DataCollection)
             {
-                GetMealsViewModel viewModel = new()
+                GetMealViewModel viewModel = new()
                 {
                     Id = meal.Id,
                     Description = meal.Description,
@@ -57,12 +56,21 @@ namespace SorayaManagement.Controllers
         [HttpPost]
         [Route("novo/")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateMealDto createMealDto)
+        public async Task<IActionResult> Create(CreateMealViewModel createMealViewModel)
         {
             if (ModelState.IsValid)
             {
                 User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse result = await _mealService.CreateMealAsync(createMealDto, authenticatedUser);
+
+                CreateMealDto createMealDto = new()
+                {
+                    Description = createMealViewModel.Description,
+                    Accompaniments = createMealViewModel.Accompaniments,
+                    CompanyId = authenticatedUser.CompanyId,
+                    UserId = authenticatedUser.Id
+                };
+
+                BaseResponse<Meal> result = await _mealService.CreateMealAsync(createMealDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)
