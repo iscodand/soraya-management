@@ -62,5 +62,26 @@ namespace SorayaManagement.Application.Services
                 DataCollection = customers
             };
         }
+
+        public async Task<BaseResponse<Customer>> DetailCustomerAsync(int customerId, User authenticatedUser)
+        {
+            Customer customer = await _customerRepository.GetByIdAsync(customerId);
+
+            if (authenticatedUser.CompanyId != customer.CompanyId)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Este cliente não pertence a sua empresa. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            return new BaseResponse<Customer>()
+            {
+                Message = "Cliente encontrado com sucesso",
+                IsSuccess = true,
+                Data = customer
+            };
+        }
     }
 }

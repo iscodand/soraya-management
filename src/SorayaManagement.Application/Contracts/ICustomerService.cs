@@ -8,5 +8,6 @@ namespace SorayaManagement.Application.Contracts
     {
         public Task<BaseResponse<Customer>> CreateCustomerAsync(CreateCustomerDto createCustomerDto);
         public Task<BaseResponse<Customer>> GetCustomersByCompanyAsync(int companyId);
+        public Task<BaseResponse<Customer>> DetailCustomerAsync(int customerId, User authenticatedUser);
     }
 }
