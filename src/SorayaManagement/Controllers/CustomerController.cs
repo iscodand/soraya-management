@@ -81,5 +81,23 @@ namespace SorayaManagement.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        [Route("detalhes/{customerId}")]
+        public async Task<IActionResult> Details(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Customer> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser);
+
+                if (result.IsSuccess)
+                {
+                    return View(result.Data);
+                }
+            }
+
+            return RedirectToAction(nameof(Customers));
+        }
     }
 }
