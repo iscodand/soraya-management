@@ -6,7 +6,6 @@ namespace SorayaManagement.Infrastructure.Data.Contracts
     {
         public Task<Order> GetOrderDetailsAsync(int orderId);
         public Task<ICollection<Order>> GetOrdersByCompanyAsync(int companyId);
-        public Task<ICollection<Order>> GetOrdersAlreadyPaidAsync(int companyId);
-        public Task<ICollection<Order>> GetOrdersNotPaidAsync(int companyId);
+        public Task<ICollection<Order>> GetOrdersByDateAsync(int companyId, DateTime? date);
     }
 }
