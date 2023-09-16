@@ -83,16 +83,52 @@ namespace SorayaManagement.Application.Services
             };
         }
 
-        public async Task<ICollection<Order>> GetOrdersByCompanyAsync(int companyId)
+        public async Task<BaseResponse<Order>> GetOrdersByCompanyAsync(int companyId)
         {
             if (companyId < 0)
             {
-                return null;
+                return new BaseResponse<Order>()
+                {
+                    Message = "Empresa não encontrada. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
             }
 
             ICollection<Order> orders = await _orderRepository.GetOrdersByCompanyAsync(companyId);
 
-            return orders;
+            return new BaseResponse<Order>()
+            {
+                DataCollection = orders,
+                Message = "Pedidos encontrados com sucesso.",
+                IsSuccess = true
+            };
+        }
+
+        public async Task<BaseResponse<Order>> GetOrdersByDateAsync(int companyId, DateTime? date)
+        {
+            if (companyId < 0)
+            {
+                return new BaseResponse<Order>()
+                {
+                    Message = "Empresa não encontrada. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            if (date == null)
+            {
+                // Date never goes null to repository
+                date = DateTime.Today.Date;
+            }
+
+            ICollection<Order> orders = await _orderRepository.GetOrdersByDateAsync(companyId, date);
+
+            return new BaseResponse<Order>()
+            {
+                DataCollection = orders,
+                Message = "Pedidos encontrados com sucesso.",
+                IsSuccess = true
+            };
         }
 
         public async Task<BaseResponse<PaymentType>> GetPaymentTypesAsync()
@@ -116,7 +152,7 @@ namespace SorayaManagement.Application.Services
                 return new BaseResponse<Order>()
                 {
                     Message = "Este pedido não pertence a sua empresa. Verifique e tente novamente.",
-                    IsSuccess = true
+                    IsSuccess = false
                 };
             }
 

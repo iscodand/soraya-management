@@ -7,7 +7,8 @@ namespace SorayaManagement.Application.Contracts
     public interface IOrderService
     {
         public Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto);
-        public Task<ICollection<Order>> GetOrdersByCompanyAsync(int companyId);
+        public Task<BaseResponse<Order>> GetOrdersByCompanyAsync(int companyId);
+        public Task<BaseResponse<Order>> GetOrdersByDateAsync(int companyId, DateTime? date);
         public Task<BaseResponse<Order>> GetOrderDetailsAsync(int orderId, User authenticatedUser);
         public Task<BaseResponse<Order>> MakeOrderPaymentAsync(int orderId, User authenticatedUser);
         public Task<BaseResponse<PaymentType>> GetPaymentTypesAsync();
