@@ -35,12 +35,13 @@ namespace SorayaManagement.Controllers
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
-            // todo => is loading ALL orders by company - try to load just today orders first
-            ICollection<Order> orders = await _orderService.GetOrdersByCompanyAsync(authenticatedUser.CompanyId);
-            List<GetOrderViewModel> viewModelCollection = new();
-            foreach (Order order in orders)
+            // Getting today orders
+            BaseResponse<Order> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
+
+            List<GetOrderViewModel> getOrderViewModelsCollection = new();
+            foreach (Order order in orders.DataCollection)
             {
-                GetOrderViewModel viewModel = new()
+                GetOrderViewModel getOrderViewModel = new()
                 {
                     Id = order.Id,
                     Description = order.Description,
@@ -54,27 +55,25 @@ namespace SorayaManagement.Controllers
                     CreatedAt = order.CreatedAt
                 };
 
-                viewModelCollection.Add(viewModel);
+                getOrderViewModelsCollection.Add(getOrderViewModel);
             }
 
-            return View(viewModelCollection);
+            return View(getOrderViewModelsCollection);
         }
 
         [HttpGet]
         [Route("filtering/")]
         public async Task<IActionResult> FilteringOrders(string isPaid, DateTime? createdAt)
         {
-            // // filtering stuff
-            // // => maybe this should not be here
-            // // => verify the best implementation for this
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
-            ICollection<Order> orders = await _orderService.GetOrdersByCompanyAsync(authenticatedUser.CompanyId);
+            // Filter by date has been applied on OrderService
+            BaseResponse<Order> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, createdAt);
 
-            List<GetOrderViewModel> viewModelCollection = new();
-            foreach (Order order in orders)
+            List<GetOrderViewModel> getOrderViewModelCollection = new();
+            foreach (Order order in orders.DataCollection)
             {
-                GetOrderViewModel viewModel = new()
+                GetOrderViewModel getOrderViewModel = new()
                 {
                     Id = order.Id,
                     Description = order.Description,
@@ -88,28 +87,25 @@ namespace SorayaManagement.Controllers
                     CreatedAt = order.CreatedAt
                 };
 
-                viewModelCollection.Add(viewModel);
+                getOrderViewModelCollection.Add(getOrderViewModel);
             }
 
+            // Filter => filter by Order is Paid equals true or false
             switch (isPaid)
             {
                 case "true":
-                    viewModelCollection = viewModelCollection.Where(x => x.IsPaid == true).ToList();
+                    getOrderViewModelCollection = getOrderViewModelCollection.Where(x => x.IsPaid == true)
+                                                                             .ToList();
                     break;
                 case "false":
-                    viewModelCollection = viewModelCollection.Where(x => x.IsPaid == false).ToList();
+                    getOrderViewModelCollection = getOrderViewModelCollection.Where(x => x.IsPaid == false)
+                                                                             .ToList();
                     break;
                 case "all":
                     break;
             }
 
-            if (createdAt != null)
-            {
-                viewModelCollection = viewModelCollection.Where(x => x.CreatedAt.Date == createdAt.Value.Date)
-                                                         .ToList();
-            }
-
-            return PartialView("_OrdersTable", viewModelCollection);
+            return PartialView("_OrdersTable", getOrderViewModelCollection);
         }
 
         [HttpGet]
@@ -118,6 +114,7 @@ namespace SorayaManagement.Controllers
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
+            // Improve this query
             BaseResponse<PaymentType> paymentTypes = await _orderService.GetPaymentTypesAsync();
             BaseResponse<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
             BaseResponse<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
@@ -202,7 +199,7 @@ namespace SorayaManagement.Controllers
 
                 if (result.IsSuccess)
                 {
-                    GetOrderViewModel order = new()
+                    GetOrderViewModel getOrderViewModel = new()
                     {
                         Id = result.Data.Id,
                         Description = result.Data.Description,
@@ -216,7 +213,7 @@ namespace SorayaManagement.Controllers
                         CreatedAt = result.Data.CreatedAt
                     };
 
-                    return View(order);
+                    return View(getOrderViewModel);
                 }
             }
 
