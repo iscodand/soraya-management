@@ -8,7 +8,6 @@ namespace SorayaManagement.Domain.Entities.Common
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public virtual User User { get; set; }
         [Column("CreatedBy")]
         public string UserId { get; set; }
