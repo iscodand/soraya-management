@@ -55,16 +55,20 @@
 .styled-table thead tr {
     background-color: #009879;
     color: #ffffff;
-    text-align: left;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+    padding: 15px;
 }
 
 .styled-table tbody tr {
     border-bottom: 1px solid #dddddd;
+    text-align: center;
+    padding-top: 10px;
+    align-items: center;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
@@ -114,7 +118,7 @@
 }
 
 .payment-type-icons {
-    width: 15px;
+    width: 19px;
     margin-right: 10px;
     color: #386d63;
 }

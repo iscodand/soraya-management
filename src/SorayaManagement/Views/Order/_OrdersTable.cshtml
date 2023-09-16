@@ -10,15 +10,16 @@
         </th>
         <td>@order.Customer</td>
         <td>@order.Meal</td>
-        <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
+        <td><b>R$</b> @Math.Round(@order.Price, 2)
+        </td>
         <td>
             @if (@order.PaymentType.Equals("PIX"))
             {
-                <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" /> @order.PaymentType</p>
+                <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" />PIX</p>
             }
             else
             {
-                <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" /> @order.PaymentType</p>
+                <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" />DINHEIRO</p>
             }
         </td>
         <td>
@@ -31,7 +32,7 @@
             }
             else
             {
-                <i class="fa-solid fa-square-check fa-xl"></i>
+                <i id="checkIcon" class="fa-solid fa-square-check fa-xl"></i>
             }
         </td>
     </tr>
@@ -40,18 +41,21 @@
     <td colspan="4">
         <table id="ordersInfoTable" class="table mb-0">
             <thead>
-                <th>Total de lucro do Dia: </th>
-                <th>Total de vendas: </th>
+                <th>Valor Total: </th>
+                <th>Quantidade Paga: </th>
+                <th>Quantidade NÃO Paga: </th>
             </thead>
             <tbody id="ordersInfoTableBody">
                 <td>
                     <h2><b>R$ @Math.Round(
-                            @Model.Where(x => x.IsPaid == true)
-                            .Select(x => x.Price)
+                            @Model.Select(x => x.Price)
                             .Sum(), 2)</b></h2>
                 </td>
                 <td>
                     <h2><b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
+                </td>
+                <td>
+                    <h2><b>@Model.Where(x => x.IsPaid == false).Select(x => x.Id).Count()</b></h2>
                 </td>
             </tbody>
         </table>

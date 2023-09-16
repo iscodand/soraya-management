@@ -6,3 +6,21 @@
 }
 
 @await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <div>
+        <h2 class="fw-normal" style="letter-spacing: 1px;">Pedido <b>N° @Model.Id</b></h2>
+        <hr>
+        <br>
+    </div>
+
+    <h3>Dados do Pedido</h3>
+    <br>
+    <p>Cliente: @Model.Customer</p>
+    <p>Sabor do Pedido: @Model.Meal</p>
+    <p>Valor do Pedido: @Model.Price</p>
+    <p>Data do Pedido: @Model.CreatedAt</p>
+    <p>Está pago: @Model.IsPaid </p>
+
+</section>

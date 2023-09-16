@@ -9,14 +9,12 @@
 
 <section class="container">
 
-    <div class="row">
-        <div class="col-md-6">
-            <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Order" asp-action="Create">Novo
-                Pedido</a>
-        </div>
+    <div class="col-md-6">
+        <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Order" asp-action="Create">Novo
+            Pedido</a>
     </div>
 
-    <div class="">
+    <div class="filtering">
         <form id="filterForm" asp-controller="Order" asp-action="Orders" method="GET">
             <div class="justify-content-end row">
                 <div class="col-md-3">
@@ -40,7 +38,7 @@
         <caption><b>@Model.Count</b> Pedidos Encontrados.</caption>
         <thead>
             <tr>
-                <th></th>
+                <th>#</th>
                 <th>Cliente</th>
                 <th>Sabor</th>
                 <th>Valor</th>
@@ -64,11 +62,11 @@
                     <td>
                         @if (@order.PaymentType.Equals("PIX"))
                         {
-                            <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" /> @order.PaymentType</p>
+                            <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" />PIX</p>
                         }
                         else
                         {
-                            <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" /> @order.PaymentType</p>
+                            <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" />DINHEIRO</p>
                         }
                     </td>
                     <td>
@@ -90,8 +88,9 @@
                 <td colspan="4">
                     <table id="ordersInfoTable" class="table mb-0">
                         <thead>
-                            <th>Total de lucro do Dia: </th>
-                            <th>Total de vendas: </th>
+                            <th>Valor Total: </th>
+                            <th>Quantidade Paga: </th>
+                            <th>Quantidade NÃO Paga: </th>
                         </thead>
                         <tbody id="ordersInfoTableBody">
                             <td>
@@ -102,6 +101,9 @@
                             </td>
                             <td>
                                 <h2><b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
+                            </td>
+                            <td>
+                                <h2><b>@Model.Where(x => x.IsPaid == false).Select(x => x.Id).Count()</b></h2>
                             </td>
                         </tbody>
                     </table>
