@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SorayaManagement.Domain.Entities.Common;
 using SorayaManagement.Infrastructure.Data.Contracts;
 using SorayaManagement.Infrastructure.Data.DataContext;
 
