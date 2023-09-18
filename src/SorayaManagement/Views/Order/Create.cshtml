@@ -30,7 +30,7 @@
                     @Html.DropDownListFor(model => model.CustomerId, new
                     SelectList(Model.CreateOrderDropdown.Customers, "Id",
                     "Name")
-                    , new { @class = "form-control" })
+                    , new { @class = "form-control form-control-lg" })
                 </div>
 
                 <div class="form-outline mb-4">
@@ -38,7 +38,7 @@
                     @Html.DropDownListFor(model => model.MealId, new
                     SelectList(Model.CreateOrderDropdown.Meals, "Id",
                     "Description")
-                    , new { @class = "form-control" })
+                    , new { @class = "form-control form-control-lg" })
                 </div>
 
                 <div class="form-outline mb-4 col-md-6">
@@ -67,7 +67,7 @@
 
         </div>
 
-        <a asp-area="" asp-controller="Customer" asp-action="Customers"><button
+        <a asp-area="" asp-controller="Order" asp-action="Orders"><button
                 class="btn btn-warning btn-block">Voltar</button></a>
 
     </section>

@@ -9,64 +9,81 @@
 
 <section class="container">
 
-    <div class="col-md-6">
-        <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Order" asp-action="Create">Novo
-            Pedido</a>
+    <div>
+        <a class="btn btn-primary-custom btn-lg" asp-area="" asp-controller="Order" asp-action="Create">
+            + Novo Pedido
+        </a>
     </div>
 
     <div class="filtering">
         <form id="filterForm" asp-controller="Order" asp-action="Orders" method="GET">
-            <div class="justify-content-end row">
+            <div class="d-flex flex-wrap justify-content-end">
+
                 <div class="col-md-3">
-                    <label for="isPaid" class="form-label fw-bolder">Filtrar por pagamento:</label>
-                    <select id="isPaid" name="isPaid" class="form-select form-control" style="width: 250px;">
+                    <label for="isPaid" class="form-label fw-thin">PAGAMENTO:</label>
+                    <select id="isPaid" name="isPaid" class="form-select form-select-lg form-control"
+                        style="width: 250px;">
                         <option>Selecione alguma opção</option>
                         <option value="all">Todos</option>
                         <option value="true">Pagos</option>
                         <option value="false">Não Pagos</option>
                     </select>
                 </div>
+
                 <div class="col-md-3">
-                    <label for="createdAt" class="form-label fw-bolder">Filtrar por data:</label>
-                    <input id="createdAt" name="createdAt" type="date" class="form-control">
+                    <label for="createdAt" class="form-label fw-thin">DATA:</label>
+                    <input id="createdAt" name="createdAt" type="date" class="form-control form-control-lg">
+                    <script>
+                        // Obtém a data atual
+                        const dataAtual = new Date();
+
+                        // Formata a data para o formato YYYY-MM-DD
+                        const ano = dataAtual.getFullYear();
+                        const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+                        const dia = String(dataAtual.getDate()).padStart(2, '0');
+
+                        // Define a data formatada como valor padrão no campo de entrada
+                        document.getElementById('createdAt').value = `${ano}-${mes}-${dia}`;
+                    </script>
                 </div>
             </div>
         </form>
     </div>
 
-    <table id="ordersTable" class="table styled-table">
+    <hr>
+
+    <table id="ordersTable" class="styled-table table">
         <caption><b>@Model.Count</b> Pedidos Encontrados.</caption>
         <thead>
-            <tr>
-                <th>#</th>
+            <tr class="table-head-row">
+                <th></th>
                 <th>Cliente</th>
                 <th>Sabor</th>
                 <th>Valor</th>
                 <th>Forma de Pagamento</th>
                 <th>Pago</th>
-                <th></th>
             </tr>
         </thead>
         <tbody id="ordersTableBody" class="table-group-divider">
             @foreach (var order in Model)
             {
-                <tr>
-                    <th>
+                <tr class="table-row">
+                    <td>
                         <a asp-action="Details" asp-route-orderId="@order.Id">
                             <i class="fa-solid fa-circle-info fa-lg"></i>
                         </a>
-                    </th>
+                    </td>
                     <td>@order.Customer</td>
                     <td>@order.Meal</td>
                     <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
                     <td>
                         @if (@order.PaymentType.Equals("PIX"))
                         {
-                            <p><img class="payment-type-icons" src="~/img/pix.svg" alt="PIX" />PIX</p>
+                            <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
                         }
                         else
                         {
-                            <p><img class="payment-type-icons" src="~/img/money.svg" alt="Money" />DINHEIRO</p>
+                            <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
                         }
                     </td>
                     <td>
@@ -84,31 +101,6 @@
                     </td>
                 </tr>
             }
-            <tr>
-                <td colspan="4">
-                    <table id="ordersInfoTable" class="table mb-0">
-                        <thead>
-                            <th>Valor Total: </th>
-                            <th>Quantidade Paga: </th>
-                            <th>Quantidade NÃO Paga: </th>
-                        </thead>
-                        <tbody id="ordersInfoTableBody">
-                            <td>
-                                <h2><b>R$ @Math.Round(
-                                        @Model.Where(x => x.IsPaid == true)
-                                        .Select(x => x.Price)
-                                        .Sum(), 2)</b></h2>
-                            </td>
-                            <td>
-                                <h2><b>@Model.Where(x => x.IsPaid == true).Select(x => x.Id).Count()</b></h2>
-                            </td>
-                            <td>
-                                <h2><b>@Model.Where(x => x.IsPaid == false).Select(x => x.Id).Count()</b></h2>
-                            </td>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
         </tbody>
     </table>
 
