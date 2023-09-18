@@ -1,4 +1,4 @@
-@model SorayaManagement.Application.Dtos.Meal.CreateMealDto;
+@model SorayaManagement.ViewModels.CreateMealViewModel;
 
 @{
     ViewData["Title"] = "Novo Sabor";
@@ -12,7 +12,9 @@
     <form asp-action="Create" asp-antiforgery="true">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Adicione um novo sabor</h5>
+        <h5 class="fw-normal" style="letter-spacing: 1px;">Adicione um novo sabor</h5>
+        <hr>
+        <br>
 
         <div class="form-outline mb-4">
             <label class="form-label fw-bolder">Sabor</label>

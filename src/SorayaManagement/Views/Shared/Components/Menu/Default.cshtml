@@ -1,11 +1,10 @@
 @model SorayaManagement.ViewModels.GetUserDataViewModel;
 
 <nav class="navbar navbar-expand-lg mb-5">
-    <div class="container">
+    <div class="container-fluid">
 
-        <button class="border-0 bg-transparent navbar-brand me-2" style="margin-top: -1px;" asp-area=""
-            asp-controller="Home" asp-action="Home">
-            @Model.CompanyName
+        <button class="border-0 bg-transparent navbar-brand me-2" style="margin-top: -1px;">
+            <a asp-controller="Home" asp-action="Home">@Model.CompanyName</a>
         </button>
 
         <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample"
@@ -16,18 +15,27 @@
         <div class="collapse navbar-collapse" id="navbarButtonsExample">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-
-                    <a class="nav-link" asp-area="" asp-controller="" asp-action="">Pedidos</a>
+                    <a class="nav-link" asp-controller="Order" asp-action="Orders"><i
+                            class="fa-solid fa-clipboard-list fa-sm" style="color: #ffffff; padding-right: 4px;"></i>
+                        Pedidos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Meal" asp-action="Meals">Sabores</a>
+                    <a class="nav-link" asp-controller="Meal" asp-action="Meals"><i class="fa-solid fa-utensils fa-sm"
+                            style="color: #ffffff; padding-right: 4px;"></i> Sabores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Customers">Clientes</a>
+                    <a class="nav-link" asp-controller="Customer" asp-action="Customers"><i
+                            class="fa-solid fa-users fa-sm" style="color: #ffffff; padding-right: 4px;"></i>
+                        Clientes</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="" asp-action="">Funcionários</a>
-                </li>
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Company" asp-action="MyCompany"><i
+                                class="fa-solid fa-building fa-sm" style="color: #ffffff; padding-right: 4px;"></i> Minha
+                            Empresa</a>
+                    </li>
+                }
             </ul>
 
             <div class="d-flex align-items-center">
@@ -35,9 +43,11 @@
                 <button id="authenticated-user-name" class="px-3 me-2 border-0 bg-transparent">
                     <b>@Model.Name</b>
                 </button>
-                <button type="button" class="btn btn-danger btn-sm me-3">
-                    Sair
-                </button>
+                <form asp-controller="Authentication" asp-action="Logout">
+                    <button class="btn btn-danger btn-sm me-3" type="submit">
+                        Sair
+                    </button>
+                </form>
             </div>
         </div>
     </div>

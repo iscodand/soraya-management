@@ -1,24 +1,50 @@
 * {
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Rubik', sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
 }
 
 /* Navbar Section */
 
+p {
+    margin: 0;
+    background-color: inherit;
+}
+
+a {
+    color: currentColor;
+    text-decoration: none;
+}
+
 .navbar {
-    background-color: transparent !important;
+    background-color: #1d5348 !important;
+    color: #1d5348 !important;
+    height: 80px;
+    border-radius: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .navbar .navbar-brand {
-    color: #009879;
+    color: #dddddd;
     font-weight: bolder;
     font-size: 1.3em;
 }
 
 .nav-link {
     position: relative;
+    color: #dddddd;
+    font-weight: bolder;
+}
+
+.nav-link:hover {
+    color: #dddddd;
 }
 
 .nav-link:after {
+    color: #dddddd;
     content: '';
     opacity: 0;
     transition: all 0.2s;
@@ -38,39 +64,49 @@
 
 .styled-table {
     border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
     font-family: sans-serif;
     min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-collapse: separate;
+    border-spacing: 0 1em;
+    --bs-table-bg: transparent
+}
+
+.styled-table thead {
+    background-color: transparent;
+    --bs-table-bg: transparent;
 }
 
 .styled-table thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: left;
+    text-align: center;
 }
 
-.styled-table th,
+.styled-table thead th {
+    color: rgb(161, 161, 161);
+}
+
+.styled-table th {
+    border-style: hidden;
+    padding: 10px;
+}
+
 .styled-table td {
-    padding: 12px 15px;
+    padding: 35px;
+    height: fit-content;
+    border-style: hidden;
+    font-weight: bolder;
+    color: #252525;
 }
 
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+    text-align: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    background-color: white;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-}
-
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
-}
-
-.styled-table tbody tr.active-row {
-    font-weight: bold;
-    color: #009879;
+.table-group-divider {
+    color: transparent;
 }
 
 /* Some Elements */
@@ -91,9 +127,24 @@
 }
 
 .fa-user {
-    color: #009879;
+    color: #ffffff;
 }
 
 #authenticated-user-name {
-    color: #009879;
+    color: #ffffff;
+}
+
+.fa-circle-info {
+    color: #386d63;
+}
+
+.payment-type-icons {
+    width: 25px;
+    margin-right: 10px;
+    color: #386d63;
+    background-color: #ffffff;
+}
+
+#checkIcon {
+    color: #386d63;
 }

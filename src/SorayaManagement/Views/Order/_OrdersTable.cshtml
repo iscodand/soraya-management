@@ -1,0 +1,39 @@
+@model List<SorayaManagement.ViewModels.GetOrderViewModel>;
+
+@foreach (var order in Model)
+{
+    <tr>
+        <td>
+            <a asp-action="Details" asp-route-orderId="@order.Id">
+                <i class="fa-solid fa-circle-info fa-lg"></i>
+            </a>
+        </td>
+        <td>@order.Customer</td>
+        <td>@order.Meal</td>
+        <td><b>R$</b> @Math.Round(@order.Price, 2)
+        </td>
+        <td>
+            @if (@order.PaymentType.Equals("PIX"))
+            {
+                <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
+            }
+            else
+            {
+                <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
+            }
+        </td>
+        <td>
+            @if (!order.IsPaid)
+            {
+                <form asp-action="MarkOrderAsPaid" method="post">
+                    <input type="hidden" name="orderId" value="@order.Id" />
+                    <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                </form>
+            }
+            else
+            {
+                <i id="checkIcon" class="fa-solid fa-square-check fa-xl"></i>
+            }
+        </td>
+    </tr>
+}

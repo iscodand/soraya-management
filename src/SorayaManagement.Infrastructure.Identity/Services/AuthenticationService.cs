@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using SorayaManagement.Domain.Entities;
 using SorayaManagement.Infrastructure.Identity.Contracts;
@@ -11,21 +10,15 @@ namespace SorayaManagement.Infrastructure.Identity.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IAuthenticatedUserService _authenticatedUserService;
 
-        public AuthenticationService(UserManager<User> userManager,
-                                     IAuthenticatedUserService authenticatedUserService,
-                                     SignInManager<User> signInManager)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
-            _authenticatedUserService = authenticatedUserService;
             _signInManager = signInManager;
         }
 
-        public async Task<BaseResponse> RegisterAsync(RegisterUserDto registerUserDto)
+        public async Task<BaseResponse> RegisterAsync(RegisterUserDto registerUserDto, User authenticatedUser)
         {
-            // User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
-
             if (registerUserDto == null)
             {
                 return new BaseResponse()
@@ -41,7 +34,7 @@ namespace SorayaManagement.Infrastructure.Identity.Services
                 NormalizedName = registerUserDto.Name.Trim().ToUpper(),
                 UserName = registerUserDto.UserName,
                 Email = registerUserDto.Email,
-                CompanyId = 1
+                CompanyId = authenticatedUser.CompanyId
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerUserDto.Password);
@@ -94,9 +87,15 @@ namespace SorayaManagement.Infrastructure.Identity.Services
             };
         }
 
-        public Task<BaseResponse> LogoutAsync()
+        public async Task<BaseResponse> LogoutAsync()
         {
-            throw new NotImplementedException();
+            await _signInManager.SignOutAsync();
+
+            return new BaseResponse()
+            {
+                Message = "Logout realizado com sucesso.",
+                IsSuccess = true
+            };
         }
     }
 }

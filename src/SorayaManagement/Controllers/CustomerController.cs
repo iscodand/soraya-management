@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SorayaManagement.Application.Contracts;
 using SorayaManagement.Application.Dtos.Customer;
+using SorayaManagement.Application.Responses;
 using SorayaManagement.Domain.Entities;
 using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Infrastructure.Identity.Responses;
 using SorayaManagement.ViewModels;
 
 namespace SorayaManagement.Controllers
@@ -28,13 +28,12 @@ namespace SorayaManagement.Controllers
         public async Task<IActionResult> Customers()
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
-            ICollection<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+            BaseResponse<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
-            // todo => improve this logic (maybe with automapper inside service layer)
-            List<GetCustomersViewModel> viewModelCollection = new();
-            foreach (Customer customer in customers)
+            List<GetCustomerViewModel> viewModelCollection = new();
+            foreach (Customer customer in customers.DataCollection)
             {
-                GetCustomersViewModel viewModel = new()
+                GetCustomerViewModel viewModel = new()
                 {
                     Id = customer.Id,
                     Name = customer.Name,
@@ -57,12 +56,20 @@ namespace SorayaManagement.Controllers
         [HttpPost]
         [Route("novo/")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateCustomerDto createCustomerDto)
+        public async Task<IActionResult> Create(CreateCustomerViewModel createCustomerViewModel)
         {
             if (ModelState.IsValid)
             {
                 User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse response = await _customerService.CreateCustomerAsync(createCustomerDto, authenticatedUser);
+
+                CreateCustomerDto createCustomerDto = new()
+                {
+                    Name = createCustomerViewModel.Name,
+                    UserId = authenticatedUser.Id,
+                    CompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<Customer> response = await _customerService.CreateCustomerAsync(createCustomerDto);
                 ViewData["Message"] = response.Message;
 
                 if (response.IsSuccess)
@@ -73,6 +80,32 @@ namespace SorayaManagement.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        [Route("detalhes/{customerId}")]
+        public async Task<IActionResult> Details(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Customer> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser);
+
+                if (result.IsSuccess)
+                {
+                    DetailCustomerViewModel detailCustomerViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Name = result.Data.Name,
+                        CreatedBy = result.Data.User.Name,
+                        Orders = result.Data.Orders
+                    };
+
+                    return View(detailCustomerViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Customers));
         }
     }
 }

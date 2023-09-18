@@ -7,7 +7,6 @@ namespace SorayaManagement.Domain.Entities
         public string Name { get; set; }
         public string NormalizedName { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public virtual Company UserCompany { get; set; }
         public int CompanyId { get; set; }
     }

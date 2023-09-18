@@ -1,4 +1,4 @@
-@model List<SorayaManagement.ViewModels.GetCustomersViewModel>;
+@model List<SorayaManagement.ViewModels.GetCustomerViewModel>;
 
 @{
     ViewData["Title"] = "Clientes";
@@ -9,11 +9,11 @@
 
 <section class="container">
 
-    <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Customer" asp-action="Create">Novo Cliente</a>
+    <a class="btn btn-primary-custom mb-3" asp-controller="Customer" asp-action="Create">Novo Cliente</a>
 
     <table class="table styled-table">
         <caption>Total de clientes encontrados: <b>@Model.Count</b></caption>
-        <thead>
+        <thead class="table-head-row">
             <tr>
                 <th>#</th>
                 <th>Nome do Cliente</th>
@@ -23,10 +23,14 @@
         <tbody>
             @foreach (var customer in Model.ToList())
             {
-                <tr>
+                <tr class="table-row">
                     <th>@customer.Id</th>
                     <td>@customer.Name</td>
                     <td>@customer.CreatedBy</td>
+                    <td>
+                        <a type="button" class="btn btn-sm btn-success" asp-controller="Customer" asp-action="Details"
+                            asp-route-customerId="@customer.Id">Detalhes</a>
+                    </td>
                 </tr>
             }
         </tbody>

@@ -14,13 +14,40 @@ namespace SorayaManagement.Infrastructure.Data.Repositories
             _orders = context.Orders;
         }
 
+        public async Task<Order> GetOrderDetailsAsync(int orderId)
+        {
+            return await _orders
+                   .Include(x => x.User).AsNoTracking()
+                   .Include(x => x.Meal).AsNoTracking()
+                   .Include(x => x.Customer).AsNoTracking()
+                   .Include(x => x.PaymentType).AsNoTracking()
+                   .Where(x => x.Id == orderId)
+                   .FirstOrDefaultAsync();
+        }
+
         public async Task<ICollection<Order>> GetOrdersByCompanyAsync(int companyId)
         {
             return await _orders.AsNoTracking()
                                .Include(x => x.User).AsNoTracking()
                                .Include(x => x.Company).AsNoTracking()
+                               .Include(x => x.Meal).AsNoTracking()
+                               .Include(x => x.Customer).AsNoTracking()
+                               .Include(x => x.PaymentType).AsNoTracking()
                                .Where(x => x.CompanyId == companyId)
                                .ToListAsync();
+        }
+
+        public async Task<ICollection<Order>> GetOrdersByDateAsync(int companyId, DateTime? date)
+        {
+            return await _orders.AsNoTracking()
+                   .Include(x => x.User).AsNoTracking()
+                   .Include(x => x.Company).AsNoTracking()
+                   .Include(x => x.Meal).AsNoTracking()
+                   .Include(x => x.Customer).AsNoTracking()
+                   .Include(x => x.PaymentType).AsNoTracking()
+                   .Where(x => x.CreatedAt.Date == date.Value.Date)
+                   .Where(x => x.CompanyId == companyId)
+                   .ToListAsync();
         }
     }
 }

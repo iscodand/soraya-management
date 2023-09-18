@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using SorayaManagement.Domain.Entities.Common;
 using SorayaManagement.Infrastructure.Data.Contracts;
 using SorayaManagement.Infrastructure.Data.DataContext;
 
 namespace SorayaManagement.Infrastructure.Data.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
 

@@ -12,19 +12,15 @@ namespace SorayaManagement.Domain.Entities
         public bool IsPaid { get; set; }
         public DateTime? PaidAt { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public virtual PaymentType PaymentType { get; set; }
         public int PaymentTypeId { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public virtual Meal Meal { get; set; }
         public int MealId { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public virtual Customer Customer { get; set; }
         public int CustomerId { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public virtual Company Company { get; set; }
         public int CompanyId { get; set; }
     }

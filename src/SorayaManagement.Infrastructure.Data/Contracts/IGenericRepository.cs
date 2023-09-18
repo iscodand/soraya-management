@@ -2,7 +2,7 @@ using SorayaManagement.Domain.Entities.Common;
 
 namespace SorayaManagement.Infrastructure.Data.Contracts
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
         public Task<ICollection<T>> GetAllAsync();
         public Task<T> GetByIdAsync(int id);

@@ -1,0 +1,129 @@
+@model List<SorayaManagement.ViewModels.GetOrderViewModel>;
+
+@{
+    ViewData["Title"] = "Pedidos";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <div>
+        <a class="btn btn-primary-custom btn-lg" asp-area="" asp-controller="Order" asp-action="Create">
+            + Novo Pedido
+        </a>
+    </div>
+
+    <div class="filtering">
+        <form id="filterForm" asp-controller="Order" asp-action="Orders" method="GET">
+            <div class="d-flex flex-wrap justify-content-end">
+
+                <div class="col-md-3">
+                    <label for="isPaid" class="form-label fw-thin">PAGAMENTO:</label>
+                    <select id="isPaid" name="isPaid" class="form-select form-select-lg form-control"
+                        style="width: 250px;">
+                        <option>Selecione alguma opção</option>
+                        <option value="all">Todos</option>
+                        <option value="true">Pagos</option>
+                        <option value="false">Não Pagos</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="createdAt" class="form-label fw-thin">DATA:</label>
+                    <input id="createdAt" name="createdAt" type="date" class="form-control form-control-lg">
+                    <script>
+                        // Obtém a data atual
+                        const dataAtual = new Date();
+
+                        // Formata a data para o formato YYYY-MM-DD
+                        const ano = dataAtual.getFullYear();
+                        const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+                        const dia = String(dataAtual.getDate()).padStart(2, '0');
+
+                        // Define a data formatada como valor padrão no campo de entrada
+                        document.getElementById('createdAt').value = `${ano}-${mes}-${dia}`;
+                    </script>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <hr>
+
+    <table id="ordersTable" class="styled-table table">
+        <caption><b>@Model.Count</b> Pedidos Encontrados.</caption>
+        <thead>
+            <tr class="table-head-row">
+                <th></th>
+                <th>Cliente</th>
+                <th>Sabor</th>
+                <th>Valor</th>
+                <th>Forma de Pagamento</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+        <tbody id="ordersTableBody" class="table-group-divider">
+            @foreach (var order in Model)
+            {
+                <tr class="table-row">
+                    <td>
+                        <a asp-action="Details" asp-route-orderId="@order.Id">
+                            <i class="fa-solid fa-circle-info fa-lg"></i>
+                        </a>
+                    </td>
+                    <td>@order.Customer</td>
+                    <td>@order.Meal</td>
+                    <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
+                    <td>
+                        @if (@order.PaymentType.Equals("PIX"))
+                        {
+                            <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
+                        }
+                    </td>
+                    <td>
+                        @if (!order.IsPaid)
+                        {
+                            <form asp-action="MarkOrderAsPaid" method="post">
+                                <input type="hidden" name="orderId" value="@order.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <i id="checkIcon" class="fa-solid fa-square-check fa-xl"></i>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('#filterForm').change(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '/pedidos/filtering',
+                type: 'GET',
+                data: formData,
+                success: function (result) {
+                    $('#ordersTableBody').html(result);
+                },
+                error: function () {
+                    alert(`Ocorreu um erro ao processar a solicitação.`);
+                }
+            });
+        });
+    });
+</script>
