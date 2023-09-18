@@ -85,7 +85,7 @@ namespace SorayaManagement.Application.Services
 
         public async Task<BaseResponse<Order>> GetOrdersByCompanyAsync(int companyId)
         {
-            if (companyId < 0)
+            if (companyId <= 0)
             {
                 return new BaseResponse<Order>()
                 {
@@ -106,7 +106,7 @@ namespace SorayaManagement.Application.Services
 
         public async Task<BaseResponse<Order>> GetOrdersByDateAsync(int companyId, DateTime? date)
         {
-            if (companyId < 0)
+            if (companyId <= 0)
             {
                 return new BaseResponse<Order>()
                 {

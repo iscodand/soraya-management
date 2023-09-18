@@ -45,7 +45,7 @@ namespace SorayaManagement.Application.Services
 
         public async Task<BaseResponse<Meal>> GetMealsByCompanyAsync(int companyId)
         {
-            if (companyId < 0)
+            if (companyId <= 0)
             {
                 return new BaseResponse<Meal>()
                 {

@@ -44,7 +44,7 @@ namespace SorayaManagement.Application.Services
 
         public async Task<BaseResponse<Customer>> GetCustomersByCompanyAsync(int companyId)
         {
-            if (companyId < 0)
+            if (companyId <= 0)
             {
                 return new BaseResponse<Customer>()
                 {
@@ -65,7 +65,7 @@ namespace SorayaManagement.Application.Services
 
         public async Task<BaseResponse<Customer>> DetailCustomerAsync(int customerId, User authenticatedUser)
         {
-            Customer customer = await _customerRepository.GetByIdAsync(customerId);
+            Customer customer = await _customerRepository.DetailCustomerAsync(customerId);
 
             if (authenticatedUser.CompanyId != customer.CompanyId)
             {
