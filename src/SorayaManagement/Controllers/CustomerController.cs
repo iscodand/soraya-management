@@ -93,7 +93,15 @@ namespace SorayaManagement.Controllers
 
                 if (result.IsSuccess)
                 {
-                    return View(result.Data);
+                    DetailCustomerViewModel detailCustomerViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Name = result.Data.Name,
+                        CreatedBy = result.Data.User.Name,
+                        Orders = result.Data.Orders
+                    };
+
+                    return View(detailCustomerViewModel);
                 }
             }
 
