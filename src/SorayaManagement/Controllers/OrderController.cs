@@ -63,7 +63,7 @@ namespace SorayaManagement.Controllers
 
         [HttpGet]
         [Route("filtering/")]
-        public async Task<IActionResult> FilteringOrders(string isPaid, DateTime? createdAt)
+        public async Task<IActionResult> FilteringOrders(DateTime? createdAt)
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
@@ -88,21 +88,6 @@ namespace SorayaManagement.Controllers
                 };
 
                 getOrderViewModelCollection.Add(getOrderViewModel);
-            }
-
-            // Filter => filter by Order is Paid equals true or false
-            switch (isPaid)
-            {
-                case "true":
-                    getOrderViewModelCollection = getOrderViewModelCollection.Where(x => x.IsPaid == true)
-                                                                             .ToList();
-                    break;
-                case "false":
-                    getOrderViewModelCollection = getOrderViewModelCollection.Where(x => x.IsPaid == false)
-                                                                             .ToList();
-                    break;
-                case "all":
-                    break;
             }
 
             return PartialView("_OrdersTable", getOrderViewModelCollection);
