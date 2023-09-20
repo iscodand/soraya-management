@@ -1,5 +1,5 @@
 * {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Merriweather Sans', sans-serif;
 }
 
 body {
@@ -22,29 +22,32 @@ a {
     background-color: #1d5348 !important;
     color: #1d5348 !important;
     height: 80px;
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
     border-radius: 50px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
 .navbar .navbar-brand {
-    color: #dddddd;
+    color: #ededed;
     font-weight: bolder;
     font-size: 1.3em;
 }
 
 .nav-link {
     position: relative;
-    color: #dddddd;
+    color: #ededed;
     font-weight: bolder;
 }
 
 .nav-link:hover {
-    color: #dddddd;
+    color: #ededed;
 }
 
 .nav-link:after {
-    color: #dddddd;
+    color: #ededed;
     content: '';
     opacity: 0;
     transition: all 0.2s;
@@ -58,6 +61,33 @@ a {
 
 .nav-link:hover::after {
     opacity: 1;
+}
+
+.box-orders {
+    background-color: #1d5348;
+    /* border: 3px solid #252525; */
+    padding: 10px;
+    text-align: center;
+    width: 175px;
+    height: 120px;
+    margin: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.box-orders h2 {
+    font-weight: bolder;
+    color: #efefef;
+}
+
+.box-orders p {
+    color: #efefef;
+    font-weight: bolder;
 }
 
 /* Styled Table Section */
@@ -145,6 +175,6 @@ a {
     background-color: #ffffff;
 }
 
-#checkIcon {
+#isPaidIcon {
     color: #386d63;
 }
