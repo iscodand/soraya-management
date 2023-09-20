@@ -2,16 +2,16 @@
 
 @foreach (var order in Model)
 {
-    <tr>
+    <tr class="table-row">
         <td>
             <a asp-action="Details" asp-route-orderId="@order.Id">
                 <i class="fa-solid fa-circle-info fa-lg"></i>
             </a>
         </td>
+        <td id="createdAtOrder">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
         <td>@order.Customer</td>
         <td>@order.Meal</td>
-        <td><b>R$</b> @Math.Round(@order.Price, 2)
-        </td>
+        <td id="orderPrice"><b>R$</b> @Math.Round(@order.Price, 2)</td>
         <td>
             @if (@order.PaymentType.Equals("PIX"))
             {
@@ -32,7 +32,7 @@
             }
             else
             {
-                <i id="checkIcon" class="fa-solid fa-square-check fa-xl"></i>
+                <i id="isPaidIcon" class="fa-solid fa-square-check fa-xl"></i>
             }
         </td>
     </tr>

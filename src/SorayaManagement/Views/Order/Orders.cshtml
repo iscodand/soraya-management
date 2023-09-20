@@ -9,28 +9,67 @@
 
 <section class="container">
 
-    <div>
-        <a class="btn btn-primary-custom btn-lg" asp-area="" asp-controller="Order" asp-action="Create">
-            + Novo Pedido
-        </a>
-    </div>
+    <div class="container">
 
-    <div class="filtering">
-        <form id="filterForm" asp-controller="Order" asp-action="Orders" method="GET">
-            <div class="d-flex flex-wrap justify-content-end">
+        <div class="row">
 
-                <div class="col-md-3">
-                    <label for="isPaid" class="form-label fw-thin">PAGAMENTO:</label>
-                    <select id="isPaid" name="isPaid" class="form-select form-select-lg form-control"
-                        style="width: 250px;">
-                        <option>Selecione alguma opção</option>
-                        <option value="all">Todos</option>
-                        <option value="true">Pagos</option>
-                        <option value="false">Não Pagos</option>
-                    </select>
+            <h3 id="ordersDataDate" class="fw-bolder">Dados dos Pedidos -
+                @DateTime.Today.Date.ToString("dd/MM/yyyy")</h3>
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <h2 id="newOrdersCount">@Model.Count</h2>
+                    <p>Novos Pedidos</p>
                 </div>
+            </div>
 
-                <div class="col-md-3">
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <h2 id="priceOrdersSum">
+                        R$ @Math.Round(Model.Where(x => x.IsPaid == true).Sum(x => x.Price), 2)
+                    </h2>
+                    <p>Total de Lucro</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <h2 id="paidOrdersCount">@Model.Where(x => x.IsPaid == true).Count()</h2>
+                    <p>Pedidos Pagos</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <h2 id="unpaidOrdersCount">@Model.Where(x => x.IsPaid == false).Count()</h2>
+                    <p>Pedidos NÃO Pagos</p>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row">
+
+            <div class="col-md-4" style="padding-top: 30px">
+                <a class="btn btn-primary-custom btn-lg" asp-controller="Order" asp-action="Create">
+                    + Novo Pedido
+                </a>
+            </div>
+
+            <div class="col-md-4" style="padding-left: 175px">
+                <label for="paymentFilter" class="form-label fw-thin">PAGAMENTO:</label>
+                <select id="paymentFilter" name="paymentFilter" class="form-select form-select-lg form-control"
+                    style="width: 250px;">
+                    <option value="all">Todos</option>
+                    <option value="paid">Pagos</option>
+                    <option value="unpaid">Não Pagos</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <form id="filterByDateForm" asp-controller="Order" asp-action="Orders" method="GET">
                     <label for="createdAt" class="form-label fw-thin">DATA:</label>
                     <input id="createdAt" name="createdAt" type="date" class="form-control form-control-lg">
                     <script>
@@ -38,77 +77,77 @@
                         const dataAtual = new Date();
 
                         // Formata a data para o formato YYYY-MM-DD
-                        const ano = dataAtual.getFullYear();
-                        const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
-                        const dia = String(dataAtual.getDate()).padStart(2, '0');
+                        const year = dataAtual.getFullYear();
+                        const month = String(dataAtual.getMonth() + 1).padStart(2, '0');
+                        const day = String(dataAtual.getDate()).padStart(2, '0');
 
                         // Define a data formatada como valor padrão no campo de entrada
-                        document.getElementById('createdAt').value = `${ano}-${mes}-${dia}`;
+                        document.getElementById('createdAt').value = `${year}-${month}-${day}`;
                     </script>
-                </div>
+                </form>
             </div>
-        </form>
-    </div>
 
-    <hr>
+        </div>
 
-    <table id="ordersTable" class="styled-table table">
-        <caption><b>@Model.Count</b> Pedidos Encontrados.</caption>
-        <thead>
-            <tr class="table-head-row">
-                <th></th>
-                <th>Cliente</th>
-                <th>Sabor</th>
-                <th>Valor</th>
-                <th>Forma de Pagamento</th>
-                <th>Pago</th>
-            </tr>
-        </thead>
-        <tbody id="ordersTableBody" class="table-group-divider">
-            @foreach (var order in Model)
-            {
-                <tr class="table-row">
-                    <td>
-                        <a asp-action="Details" asp-route-orderId="@order.Id">
-                            <i class="fa-solid fa-circle-info fa-lg"></i>
-                        </a>
-                    </td>
-                    <td>@order.Customer</td>
-                    <td>@order.Meal</td>
-                    <td><b>R$</b> @Math.Round(@order.Price, 2)</td>
-                    <td>
-                        @if (@order.PaymentType.Equals("PIX"))
-                        {
-                            <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
-                        }
-                        else
-                        {
-                            <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
-                        }
-                    </td>
-                    <td>
-                        @if (!order.IsPaid)
-                        {
-                            <form asp-action="MarkOrderAsPaid" method="post">
-                                <input type="hidden" name="orderId" value="@order.Id" />
-                                <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <i id="checkIcon" class="fa-solid fa-square-check fa-xl"></i>
-                        }
-                    </td>
+        <hr>
+        <table id="ordersTable" class="styled-table table">
+            <thead>
+                <tr class="table-head-row">
+                    <th></th>
+                    <th>Data do Pedido</th>
+                    <th>Cliente</th>
+                    <th>Sabor</th>
+                    <th>Valor</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Pago</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="ordersTableBody" class="table-group-divider">
+                @foreach (var order in Model)
+                {
+                    <tr class="table-row">
+                        <td>
+                            <a asp-action="Details" asp-route-orderId="@order.Id">
+                                <i class="fa-solid fa-circle-info fa-lg"></i>
+                            </a>
+                        </td>
+                        <td id="createdAtOrder">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@order.Customer</td>
+                        <td>@order.Meal</td>
+                        <td id="orderPrice"><b>R$</b> @Math.Round(@order.Price, 2)</td>
+                        <td>
+                            @if (@order.PaymentType.Equals("PIX"))
+                            {
+                                <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
+                            }
+                        </td>
+                        <td>
+                            @if (!order.IsPaid)
+                            {
+                                <form asp-action="MarkOrderAsPaid" method="post">
+                                    <input type="hidden" name="orderId" value="@order.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <i id="isPaidIcon" class="fa-solid fa-square-check fa-xl"></i>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
 </section>
 
 <script>
     $(document).ready(function () {
-        $('#filterForm').change(function (e) {
+        $('#filterByDateForm').change(function (e) {
             e.preventDefault();
 
             var formData = $(this).serialize();
@@ -119,9 +158,57 @@
                 data: formData,
                 success: function (result) {
                     $('#ordersTableBody').html(result);
+
+                    // Atualize os boxes com os novos valores
+                    var newOrdersCount = $('#ordersTableBody tr').length;
+                    var paidOrdersCount = $('#ordersTableBody tr:has(.fa-square-check)').length;
+                    var unpaidOrdersCount = newOrdersCount - paidOrdersCount;
+
+                    $('#newOrdersCount').text(newOrdersCount);
+                    $('#paidOrdersCount').text(paidOrdersCount);
+                    $('#unpaidOrdersCount').text(unpaidOrdersCount);
+
+                    // Calcula a soma total do valor arrecadado
+                    var totalRevenue = 0;
+                    $('#ordersTableBody tr').each(function () {
+                        $('#ordersDataDate').text(`Dados dos Pedidos - ${$(this).find('td:eq(1)').text()}`);
+                        var priceText = $(this).find('td:eq(4)').text().replace('R$', '').trim();
+                        var price = parseFloat(priceText.replace(',', '.'));
+                        if (!isNaN(price)) {
+                            totalRevenue += price;
+                        }
+                    });
+
+                    // Formata o valor da soma total
+                    var formattedTotalRevenue = 'R$ ' + totalRevenue.toFixed(2);
+                    $('#priceOrdersSum').text(formattedTotalRevenue);
                 },
                 error: function () {
                     alert(`Ocorreu um erro ao processar a solicitação.`);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        // Bind an input event listener to the payment filter input
+        $("#paymentFilter").on("change", function () {
+            var paymentFilter = $("#paymentFilter").val();
+
+            // Loop through each row in the table body
+            $("#ordersTableBody tr").each(function () {
+                var paidColumn = $(this).find("td:nth-child(7)");
+
+                // Check if the payment status matches the selected filter
+                var isPaid = paidColumn.find("i#isPaidIcon").length > 0;
+
+                // Determine whether to show or hide the row based on the payment status filter
+                if ((paymentFilter === "all") ||
+                    (paymentFilter === "paid" && isPaid) ||
+                    (paymentFilter === "unpaid" && !isPaid)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
                 }
             });
         });
