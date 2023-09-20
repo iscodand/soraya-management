@@ -9,7 +9,7 @@
 
 <section class="container">
 
-    <a class="btn btn-primary-custom mb-3" asp-area="" asp-controller="Meal" asp-action="Create">Novo Sabor</a>
+    <a class="btn btn-primary-custom btn-lg mb-3" asp-controller="Meal" asp-action="Create">+ Novo Sabor</a>
 
     <table class="table styled-table">
         <caption>Total de sabores encontrados: <b>@Model.Count</b></caption>
@@ -25,7 +25,7 @@
             @foreach (var meal in Model.ToList())
             {
                 <tr>
-                    <th>@meal.Id</th>
+                    <td>@meal.Id</td>
                     <td>@meal.Description</td>
                     <td>@meal.Accompaniments</td>
                     <td>@meal.CreatedBy</td>
