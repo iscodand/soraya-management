@@ -21,16 +21,16 @@
     <script src="https://kit.fontawesome.com/761a28cb00.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script type="module" src="./js/site.js"></script>
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 
 <body>
-
-    <main role="main" class="pb-3">
+    <main id="main" role="main" class="main-content pb-3">
         @RenderBody()
     </main>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
