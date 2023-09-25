@@ -198,7 +198,7 @@ namespace SorayaManagement.Controllers
                         CreatedAt = result.Data.CreatedAt
                     };
 
-                    return View(getOrderViewModel);
+                    return PartialView("_Details", getOrderViewModel);
                 }
             }
 
