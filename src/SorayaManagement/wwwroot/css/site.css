@@ -156,6 +156,18 @@ a {
     background-color: #3c9482
 }
 
+.btn-warning {
+    color: #ffffff;
+}
+
+.btn-warning:active {
+    color: #ffffff;
+}
+
+.btn-primary-custom:hover {
+    color: #ffffff;
+}
+
 .fa-user {
     color: #ffffff;
 }
