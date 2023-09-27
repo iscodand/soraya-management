@@ -21,6 +21,7 @@ $(document).ready(function () {
                 $('#unpaid-orders-count').text(unpaidOrdersCount);
 
                 let totalRevenue = 0;
+                let filterDate;
 
                 $orders.each(function () {
                     let priceText = $(this).find('td:eq(4)').text().replace('R$', '').trim();
@@ -29,10 +30,15 @@ $(document).ready(function () {
                     if (!isNaN(price)) {
                         totalRevenue += price;
                     }
+
+                    filterDate = $(this).find('td:eq(1)').text();
                 });
 
                 let formattedTotalRevenue = 'R$ ' + totalRevenue.toFixed(2);
                 $('#price-orders-sum').text(formattedTotalRevenue);
+
+                let ordersDataDate = $('#orders-data-date');
+                ordersDataDate.text(`Dados dos Pedidos - ${filterDate}`);
             },
             error: function () {
                 alert('Ocorreu um erro ao processar a solicitação.');
