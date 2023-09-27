@@ -5,7 +5,7 @@ using SorayaManagement.Services;
 using SorayaManagement.Application;
 using Newtonsoft.Json;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Configure Newtonsoft.Json to Ignore Loops
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -31,6 +31,7 @@ builder.Services.AddIdentitySetup();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Add session settings
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -38,7 +39,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
