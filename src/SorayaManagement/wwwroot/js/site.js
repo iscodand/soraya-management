@@ -1,4 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// Imports File
 
-// Write your JavaScript code.
+// Order Actions
+import './orders/closeOrderDetails.js'
+
+// Orders Filtering
+import './orders/filters/filterOrdersByDate.js'
+import './orders/filters/filterOrdersByPaid.js'
+
+//  Utils
+import './utils/setCurrentDateInSelectByDate.js'

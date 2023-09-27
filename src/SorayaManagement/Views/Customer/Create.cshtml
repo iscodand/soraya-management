@@ -12,7 +12,7 @@
     <form asp-action="Create" asp-antiforgery="true">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <h5 class="fw-normal" style="letter-spacing: 1px;">Crie um novo cliente</h5>
+        <h5 class="fw-normal" style="letter-spacing: 1px;">Adicione um novo cliente</h5>
         <hr>
         <br>
 
@@ -29,7 +29,6 @@
         </div>
     </form>
 
-    <a asp-area="" asp-controller="Customer" asp-action="Customers"><button
-            class="btn btn-warning btn-block">Voltar</button></a>
+    <a asp-controller="Customer" asp-action="Customers" class="btn btn-warning btn-block">Voltar</a>
 
 </section>

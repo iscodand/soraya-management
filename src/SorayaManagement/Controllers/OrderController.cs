@@ -14,19 +14,13 @@ namespace SorayaManagement.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
-        private readonly ICustomerService _customerService;
-        private readonly IMealService _mealService;
         private readonly ISessionService _sessionService;
 
         public OrderController(IOrderService orderService,
-                               ICustomerService customerService,
-                               IMealService mealService,
                                ISessionService sessionService)
         {
             _orderService = orderService;
             _sessionService = sessionService;
-            _customerService = customerService;
-            _mealService = mealService;
         }
 
         [HttpGet]
@@ -63,7 +57,7 @@ namespace SorayaManagement.Controllers
 
         [HttpGet]
         [Route("filtering/")]
-        public async Task<IActionResult> FilteringOrders(string isPaid, DateTime? createdAt)
+        public async Task<IActionResult> FilteringOrders(DateTime? createdAt)
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
@@ -90,21 +84,6 @@ namespace SorayaManagement.Controllers
                 getOrderViewModelCollection.Add(getOrderViewModel);
             }
 
-            // Filter => filter by Order is Paid equals true or false
-            switch (isPaid)
-            {
-                case "true":
-                    getOrderViewModelCollection = getOrderViewModelCollection.Where(x => x.IsPaid == true)
-                                                                             .ToList();
-                    break;
-                case "false":
-                    getOrderViewModelCollection = getOrderViewModelCollection.Where(x => x.IsPaid == false)
-                                                                             .ToList();
-                    break;
-                case "all":
-                    break;
-            }
-
             return PartialView("_OrdersTable", getOrderViewModelCollection);
         }
 
@@ -114,16 +93,13 @@ namespace SorayaManagement.Controllers
         {
             User authenticatedUser = _sessionService.RetrieveUserSession();
 
-            // Improve this query
-            BaseResponse<PaymentType> paymentTypes = await _orderService.GetPaymentTypesAsync();
-            BaseResponse<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
-            BaseResponse<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
+            var orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
 
             CreateOrderDropdown createOrderDropdown = new()
             {
-                PaymentTypes = paymentTypes.DataCollection,
-                Customers = customers.DataCollection,
-                Meals = meals.DataCollection
+                PaymentTypes = orderItems.Data.PaymentTypes,
+                Customers = orderItems.Data.Customers,
+                Meals = orderItems.Data.Meals
             };
 
             CreateOrderViewModel createOrderViewModel = new()
@@ -161,7 +137,7 @@ namespace SorayaManagement.Controllers
                 if (result.IsSuccess)
                 {
                     ViewData["IsSuccess"] = true;
-                    return RedirectToAction("Orders");
+                    return RedirectToAction(nameof(Orders));
                 }
             }
 
@@ -181,11 +157,11 @@ namespace SorayaManagement.Controllers
                 if (result.IsSuccess)
                 {
                     ViewData["IsSuccess"] = true;
-                    return RedirectToAction("Orders");
+                    return RedirectToAction(nameof(Orders));
                 }
             }
 
-            return RedirectToAction("Orders");
+            return RedirectToAction(nameof(Orders));
         }
 
         [HttpGet]
@@ -213,11 +189,115 @@ namespace SorayaManagement.Controllers
                         CreatedAt = result.Data.CreatedAt
                     };
 
-                    return View(getOrderViewModel);
+                    return PartialView("_Details", getOrderViewModel);
                 }
             }
 
             return RedirectToAction(nameof(Orders));
+        }
+
+        [HttpDelete]
+        [Route("deletar/{orderId}")]
+        public async Task<IActionResult> Delete(int orderId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Order> result = await _orderService.DeleteOrderAsync(orderId, authenticatedUser);
+                ViewData["Message"] = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    ViewData["IsSuccess"] = true;
+                    return Json(new { success = true });
+                }
+            }
+
+            return Json(new { success = false, message = "Falha ao excluir o pedido." });
+        }
+
+        [HttpGet]
+        [Route("editar/{orderId}")]
+        public async Task<IActionResult> Update(int orderId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Order> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser);
+
+                if (result.IsSuccess)
+                {
+                    BaseResponse<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+
+                    CreateOrderDropdown updateOrderDropdown = new()
+                    {
+                        PaymentTypes = orderItems.Data.PaymentTypes,
+                        Customers = orderItems.Data.Customers,
+                        Meals = orderItems.Data.Meals
+                    };
+
+                    UpdateOrderViewModel updateOrderViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Description = result.Data.Description,
+                        Price = result.Data.Price,
+
+                        PaymentTypeId = result.Data.PaymentType.Id,
+                        MealId = result.Data.Meal.Id,
+                        CustomerId = result.Data.Customer.Id,
+
+                        IsPaid = result.Data.IsPaid,
+                        PaidAt = result.Data.PaidAt,
+                        CreatedAt = result.Data.CreatedAt,
+                        UpdatedAt = result.Data.UpdatedAt,
+
+                        CreateOrderDropdown = updateOrderDropdown,
+                    };
+
+                    return View(updateOrderViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Orders));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("editar/{orderId}")]
+        public async Task<IActionResult> Update(int orderId, UpdateOrderViewModel updateOrderViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+
+                UpdateOrderDto updateOrderDto = new()
+                {
+                    Description = updateOrderViewModel.Description,
+                    CustomerId = updateOrderViewModel.CustomerId,
+                    MealId = updateOrderViewModel.MealId,
+                    PaymentTypeId = updateOrderViewModel.PaymentTypeId,
+                    Price = updateOrderViewModel.Price,
+
+                    IsPaid = updateOrderViewModel.IsPaid,
+                    PaidAt = updateOrderViewModel.PaidAt,
+
+                    OrderId = orderId,
+                    CompanyId = authenticatedUser.CompanyId,
+                    UserId = authenticatedUser.Id
+                };
+
+                BaseResponse<Order> result = await _orderService.UpdateOrderAsync(updateOrderDto);
+                ViewData["Message"] = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    ViewData["IsSuccess"] = result.IsSuccess;
+
+                    return RedirectToAction(nameof(Orders));
+                }
+            }
+
+            return View();
         }
     }
 }

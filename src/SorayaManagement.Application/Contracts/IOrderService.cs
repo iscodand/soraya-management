@@ -8,9 +8,11 @@ namespace SorayaManagement.Application.Contracts
     {
         public Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto);
         public Task<BaseResponse<Order>> GetOrdersByCompanyAsync(int companyId);
+        public Task<BaseResponse<Order>> UpdateOrderAsync(UpdateOrderDto updateOrderDto);
+        public Task<BaseResponse<GetCreateOrderItemsDto>> GetCreateOrdersItemsAsync(int companyId);
         public Task<BaseResponse<Order>> GetOrdersByDateAsync(int companyId, DateTime? date);
         public Task<BaseResponse<Order>> GetOrderDetailsAsync(int orderId, User authenticatedUser);
         public Task<BaseResponse<Order>> MakeOrderPaymentAsync(int orderId, User authenticatedUser);
-        public Task<BaseResponse<PaymentType>> GetPaymentTypesAsync();
+        public Task<BaseResponse<Order>> DeleteOrderAsync(int orderId, User authenticatedUser);
     }
 }
