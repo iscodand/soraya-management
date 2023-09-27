@@ -79,6 +79,7 @@
         </div>
 
         <hr>
+
         <table id="orders-table" class="styled-table table">
             <thead>
                 <tr class="table-head-row">
@@ -96,7 +97,8 @@
                 {
                     <tr class="table-row">
                         <td>
-                            <a href="pedidos/detalhes/@order.Id" class="show-details" data-order-id="@order.Id">
+                            <a id="open-order-details" href="pedidos/detalhes/@order.Id" class="show-details"
+                                data-order-id="@order.Id">
                                 <i class="fa-solid fa-circle-info fa-lg"></i>
                             </a>
                         </td>
@@ -132,11 +134,13 @@
             </tbody>
         </table>
 
-        <div id="order-details-modal-card" class="hidden">
+        <p id="orders-info" class="text-center hidden">Não foram encontrados pedidos para esses filtros.</p>
+
+        <div id="order-details-modal-card" class="hidden order-details-modal-card">
+            <!-- Get a modal of order details (Being loaded on _Details.cshtml) -->
         </div>
 
         <div id="modal-backdrop" class="modal-backdrop hidden"></div>
-
 </section>
 
 <script>
@@ -145,7 +149,7 @@
             e.preventDefault();
 
             const orderId = $(this).data('order-id');
-            const orderDetailsCard = $('#order-details-modal-card');
+            const orderDetailsCard = $('.order-details-modal-card');
             const backdrop = $('.modal-backdrop');
 
             $.ajax({
