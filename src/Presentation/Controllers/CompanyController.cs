@@ -2,19 +2,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos.User;
-using Application.Dtos;
 using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
-using UI.ViewModels.User.Employee;
-using ViewModels;
+using Presentation.ViewModels.User;
 
-namespace UI.Controllers
+namespace Presentation.Controllers
 {
     [Route("minha-empresa/")]
-    // [Authorize(Roles = "Manager, Admin")]
+    [Authorize(Roles = "Manager, Admin")]
     public class CompanyController : Controller
     {
         private readonly ISessionService _sessionService;
@@ -92,7 +90,7 @@ namespace UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                // User authenticatedUser = _sessionService.RetrieveUserSession();
+                User authenticatedUser = _sessionService.RetrieveUserSession();
 
                 RegisterUserDto registerUserDto = new()
                 {

@@ -3,7 +3,7 @@ using Infrastructure.Identity.Contracts;
 using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
 
-namespace UI.Controllers
+namespace Presentation.Controllers
 {
     [Route("auth/")]
     public class AuthenticationController : Controller

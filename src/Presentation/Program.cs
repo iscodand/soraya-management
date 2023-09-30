@@ -1,9 +1,9 @@
+using Application;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Contracts;
-using Services;
-using Application;
 using Newtonsoft.Json;
+using Presentation.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

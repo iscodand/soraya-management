@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 
-namespace UI.Controllers
+namespace Presentation.Controllers
 {
     [Route("/")]
     [Authorize]

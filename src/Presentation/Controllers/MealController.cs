@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos.Meal;
 using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
-using ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Presentation.ViewModels.Meal;
 
-namespace UI.Controllers
+namespace Presentation.Controllers
 {
     [Route("sabores/")]
     [Authorize]

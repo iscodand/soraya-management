@@ -2,7 +2,7 @@ using Domain.Entities;
 using Infrastructure.Data.Contracts;
 using Infrastructure.Identity.Contracts;
 
-namespace Services
+namespace Presentation.Services
 {
     public class AuthenticatedUserService : IAuthenticatedUserService
     {

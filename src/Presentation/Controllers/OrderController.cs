@@ -5,9 +5,9 @@ using Application.Dtos.Order;
 using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
-using ViewModels;
+using Presentation.ViewModels.Order;
 
-namespace UI.Controllers
+namespace Presentation.Controllers
 {
     [Authorize]
     [Route("pedidos/")]

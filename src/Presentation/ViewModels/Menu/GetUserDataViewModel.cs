@@ -1,4 +1,4 @@
-namespace UI.Menu.ViewModels
+namespace Presentation.ViewModels.Menu
 {
     public class GetUserDataViewModel
     {

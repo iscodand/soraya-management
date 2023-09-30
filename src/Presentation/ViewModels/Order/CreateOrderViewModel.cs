@@ -1,4 +1,4 @@
-namespace ViewModels
+namespace Presentation.ViewModels.Order
 {
     public class CreateOrderViewModel
     {

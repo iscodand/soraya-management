@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
-using UI.Menu.ViewModels;
+using Presentation.ViewModels.Menu;
 
-namespace ViewComponents
+namespace Presentation.ViewComponents
 {
     public class MenuViewComponent : ViewComponent
     {

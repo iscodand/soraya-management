@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 
-namespace Services
+namespace Presentation.Services
 {
     public class SessionService : ISessionService
     {

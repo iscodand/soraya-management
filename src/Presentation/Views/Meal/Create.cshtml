@@ -1,4 +1,4 @@
-@model ViewModels.CreateMealViewModel;
+@model Presentation.ViewModels.Meal.CreateMealViewModel;
 
 @{
     ViewData["Title"] = "Novo Sabor";
@@ -35,7 +35,6 @@
         </div>
     </form>
 
-    <a asp-area="" asp-controller="Meal" asp-action="Meals"><button
-            class="btn btn-warning btn-block">Voltar</button></a>
+    <a asp-area="" asp-controller="Meal" asp-action="Meals" class="btn btn-warning btn-block">Voltar</a>
 
 </section>

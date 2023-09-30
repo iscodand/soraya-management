@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Dtos.User;
 
-namespace UI.ViewModels.User.Employee
+namespace Presentation.ViewModels.User
 {
     public class RegisterUserViewModel
     {

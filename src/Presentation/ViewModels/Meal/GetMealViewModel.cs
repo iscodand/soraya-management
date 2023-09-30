@@ -1,4 +1,4 @@
-namespace ViewModels
+namespace Presentation.ViewModels.Meal
 {
     public class GetMealViewModel
     {

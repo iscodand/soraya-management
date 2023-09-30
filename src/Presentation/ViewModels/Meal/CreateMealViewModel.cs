@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ViewModels
+namespace Presentation.ViewModels.Meal
 {
     public class CreateMealViewModel
     {

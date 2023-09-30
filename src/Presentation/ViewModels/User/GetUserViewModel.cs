@@ -1,4 +1,4 @@
-namespace ViewModels
+namespace Presentation.ViewModels.User
 {
     public class GetUserViewModel
     {
