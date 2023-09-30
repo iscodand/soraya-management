@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/SorayaManagement/bin/Debug/net7.0/SorayaManagement.dll",
+            "program": "${workspaceFolder}/src/SorayaManagement.UI/bin/Debug/net7.0/SorayaManagement.UI.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/SorayaManagement",
+            "cwd": "${workspaceFolder}/src/SorayaManagement.UI",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
