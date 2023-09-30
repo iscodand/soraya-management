@@ -1,4 +1,4 @@
-namespace SorayaManagement.ViewModels
+namespace ViewModels
 {
     public class GetUserViewModel
     {

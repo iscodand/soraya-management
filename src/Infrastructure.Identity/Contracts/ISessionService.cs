@@ -1,6 +1,6 @@
-using SorayaManagement.Domain.Entities;
+using Domain.Entities;
 
-namespace SorayaManagement.Infrastructure.Identity.Contracts
+namespace Infrastructure.Identity.Contracts
 {
     public interface ISessionService
     {

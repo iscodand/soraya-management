@@ -1,4 +1,4 @@
-namespace SorayaManagement.UI.Menu.ViewModels
+namespace UI.Menu.ViewModels
 {
     public class GetUserDataViewModel
     {

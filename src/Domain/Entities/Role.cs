@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace SorayaManagement.Domain.Entities
+namespace Domain.Entities
 {
     public class Role : IdentityRole<string>
     {

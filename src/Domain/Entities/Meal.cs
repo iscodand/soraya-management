@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using SorayaManagement.Domain.Entities.Common;
+using Domain.Entities.Common;
 
-namespace SorayaManagement.Domain.Entities
+namespace Domain.Entities
 {
     [Table("MEALS")]
     public class Meal : BaseEntity

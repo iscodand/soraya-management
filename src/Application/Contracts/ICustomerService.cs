@@ -1,8 +1,8 @@
-using SorayaManagement.Application.Dtos.Customer;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
+using Application.Dtos.Customer;
+using Application.Responses;
+using Domain.Entities;
 
-namespace SorayaManagement.Application.Contracts
+namespace Application.Contracts
 {
     public interface ICustomerService
     {

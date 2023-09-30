@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SorayaManagement.ViewModels
+namespace ViewModels
 {
     public class CreateCustomerViewModel
     {

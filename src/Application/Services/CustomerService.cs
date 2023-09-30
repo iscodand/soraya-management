@@ -1,10 +1,10 @@
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dtos.Customer;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Contracts;
+using Application.Contracts;
+using Application.Dtos.Customer;
+using Application.Responses;
+using Domain.Entities;
+using Infrastructure.Data.Contracts;
 
-namespace SorayaManagement.Application.Services
+namespace Application.Services
 {
     public class CustomerService : ICustomerService
     {

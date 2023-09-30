@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SorayaManagement.Infrastructure.Data.Contracts;
-using SorayaManagement.Infrastructure.Data.DataContext;
-using SorayaManagement.Infrastructure.Data.Repositories;
+using Infrastructure.Data.Contracts;
+using Infrastructure.Data.DataContext;
+using Infrastructure.Data.Repositories;
 
-namespace SorayaManagement.Infrastructure.Data
+namespace Infrastructure.Data
 {
     public static class ServicesExtension
     {

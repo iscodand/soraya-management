@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SorayaManagement.Infrastructure.Identity.Dtos
+namespace Infrastructure.Identity.Dtos
 {
     public class LoginUserDto
     {

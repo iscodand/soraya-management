@@ -1,4 +1,4 @@
-namespace SorayaManagement.Application.Responses
+namespace Application.Responses
 {
     public class BaseResponse<T>
     {

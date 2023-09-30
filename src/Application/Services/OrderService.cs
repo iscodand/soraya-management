@@ -1,12 +1,11 @@
-using Microsoft.Identity.Client;
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dtos.Order;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Contracts;
-using SorayaManagement.Infrastructure.Data.Repositories;
+using Application.Contracts;
+using Application.Dtos.Order;
+using Application.Responses;
+using Domain.Entities;
+using Infrastructure.Data.Contracts;
+using Infrastructure.Data.Repositories;
 
-namespace SorayaManagement.Application.Services
+namespace Application.Services
 {
     public class OrderService : IOrderService
     {

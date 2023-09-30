@@ -1,4 +1,4 @@
-namespace SorayaManagement.Infrastructure.Identity.Responses
+namespace Infrastructure.Identity.Responses
 {
     public class BaseResponse
     {

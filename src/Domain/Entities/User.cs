@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
-namespace SorayaManagement.Domain.Entities
+namespace Domain.Entities
 {
     [Table("USERS")]
     public class User : IdentityUser<string>

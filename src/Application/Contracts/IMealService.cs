@@ -1,8 +1,8 @@
-using SorayaManagement.Application.Dtos.Meal;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
+using Application.Dtos.Meal;
+using Application.Responses;
+using Domain.Entities;
 
-namespace SorayaManagement.Application.Contracts
+namespace Application.Contracts
 {
     public interface IMealService
     {

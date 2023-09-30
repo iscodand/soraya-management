@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SorayaManagement.Domain.Entities
+namespace Domain.Entities
 {
     [Table("COMPANIES")]
     public class Company

@@ -1,6 +1,6 @@
-using SorayaManagement.Domain.Entities;
+using Domain.Entities;
 
-namespace SorayaManagement.Infrastructure.Data.Contracts
+namespace Infrastructure.Data.Contracts
 {
     public interface IPaymentTypeRepository : IGenericRepository<PaymentType>
     {

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.DataContext;
+using Domain.Entities;
+using Infrastructure.Data.DataContext;
 
-namespace SorayaManagement.Infrastructure.Data.Repositories
+namespace Infrastructure.Data.Repositories
 {
     public class MealRepository : GenericRepository<Meal>, IMealRepository
     {

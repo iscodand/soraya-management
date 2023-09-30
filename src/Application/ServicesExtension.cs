@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Services;
+using Application.Contracts;
+using Application.Services;
 
-namespace SorayaManagement.Application
+namespace Application
 {
     public static class ServicesExtension
     {

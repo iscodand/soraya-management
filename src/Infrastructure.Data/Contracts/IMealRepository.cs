@@ -1,7 +1,7 @@
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Contracts;
+using Domain.Entities;
+using Infrastructure.Data.Contracts;
 
-namespace SorayaManagement.Infrastructure.Data.Repositories
+namespace Infrastructure.Data.Repositories
 {
     public interface IMealRepository : IGenericRepository<Meal>
     {

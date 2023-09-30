@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
+using Domain.Entities;
+using Infrastructure.Identity.Contracts;
 
-namespace SorayaManagement.Services
+namespace Services
 {
     public class SessionService : ISessionService
     {

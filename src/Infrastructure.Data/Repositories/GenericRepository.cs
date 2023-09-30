@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using SorayaManagement.Infrastructure.Data.Contracts;
-using SorayaManagement.Infrastructure.Data.DataContext;
+using Infrastructure.Data.Contracts;
+using Infrastructure.Data.DataContext;
 
-namespace SorayaManagement.Infrastructure.Data.Repositories
+namespace Infrastructure.Data.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

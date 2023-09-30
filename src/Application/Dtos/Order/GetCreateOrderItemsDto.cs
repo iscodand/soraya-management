@@ -1,6 +1,6 @@
-using SorayaManagement.Domain.Entities;
+using Domain.Entities;
 
-namespace SorayaManagement.Application.Dtos.Order
+namespace Application.Dtos.Order
 {
     public class GetCreateOrderItemsDto
     {

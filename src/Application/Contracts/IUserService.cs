@@ -1,8 +1,7 @@
-using SorayaManagement.Application.Dto.User;
-using SorayaManagement.Application.Dtos;
-using SorayaManagement.Application.Responses;
+using Application.Dtos.User;
+using Application.Responses;
 
-namespace SorayaManagement.Application.Contracts
+namespace Application.Contracts
 {
     public interface IUserService
     {

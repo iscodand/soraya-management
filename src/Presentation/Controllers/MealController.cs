@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dtos.Meal;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.ViewModels;
+using Application.Contracts;
+using Application.Dtos.Meal;
+using Application.Responses;
+using Domain.Entities;
+using Infrastructure.Identity.Contracts;
+using ViewModels;
 
-namespace SorayaManagement.UI.Controllers
+namespace UI.Controllers
 {
     [Route("sabores/")]
     [Authorize]

@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace SorayaManagement.Application.Dtos.Customer
+namespace Application.Dtos.Customer
 {
     public class CreateCustomerDto
     {

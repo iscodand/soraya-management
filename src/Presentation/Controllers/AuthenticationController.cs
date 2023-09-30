@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Infrastructure.Identity.Dtos;
-using SorayaManagement.Infrastructure.Identity.Responses;
+using Infrastructure.Identity.Contracts;
+using Infrastructure.Identity.Dtos;
+using Infrastructure.Identity.Responses;
 
-namespace SorayaManagement.UI.Controllers
+namespace UI.Controllers
 {
     [Route("auth/")]
     public class AuthenticationController : Controller

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SorayaManagement.Infrastructure.Data.DataContext;
+using Infrastructure.Data.DataContext;
 
 #nullable disable
 
-namespace SorayaManagement.Infrastructure.Data.Migrations
+namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230929194345_InitialMigration")]
@@ -131,7 +131,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.ToTable("USER_TOKENS", (string)null);
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Company", b =>
+            modelBuilder.Entity("Domain.Entities.Company", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +153,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.ToTable("COMPANIES");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,7 +186,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.ToTable("CUSTOMERS");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Meal", b =>
+            modelBuilder.Entity("Domain.Entities.Meal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,7 +222,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.ToTable("MEALS");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Order", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -279,7 +279,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.ToTable("ORDERS");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.PaymentType", b =>
+            modelBuilder.Entity("Domain.Entities.PaymentType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -307,7 +307,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Role", b =>
+            modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -363,7 +363,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -441,7 +441,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Role", null)
+                    b.HasOne("Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -450,7 +450,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.User", null)
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,7 +459,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.User", null)
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -468,13 +468,13 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Role", null)
+                    b.HasOne("Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.User", null)
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,22 +483,22 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.User", null)
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", "Company")
+                    b.HasOne("Domain.Entities.Company", "Company")
                         .WithMany("Customers")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -507,15 +507,15 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Meal", b =>
+            modelBuilder.Entity("Domain.Entities.Meal", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", "Company")
+                    b.HasOne("Domain.Entities.Company", "Company")
                         .WithMany("Meals")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -524,33 +524,33 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Order", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", "Company")
+                    b.HasOne("Domain.Entities.Company", "Company")
                         .WithMany("Orders")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.Customer", "Customer")
+                    b.HasOne("Domain.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.Meal", "Meal")
+                    b.HasOne("Domain.Entities.Meal", "Meal")
                         .WithMany("Orders")
                         .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.PaymentType", "PaymentType")
+                    b.HasOne("Domain.Entities.PaymentType", "PaymentType")
                         .WithMany()
                         .HasForeignKey("PaymentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SorayaManagement.Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -565,9 +565,9 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.HasOne("SorayaManagement.Domain.Entities.Company", "UserCompany")
+                    b.HasOne("Domain.Entities.Company", "UserCompany")
                         .WithMany("Users")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -576,7 +576,7 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Navigation("UserCompany");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Company", b =>
+            modelBuilder.Entity("Domain.Entities.Company", b =>
                 {
                     b.Navigation("Customers");
 
@@ -587,12 +587,12 @@ namespace SorayaManagement.Infrastructure.Data.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("SorayaManagement.Domain.Entities.Meal", b =>
+            modelBuilder.Entity("Domain.Entities.Meal", b =>
                 {
                     b.Navigation("Orders");
                 });

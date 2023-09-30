@@ -1,11 +1,11 @@
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dto.User;
-using SorayaManagement.Application.Dtos;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Contracts;
+using Application.Contracts;
+using Application.Dtos.User;
+using Application.Dtos;
+using Application.Responses;
+using Domain.Entities;
+using Infrastructure.Data.Contracts;
 
-namespace SorayaManagement.Application.Services
+namespace Application.Services
 {
     public class UserService : IUserService
     {

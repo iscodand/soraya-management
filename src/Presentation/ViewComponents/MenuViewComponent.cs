@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.UI.Menu.ViewModels;
+using Domain.Entities;
+using Infrastructure.Identity.Contracts;
+using UI.Menu.ViewModels;
 
-namespace SorayaManagement.ViewComponents
+namespace ViewComponents
 {
     public class MenuViewComponent : ViewComponent
     {

@@ -1,4 +1,4 @@
-namespace SorayaManagement.Tests
+namespace Tests
 {
     public class UnitTest1
     {

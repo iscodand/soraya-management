@@ -1,4 +1,4 @@
-namespace SorayaManagement.Application.Dtos
+namespace Application.Dtos.User
 {
     public class GetUserDto
     {

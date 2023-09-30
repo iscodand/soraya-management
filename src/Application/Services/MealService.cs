@@ -1,10 +1,10 @@
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dtos.Meal;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Repositories;
+using Application.Contracts;
+using Application.Dtos.Meal;
+using Application.Responses;
+using Domain.Entities;
+using Infrastructure.Data.Repositories;
 
-namespace SorayaManagement.Application.Services
+namespace Application.Services
 {
     public class MealService : IMealService
     {

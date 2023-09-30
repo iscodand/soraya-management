@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.DataContext;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Infrastructure.Identity.Services;
+using Domain.Entities;
+using Infrastructure.Data.DataContext;
+using Infrastructure.Identity.Contracts;
+using Infrastructure.Identity.Services;
 
-namespace SorayaManagement.Infrastructure.Identity
+namespace Infrastructure.Identity
 {
     public static class ServicesExtension
     {

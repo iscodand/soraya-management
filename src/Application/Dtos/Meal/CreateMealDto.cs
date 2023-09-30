@@ -1,4 +1,4 @@
-namespace SorayaManagement.Application.Dtos.Meal
+namespace Application.Dtos.Meal
 {
     public class CreateMealDto
     {

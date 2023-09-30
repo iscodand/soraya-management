@@ -1,8 +1,8 @@
-using SorayaManagement.Infrastructure.Data;
-using SorayaManagement.Infrastructure.Identity;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Services;
-using SorayaManagement.Application;
+using Infrastructure.Data;
+using Infrastructure.Identity;
+using Infrastructure.Identity.Contracts;
+using Services;
+using Application;
 using Newtonsoft.Json;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

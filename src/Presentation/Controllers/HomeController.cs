@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
+using Domain.Entities;
+using Infrastructure.Identity.Contracts;
 
-namespace SorayaManagement.UI.Controllers
+namespace UI.Controllers
 {
     [Route("/")]
     [Authorize]

@@ -1,8 +1,8 @@
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Contracts;
-using SorayaManagement.Infrastructure.Identity.Contracts;
+using Domain.Entities;
+using Infrastructure.Data.Contracts;
+using Infrastructure.Identity.Contracts;
 
-namespace SorayaManagement.Services
+namespace Services
 {
     public class AuthenticatedUserService : IAuthenticatedUserService
     {

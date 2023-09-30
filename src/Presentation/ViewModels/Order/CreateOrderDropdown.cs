@@ -1,6 +1,6 @@
-using SorayaManagement.Domain.Entities;
+using Domain.Entities;
 
-namespace SorayaManagement.ViewModels
+namespace ViewModels
 {
     // todo => remove Entity and add some dto's (or view models idk)
     public class CreateOrderDropdown

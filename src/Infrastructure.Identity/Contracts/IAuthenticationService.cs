@@ -1,8 +1,8 @@
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Dtos;
-using SorayaManagement.Infrastructure.Identity.Responses;
+using Domain.Entities;
+using Infrastructure.Identity.Dtos;
+using Infrastructure.Identity.Responses;
 
-namespace SorayaManagement.Infrastructure.Identity.Contracts
+namespace Infrastructure.Identity.Contracts
 {
     public interface IAuthenticationService
     {

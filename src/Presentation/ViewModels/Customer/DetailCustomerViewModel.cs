@@ -1,6 +1,6 @@
-using SorayaManagement.Domain.Entities;
+using Domain.Entities;
 
-namespace SorayaManagement.ViewModels
+namespace ViewModels
 {
     public class DetailCustomerViewModel
     {

@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SorayaManagement.Application.Contracts;
-using SorayaManagement.Application.Dto.User;
-using SorayaManagement.Application.Dtos;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Infrastructure.Identity.Dtos;
-using SorayaManagement.Infrastructure.Identity.Responses;
-using SorayaManagement.UI.ViewModels.User.Employee;
-using SorayaManagement.ViewModels;
+using Application.Contracts;
+using Application.Dtos.User;
+using Application.Dtos;
+using Application.Responses;
+using Domain.Entities;
+using Infrastructure.Identity.Contracts;
+using Infrastructure.Identity.Dtos;
+using Infrastructure.Identity.Responses;
+using UI.ViewModels.User.Employee;
+using ViewModels;
 
-namespace SorayaManagement.UI.Controllers
+namespace UI.Controllers
 {
     [Route("minha-empresa/")]
     // [Authorize(Roles = "Manager, Admin")]

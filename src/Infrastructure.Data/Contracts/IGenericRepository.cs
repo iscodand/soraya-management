@@ -1,6 +1,6 @@
-using SorayaManagement.Domain.Entities.Common;
+using Domain.Entities.Common;
 
-namespace SorayaManagement.Infrastructure.Data.Contracts
+namespace Infrastructure.Data.Contracts
 {
     public interface IGenericRepository<T> where T : class
     {

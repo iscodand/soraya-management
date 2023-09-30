@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Data.Contracts;
-using SorayaManagement.Infrastructure.Data.DataContext;
+using Domain.Entities;
+using Infrastructure.Data.Contracts;
+using Infrastructure.Data.DataContext;
 
-namespace SorayaManagement.Infrastructure.Data.Repositories
+namespace Infrastructure.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {

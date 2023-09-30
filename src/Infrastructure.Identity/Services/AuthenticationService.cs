@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
-using SorayaManagement.Domain.Entities;
-using SorayaManagement.Infrastructure.Identity.Contracts;
-using SorayaManagement.Infrastructure.Identity.Dtos;
-using SorayaManagement.Infrastructure.Identity.Responses;
+using Domain.Entities;
+using Infrastructure.Identity.Contracts;
+using Infrastructure.Identity.Dtos;
+using Infrastructure.Identity.Responses;
 
-namespace SorayaManagement.Infrastructure.Identity.Services
+namespace Infrastructure.Identity.Services
 {
     public class AuthenticationService : IAuthenticationService
     {

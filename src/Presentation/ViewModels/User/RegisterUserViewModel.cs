@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using SorayaManagement.Application.Dto.User;
+using Application.Dtos.User;
 
-namespace SorayaManagement.UI.ViewModels.User.Employee
+namespace UI.ViewModels.User.Employee
 {
     public class RegisterUserViewModel
     {

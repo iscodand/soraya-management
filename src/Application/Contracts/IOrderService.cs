@@ -1,8 +1,8 @@
-using SorayaManagement.Application.Dtos.Order;
-using SorayaManagement.Application.Responses;
-using SorayaManagement.Domain.Entities;
+using Application.Dtos.Order;
+using Application.Responses;
+using Domain.Entities;
 
-namespace SorayaManagement.Application.Contracts
+namespace Application.Contracts
 {
     public interface IOrderService
     {

@@ -1,4 +1,4 @@
-namespace SorayaManagement.Application.Dto.User
+namespace Application.Dtos.User
 {
     public class GetRolesDto
     {

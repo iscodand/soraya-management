@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SorayaManagement.Domain.Entities;
+using Domain.Entities;
 
-namespace SorayaManagement.Infrastructure.Data.DataContext
+namespace Infrastructure.Data.DataContext
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     {

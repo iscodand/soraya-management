@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SorayaManagement.Domain.Entities
+namespace Domain.Entities
 {
     [Table("PAYMENT_TYPES")]
     public class PaymentType

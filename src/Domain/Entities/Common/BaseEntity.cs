@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SorayaManagement.Domain.Entities.Common
+namespace Domain.Entities.Common
 {
     public abstract class BaseEntity
     {
