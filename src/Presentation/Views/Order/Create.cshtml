@@ -1,0 +1,96 @@
+@model Presentation.ViewModels.Order.CreateOrderViewModel;
+
+@{
+    ViewData["Title"] = "Novo Pedido";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <section class="container">
+
+        <form asp-action="Create" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <h5 class="fw-normal" style="letter-spacing: 1px;">Cadastre um novo pedido</h5>
+            <hr>
+            <br>
+
+            <div class="row">
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Descrição do Pedido (Não obrigatório)</label>
+                    <textarea class="form-control form-control-lg" asp-for="Description"
+                        placeholder="Adicione uma descrição para o pedido.">
+                </textarea>
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Description"></span>
+                </div>
+
+                <div class="form-outline mb-4 row">
+                    <div class="col-md-10">
+                        <label class="form-label fw-bolder">Cliente</label>
+                        @Html.DropDownListFor(model => model.CustomerId, new
+                                 SelectList(Model.CreateOrderDropdown.Customers, "Id",
+                                 "Name")
+                                 , new { @class = "form-control form-control-lg" })
+                    </div>
+                    <div class="col-md-2" style="padding-top: 2.3em">
+                        <a class="btn btn-primary-custom" asp-controller="Customer" asp-action="Create">+ Adicionar
+                            Cliente</a>
+                    </div>
+                </div>
+
+                <div class="form-outline mb-4 row">
+                    <div class="col-md-10">
+                        <label class="form-label fw-bolder">Sabor da Quentinha</label>
+                        @Html.DropDownListFor(model => model.MealId, new
+                                 SelectList(Model.CreateOrderDropdown.Meals, "Id",
+                                 "Description")
+                                 , new { @class = "form-control form-control-lg" })
+                    </div>
+                    <div class="col-md-2" style="padding-top: 2.3em">
+                        <a class="btn btn-primary-custom" asp-controller="Meal" asp-action="Create">+ Adicionar
+                            Sabor</a>
+                    </div>
+                </div>
+
+                <div class="form-outline mb-4 col-md-4">
+                    <label class="form-label fw-bolder">Valor</label>
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+                        <input class="form-control form-control-lg" asp-for="Price" placeholder="0.00">
+                    </div>
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Price"></span>
+                </div>
+
+                <div class="form-outline mb-4 col-md-4">
+                    <label class="form-label fw-bolder">Forma de Pagamento</label>
+                    @Html.DropDownListFor(model => model.PaymentTypeId, new
+                             SelectList(Model.CreateOrderDropdown.PaymentTypes, "Id",
+                             "Description")
+                             , new { @class = "form-control form-control-lg" })
+                </div>
+            </div>
+
+            <partial name="../Shared/Partials/_Messages.cshtml" />
+
+            <hr>
+
+            <div class="pt-1 mb-4">
+                <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
+                    <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Salvar
+                </button>
+            </div>
+
+            <div class="pt-1">
+                <a asp-controller="Order" asp-action="Orders" class="btn btn-warning pt-1">
+                    <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+                    <b>Voltar</b>
+                </a>
+            </div>
+        </form>
+
+    </section>
+
+</section>

@@ -1,0 +1,47 @@
+@model Presentation.ViewModels.Meal.CreateMealViewModel;
+
+@{
+    ViewData["Title"] = "Novo Sabor";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <form asp-action="Create" asp-antiforgery="true">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <h5 class="fw-normal" style="letter-spacing: 1px;">Adicione um novo sabor</h5>
+        <hr>
+        <br>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fw-bolder">Sabor</label>
+            <input class="form-control form-control-lg" asp-for="Description" />
+            <span class="text-danger fw-bolder sm" asp-validation-for="Description"></span>
+        </div>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fw-bolder">Acompanhamentos</label>
+            <textarea class="form-control form-control-lg" asp-for="Accompaniments"></textarea>
+            <span class="text-danger fw-bolder sm" asp-validation-for="Accompaniments"></span>
+        </div>
+
+        <partial name="../Shared/Partials/_Messages.cshtml" />
+
+        <div class="pt-1 mb-4">
+            <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
+                <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Salvar
+            </button>
+        </div>
+
+        <div class="pt-1">
+            <a asp-controller="Meal" asp-action="Meals" class="btn btn-warning pt-1">
+                <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+                <b>Voltar</b>
+            </a>
+        </div>
+    </form>
+
+</section>

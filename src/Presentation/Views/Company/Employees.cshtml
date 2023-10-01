@@ -1,0 +1,40 @@
+@model List<Presentation.ViewModels.User.GetUserViewModel>;
+
+@{
+    ViewData["Title"] = "Funcionários";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+
+<section class="container">
+
+    <a class="btn btn-primary-custom btn-lg mb-3" asp-controller="Company" asp-action="RegisterEmployee">
+        + Novo Funcionário
+    </a>
+
+    <hr>
+
+    <table class="table styled-table">
+        <caption>Total de funcionário encontrados: <b>@Model.Count</b></caption>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Nome de Usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>@user.Username</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</section>

@@ -1,0 +1,75 @@
+@model Presentation.ViewModels.Order.GetOrderViewModel;
+
+<div id="order-details-modal">
+
+    <div class="text-center">
+        <i class="fa-solid fa-circle-info fa-2xl mb-4"></i>
+        <h4>Detalhes do Pedido </h4>
+        <h4><b style="color: #386d63;">N° @Model.Id</b></h4>
+        <hr>
+    </div>
+
+    <div class="order-details-modal-content mb-3">
+        @if (Model.Description == null)
+        {
+            <p>Descrição: <b>Sem descrição</b></p>
+        }
+        else
+        {
+            <p>Descrição: <b>@Model.Description</b></p>
+        }
+
+        <p>Cliente: <b>@Model.Customer</b></p>
+        <p>Sabor: <b>@Model.Meal</b></p>
+        <p>Preço: <b>R$ @Math.Round(Model.Price, 2)</b></p>
+        <p>Forma de Pagamento: <b>@Model.PaymentType</b></p>
+
+        @if (Model.IsPaid)
+        {
+            <p>Pago: <b>Sim</b></p>
+            <p>Data de Pagamento: <b>@Model.PaidAt</b></p>
+        }
+        else
+        {
+            <p>Pago: <b style="color: red;">Não</b></p>
+        }
+
+        <p>Adicionado por: <b>@Model.CreatedBy</b></p>
+    </div>
+
+    <hr>
+
+    <div class="mb-5 text-center">
+        <a href="pedidos/editar/@Model.Id" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Pedido</b>
+        </a>
+        <button id="delete-order-button" class="btn btn-danger btn-sm test-button" data-order-id="@Model.Id">
+            <i class="fa-solid fa-trash" style="color: #ffffff; padding-right: 4px;"></i> <b>Deletar Pedido</b>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    $('#delete-order-button').click(function () {
+        var orderId = $(this).data('order-id');
+
+        if (confirm('Tem certeza de que deseja excluir este pedido?')) {
+            $.ajax({
+                url: `/pedidos/deletar/${orderId}`,
+                type: 'DELETE',
+                success: function (result) {
+                    if (result.success) {
+                        alert('Pedido excluído com sucesso.');
+                        location.reload();
+                    } else {
+                        alert('Falha ao excluir o pedido: ' + result.message);
+                    }
+                },
+                error: function () {
+                    alert('Ocorreu um erro ao excluir o pedido.');
+                }
+            });
+        }
+    });
+</script>
