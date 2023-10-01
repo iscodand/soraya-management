@@ -34,5 +34,33 @@ namespace Infrastructure.Data.Repositories
                                    .ToListAsync()
                                    .ConfigureAwait(false);
         }
+
+        public async Task<ICollection<Customer>> GetActiveCustomersByCompanyAsync(int companyId)
+        {
+            return await _customers.AsNoTracking()
+                                   .Include(x => x.User).AsNoTracking()
+                                   .Include(x => x.Company).AsNoTracking()
+                                   .Where(x => x.CompanyId == companyId).AsNoTracking()
+                                   .Where(x => x.IsActive == true).AsNoTracking()
+                                   .ToListAsync()
+                                   .ConfigureAwait(false);
+        }
+
+        public async Task<ICollection<Customer>> GetInactiveCustomersByCompanyAsync(int companyId)
+        {
+            return await _customers.AsNoTracking()
+                                   .Include(x => x.User).AsNoTracking()
+                                   .Include(x => x.Company).AsNoTracking()
+                                   .Where(x => x.CompanyId == companyId).AsNoTracking()
+                                   .Where(x => x.IsActive == false).AsNoTracking()
+                                   .ToListAsync()
+                                   .ConfigureAwait(false);
+        }
+
+        public async Task<bool> CustomerExistsByNameAsync(string name)
+        {
+            return await _customers.AnyAsync(x => x.Name == name)
+                                   .ConfigureAwait(false);
+        }
     }
 }
