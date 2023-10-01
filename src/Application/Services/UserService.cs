@@ -1,6 +1,5 @@
 using Application.Contracts;
 using Application.Dtos.User;
-using Application.Dtos;
 using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Data.Contracts;
@@ -48,11 +47,11 @@ namespace Application.Services
             ICollection<Role> roles = await _roleRepository.GetAllAsync();
 
             List<GetRolesDto> getRolesDtosCollection = new();
-            foreach (Role role in roles)
+            foreach (Role role in roles.Where(x => x.Name != "Admin"))
             {
                 GetRolesDto getRolesDto = new()
                 {
-                    Id = role.Id,
+                    Name = role.Name,
                     Description = role.Description
                 };
 
