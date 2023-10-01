@@ -26,14 +26,23 @@ namespace Application.Services
                 };
             }
 
-            Customer newCustomer = new()
+            if (await _customerRepository.CustomerExistsByNameAsync(createCustomerDto.Name))
             {
-                Name = createCustomerDto.Name,
-                UserId = createCustomerDto.UserId,
-                CompanyId = createCustomerDto.CompanyId
-            };
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Um cliente com esse nome já foi cadastrado. Verifique e tente novamente",
+                    IsSuccess = false
+                };
+            }
 
-            await _customerRepository.CreateAsync(newCustomer);
+            Customer customer = Customer.Create(
+                createCustomerDto.Name,
+                createCustomerDto.Phone,
+                createCustomerDto.CompanyId,
+                createCustomerDto.UserId
+            );
+
+            await _customerRepository.CreateAsync(customer);
 
             return new BaseResponse<Customer>()
             {
@@ -63,11 +72,11 @@ namespace Application.Services
             };
         }
 
-        public async Task<BaseResponse<Customer>> DetailCustomerAsync(int customerId, User authenticatedUser)
+        public async Task<BaseResponse<Customer>> DetailCustomerAsync(int customerId, int userCompanyId)
         {
             Customer customer = await _customerRepository.DetailCustomerAsync(customerId);
 
-            if (authenticatedUser.CompanyId != customer.CompanyId)
+            if (userCompanyId != customer.CompanyId)
             {
                 return new BaseResponse<Customer>()
                 {
@@ -81,6 +90,72 @@ namespace Application.Services
                 Message = "Cliente encontrado com sucesso",
                 IsSuccess = true,
                 Data = customer
+            };
+        }
+
+        public async Task<BaseResponse<Customer>> InactivateCustomerAsync(int customerId, int userCompanyId)
+        {
+            Customer customer = await _customerRepository.GetByIdAsync(customerId);
+
+            if (!customer.IsActive)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Cliente já está inativo",
+                    IsSuccess = false
+                };
+            }
+
+            if (customer.CompanyId != userCompanyId)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Você não pode desativar clientes de outras empresas.",
+                    IsSuccess = false
+                };
+            }
+
+            customer.Inactivate();
+
+            await _customerRepository.UpdateAsync(customer);
+
+            return new BaseResponse<Customer>()
+            {
+                Message = "Cliente desativado com sucesso",
+                IsSuccess = true
+            };
+        }
+
+        public async Task<BaseResponse<Customer>> ActivateCustomerAsync(int customerId, int userCompanyId)
+        {
+            Customer customer = await _customerRepository.GetByIdAsync(customerId);
+
+            if (customer.IsActive)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Cliente já está ativo",
+                    IsSuccess = false
+                };
+            }
+
+            if (customer.CompanyId != userCompanyId)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Você não pode ativar clientes de outras empresas.",
+                    IsSuccess = false
+                };
+            }
+
+            customer.Activate();
+
+            await _customerRepository.UpdateAsync(customer);
+
+            return new BaseResponse<Customer>()
+            {
+                Message = "Cliente ativado com sucesso",
+                IsSuccess = true
             };
         }
     }
