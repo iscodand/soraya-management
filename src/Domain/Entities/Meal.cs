@@ -14,5 +14,21 @@ namespace Domain.Entities
         public int CompanyId { get; set; }
 
         public ICollection<Order> Orders { get; } = new List<Order>();
+
+        public static Meal Create(string description,
+                                  string accompaniments,
+                                  int companyId,
+                                  string createdById)
+        {
+            Meal meal = new()
+            {
+                Description = description,
+                Accompaniments = accompaniments,
+                CompanyId = companyId,
+                UserId = createdById
+            };
+
+            return meal;
+        }
     }
 }

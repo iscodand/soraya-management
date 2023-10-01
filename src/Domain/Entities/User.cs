@@ -16,5 +16,22 @@ namespace Domain.Entities
         {
             Id = Guid.NewGuid().ToString();
         }
+
+        public static User Create(string name,
+                                  string email,
+                                  string username,
+                                  int companyId)
+        {
+            User user = new()
+            {
+                Name = name,
+                NormalizedName = name.Trim().ToUpper(),
+                Email = email,
+                UserName = username,
+                CompanyId = companyId
+            };
+
+            return user;
+        }
     }
 }

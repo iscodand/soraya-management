@@ -28,5 +28,42 @@ namespace Domain.Entities
         [ForeignKey("CompanyId")]
         public Company Company { get; set; }
         public int CompanyId { get; set; }
+
+        public static Order Create(string description,
+                                  decimal price,
+                                  int paymentTypeId,
+                                  int mealId,
+                                  int customerId,
+                                  int companyId,
+                                  string createdById)
+        {
+            Order order = new()
+            {
+                Description = description,
+                Price = price,
+                IsPaid = false,
+                PaidAt = null,
+                PaymentTypeId = paymentTypeId,
+                MealId = mealId,
+                CustomerId = customerId,
+                CompanyId = companyId,
+                UserId = createdById
+            };
+
+            return order;
+        }
+
+        public Order MarkAsPaid(int userCompanyId)
+        {
+            if (CompanyId != userCompanyId)
+            {
+                throw new Exception("Você não pode atualizar pedidos de outras empresas.");
+            }
+
+            IsPaid = true;
+            PaidAt = DateTime.Now;
+
+            return this;
+        }
     }
 }
