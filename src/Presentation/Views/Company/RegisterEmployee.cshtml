@@ -5,7 +5,7 @@
     Layout = "_Layout";
 }
 
-@* @await Component.InvokeAsync("Menu") *@
+@await Component.InvokeAsync("Menu")
 
 <section class="container">
 
@@ -38,7 +38,7 @@
             <div class="col-md-10">
                 <label class="form-label fw-bolder">Cargo do Usuário</label>
                 @Html.DropDownListFor(model => model.RoleId, new
-                         SelectList(Model.RolesDropdown, "Id",
+                         SelectList(Model.RolesDropdown, "Name",
                          "Description")
                          , new { @class = "form-control form-control-lg" })
             </div>

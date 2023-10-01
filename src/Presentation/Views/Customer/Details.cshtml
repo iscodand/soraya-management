@@ -23,5 +23,70 @@
         <p>@order.Description</p>
     }
 
+    <hr>
+
+    <div>
+        <a href="pedidos/editar/@Model.Id" class="btn btn-primary">
+            <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Cliente</b>
+        </a>
+
+        @if (Model.IsActive)
+        {
+            <button id="inactivate-customer-button" class="btn btn-danger" data-customer-id="@Model.Id">
+                <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i> <b>Desativar Cliente</b>
+            </button>
+        }
+        else
+        {
+            <button id="activate-customer-button" class="btn btn-success" data-customer-id="@Model.Id">
+                <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i> <b>Ativar Cliente</b>
+            </button>
+        }
+
+    </div>
 
 </section>
+
+<script>
+    $('#inactivate-customer-button').click(function () {
+        var customerId = $(this).data('customer-id');
+
+        if (confirm('Tem certeza de que deseja desativar este cliente? \n Os pedidos desse cliente não serão perdidos.')) {
+            $.ajax({
+                url: `/clientes/desativar/${customerId}`,
+                type: 'PATCH',
+                success: function (result) {
+                    if (result.success) {
+                        alert('Cliente desativado com sucesso. Você pode reativá-lo a qualquer momento.');
+                        location.reload();
+                    } else {
+                        alert('Falha ao inativar o cliente: ' + result.message);
+                    }
+                },
+                error: function () {
+                    alert('Ocorreu um erro ao inativar o cliente.');
+                }
+            });
+        }
+    });
+
+    $('#activate-customer-button').click(function () {
+        var customerId = $(this).data('customer-id');
+
+        $.ajax({
+            url: `/clientes/ativar/${customerId}`,
+            type: 'PATCH',
+            success: function (result) {
+                if (result.success) {
+                    alert('Cliente ativado com sucesso.');
+                    location.reload();
+                } else {
+                    alert('Falha ao ativar o cliente: ' + result.message);
+                }
+            },
+            error: function () {
+                alert('Ocorreu um erro ao ativar o cliente.');
+            }
+        });
+    });
+</script>

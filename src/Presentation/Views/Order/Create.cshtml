@@ -22,7 +22,7 @@
                 <div class="form-outline mb-4">
                     <label class="form-label fw-bolder">Descrição do Pedido (Não obrigatório)</label>
                     <textarea class="form-control form-control-lg" asp-for="Description"
-                              placeholder="Adicione uma descrição para o pedido.">
+                        placeholder="Adicione uma descrição para o pedido.">
                 </textarea>
                     <span class="text-danger fw-bolder sm" asp-validation-for="Description"></span>
                 </div>
@@ -31,12 +31,13 @@
                     <div class="col-md-10">
                         <label class="form-label fw-bolder">Cliente</label>
                         @Html.DropDownListFor(model => model.CustomerId, new
-                        SelectList(Model.CreateOrderDropdown.Customers, "Id",
-                        "Name")
-                        , new { @class = "form-control form-control-lg" })
+                                 SelectList(Model.CreateOrderDropdown.Customers, "Id",
+                                 "Name")
+                                 , new { @class = "form-control form-control-lg" })
                     </div>
                     <div class="col-md-2" style="padding-top: 2.3em">
-                        <a class="btn btn-primary-custom">+ Adicionar Cliente</a>
+                        <a class="btn btn-primary-custom" asp-controller="Customer" asp-action="Create">+ Adicionar
+                            Cliente</a>
                     </div>
                 </div>
 
@@ -44,12 +45,13 @@
                     <div class="col-md-10">
                         <label class="form-label fw-bolder">Sabor da Quentinha</label>
                         @Html.DropDownListFor(model => model.MealId, new
-                        SelectList(Model.CreateOrderDropdown.Meals, "Id",
-                        "Description")
-                        , new { @class = "form-control form-control-lg" })
+                                 SelectList(Model.CreateOrderDropdown.Meals, "Id",
+                                 "Description")
+                                 , new { @class = "form-control form-control-lg" })
                     </div>
                     <div class="col-md-2" style="padding-top: 2.3em">
-                        <a class="btn btn-primary-custom">+ Adicionar Sabor</a>
+                        <a class="btn btn-primary-custom" asp-controller="Meal" asp-action="Create">+ Adicionar
+                            Sabor</a>
                     </div>
                 </div>
 
@@ -65,9 +67,9 @@
                 <div class="form-outline mb-4 col-md-4">
                     <label class="form-label fw-bolder">Forma de Pagamento</label>
                     @Html.DropDownListFor(model => model.PaymentTypeId, new
-                    SelectList(Model.CreateOrderDropdown.PaymentTypes, "Id",
-                    "Description")
-                    , new { @class = "form-control form-control-lg" })
+                             SelectList(Model.CreateOrderDropdown.PaymentTypes, "Id",
+                             "Description")
+                             , new { @class = "form-control form-control-lg" })
                 </div>
             </div>
 
