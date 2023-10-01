@@ -12,7 +12,7 @@ using Presentation.ViewModels.User;
 namespace Presentation.Controllers
 {
     [Route("minha-empresa/")]
-    [Authorize(Roles = "Manager, Admin")]
+    [Authorize(Roles = "Admin, Manager")]
     public class CompanyController : Controller
     {
         private readonly ISessionService _sessionService;
@@ -100,7 +100,8 @@ namespace Presentation.Controllers
                     Password = registerUserViewModel.Password,
                     ConfirmPassword = registerUserViewModel.ConfirmPassword,
 
-                    CompanyId = 1
+                    Role = registerUserViewModel.RoleId,
+                    CompanyId = authenticatedUser.CompanyId
                 };
 
                 BaseResponse result = await _authenticationService.RegisterAsync(registerUserDto);
@@ -109,7 +110,7 @@ namespace Presentation.Controllers
                 if (result.IsSuccess)
                 {
                     ViewData["IsSuccess"] = true;
-                    return Redirect(nameof(Employees));
+                    return RedirectToAction(nameof(Employees));
                 }
             }
 
