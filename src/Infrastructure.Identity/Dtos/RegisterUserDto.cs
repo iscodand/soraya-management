@@ -9,5 +9,6 @@ namespace Infrastructure.Identity.Dtos
         public string ConfirmPassword { get; set; }
 
         public int CompanyId { get; set; }
+        public string Role { get; set; }
     }
 }

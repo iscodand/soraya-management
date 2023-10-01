@@ -28,16 +28,17 @@ namespace Infrastructure.Identity.Services
                 };
             }
 
-            User user = new()
-            {
-                Name = registerUserDto.Name,
-                NormalizedName = registerUserDto.Name.Trim().ToUpper(),
-                UserName = registerUserDto.Username,
-                Email = registerUserDto.Email,
-                CompanyId = registerUserDto.CompanyId
-            };
+            User user = User.Create(
+                registerUserDto.Name,
+                registerUserDto.Email,
+                registerUserDto.Username,
+                registerUserDto.CompanyId
+            );
 
             IdentityResult result = await _userManager.CreateAsync(user, registerUserDto.Password);
+
+            // Add user to specified Role
+            await _userManager.AddToRoleAsync(user, registerUserDto.Role);
 
             if (!result.Succeeded)
             {
