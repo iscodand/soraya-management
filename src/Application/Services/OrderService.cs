@@ -36,19 +36,15 @@ namespace Application.Services
                 };
             }
 
-            // todo => add validation rules
-            Order order = new()
-            {
-                Description = createOrderDto.Description,
-                Price = createOrderDto.Price,
-                IsPaid = false,
-                PaidAt = null,
-                PaymentTypeId = createOrderDto.PaymentTypeId,
-                MealId = createOrderDto.MealId,
-                CustomerId = createOrderDto.CustomerId,
-                CompanyId = createOrderDto.CompanyId,
-                UserId = createOrderDto.UserId
-            };
+            Order order = Order.Create(
+                createOrderDto.Description,
+                createOrderDto.Price,
+                createOrderDto.PaymentTypeId,
+                createOrderDto.MealId,
+                createOrderDto.CustomerId,
+                createOrderDto.CompanyId,
+                createOrderDto.UserId
+            );
 
             await _orderRepository.CreateAsync(order);
 
@@ -191,18 +187,7 @@ namespace Application.Services
         {
             Order order = await _orderRepository.GetOrderDetailsAsync(orderId);
 
-            if (authenticatedUser.CompanyId != order.CompanyId)
-            {
-                return new BaseResponse<Order>()
-                {
-                    Message = "Este pedido não pertence a sua empresa. Verifique e tente novamente.",
-                    IsSuccess = false
-                };
-            }
-
-            order.IsPaid = true;
-            order.PaidAt = DateTime.Now;
-
+            order.MarkAsPaid(authenticatedUser.CompanyId);
             await _orderRepository.UpdateAsync(order);
 
             return new BaseResponse<Order>()
