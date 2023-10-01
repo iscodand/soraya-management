@@ -211,6 +211,8 @@ namespace Presentation.Controllers
                     ViewData["IsSuccess"] = result.IsSuccess;
                     return Json(new { success = true });
                 }
+
+                return Json(new { success = false, message = result.Message });
             }
 
             return Json(new { success = false, message = "Falha ao excluir o pedido." });
