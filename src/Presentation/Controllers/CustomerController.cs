@@ -37,6 +37,8 @@ namespace Presentation.Controllers
                 {
                     Id = customer.Id,
                     Name = customer.Name,
+                    Phone = customer.Phone,
+                    IsActive = customer.IsActive,
                     CreatedBy = customer.User.Name
                 };
 
@@ -65,6 +67,7 @@ namespace Presentation.Controllers
                 CreateCustomerDto createCustomerDto = new()
                 {
                     Name = createCustomerViewModel.Name,
+                    Phone = createCustomerViewModel.Phone,
                     UserId = authenticatedUser.Id,
                     CompanyId = authenticatedUser.CompanyId
                 };
@@ -75,7 +78,7 @@ namespace Presentation.Controllers
                 if (response.IsSuccess)
                 {
                     ViewData["IsSuccess"] = true;
-                    return View();
+                    return View(nameof(Customers));
                 }
             }
 
@@ -89,7 +92,7 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<Customer> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser);
+                BaseResponse<Customer> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
@@ -97,6 +100,8 @@ namespace Presentation.Controllers
                     {
                         Id = result.Data.Id,
                         Name = result.Data.Name,
+                        Phone = result.Data.Phone,
+                        IsActive = result.Data.IsActive,
                         CreatedBy = result.Data.User.Name,
                         Orders = result.Data.Orders
                     };
@@ -106,6 +111,46 @@ namespace Presentation.Controllers
             }
 
             return RedirectToAction(nameof(Customers));
+        }
+
+        [HttpPatch]
+        [Route("desativar/{customerId}")]
+        public async Task<IActionResult> Inactivate(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Customer> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, message = result.Message });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao desativar cliente." });
+        }
+
+        [HttpPatch]
+        [Route("ativar/{customerId}")]
+        public async Task<IActionResult> Activate(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Customer> result = await _customerService.ActivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, message = result.Message });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao ativar cliente." });
         }
     }
 }
