@@ -26,13 +26,12 @@ namespace Application.Services
                 };
             }
 
-            Meal meal = new()
-            {
-                Description = createMealDto.Description,
-                Accompaniments = createMealDto.Accompaniments,
-                CompanyId = createMealDto.CompanyId,
-                UserId = createMealDto.UserId
-            };
+            Meal meal = Meal.Create(
+                createMealDto.Description,
+                createMealDto.Accompaniments,
+                createMealDto.CompanyId,
+                createMealDto.UserId
+            );
 
             await _mealRepository.CreateAsync(meal);
 
