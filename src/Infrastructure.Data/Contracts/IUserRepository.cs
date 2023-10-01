@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Domain.Entities;
 
 namespace Infrastructure.Data.Contracts
