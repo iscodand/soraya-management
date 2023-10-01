@@ -4,6 +4,7 @@ using Infrastructure.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231001133607_addCustomerPhone")]
+    partial class addCustomerPhone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,12 +60,6 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("InactivatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -239,7 +236,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fac8fb25-e8b0-43ef-8e85-02694e2baa8c",
+                            Id = "22bd8e4d-8b6d-4800-beac-f9953a919c0e",
                             ConcurrencyStamp = "ADMIN",
                             Description = "Administrador",
                             Name = "Admin",
@@ -247,7 +244,7 @@ namespace Infrastructure.Data.Migrations
                         },
                         new
                         {
-                            Id = "6aaf2420-a32c-4bb9-94f8-214778ae469b",
+                            Id = "b37ffe65-4712-4bbe-a5d7-ef92811b33b4",
                             ConcurrencyStamp = "MANAGER",
                             Description = "Gerente",
                             Name = "Manager",
@@ -255,7 +252,7 @@ namespace Infrastructure.Data.Migrations
                         },
                         new
                         {
-                            Id = "a468f53e-c1bc-4f7f-9599-5ae25e6cffd6",
+                            Id = "8090f340-c3f9-4769-8700-66d5abd4c8af",
                             ConcurrencyStamp = "EMPLOYEE",
                             Description = "Funcionário",
                             Name = "Employee",
