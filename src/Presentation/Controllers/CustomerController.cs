@@ -45,7 +45,7 @@ namespace Presentation.Controllers
                 viewModelCollection.Add(viewModel);
             }
 
-            return View(viewModelCollection);
+            return View(viewModelCollection.OrderBy(x => x.IsActive == false).ToList());
         }
 
         [HttpGet]
@@ -78,7 +78,7 @@ namespace Presentation.Controllers
                 if (response.IsSuccess)
                 {
                     ViewData["IsSuccess"] = true;
-                    return View(nameof(Customers));
+                    return RedirectToAction(nameof(Customers));
                 }
             }
 
@@ -113,27 +113,62 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Customers));
         }
 
-        [HttpPatch]
-        [Route("desativar/{customerId}")]
-        public async Task<IActionResult> Inactivate(int customerId)
+        [HttpGet]
+        [Route("editar/{customerId}")]
+        public async Task<IActionResult> Update(int customerId)
         {
             if (ModelState.IsValid)
             {
                 User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<Customer> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+                BaseResponse<Customer> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
-                    return Json(new { success = true, message = result.Message });
-                }
+                    UpdateCustomerViewModel updateCustomerViewModel = new()
+                    {
+                        Name = result.Data.Name,
+                        Phone = result.Data.Phone
+                    };
 
-                return Json(new { success = false, message = result.Message });
+                    return View(updateCustomerViewModel);
+                }
             }
 
-            return Json(new { success = false, message = "Falha ao desativar cliente." });
+            return RedirectToAction(nameof(Customers));
+        }
+
+        [HttpPost]
+        [Route("editar/{customerId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int customerId, UpdateCustomerViewModel updateCustomerViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+
+                UpdateCustomerDto updateCustomerDto = new()
+                {
+                    Id = customerId,
+                    Name = updateCustomerViewModel.Name,
+                    Phone = updateCustomerViewModel.Phone,
+                    UserCompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<Customer> result = await _customerService.UpdateCustomerAsync(updateCustomerDto);
+                ViewData["Message"] = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    ViewData["IsSuccess"] = result.IsSuccess;
+                    return RedirectToAction(nameof(Customers));
+                }
+            }
+
+            return View();
         }
 
         [HttpPatch]
+        [Authorize(Roles = "Manager, Admin")]
         [Route("ativar/{customerId}")]
         public async Task<IActionResult> Activate(int customerId)
         {
@@ -151,6 +186,27 @@ namespace Presentation.Controllers
             }
 
             return Json(new { success = false, message = "Falha ao ativar cliente." });
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = "Manager, Admin")]
+        [Route("desativar/{customerId}")]
+        public async Task<IActionResult> Inactivate(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                User authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<Customer> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, message = result.Message });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao desativar cliente." });
         }
     }
 }
