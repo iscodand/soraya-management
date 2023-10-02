@@ -10,13 +10,23 @@
 <section class="container">
 
     <div>
-        <h2 class="fw-normal" style="letter-spacing: 1px;">Cliente <b>N° @Model.Id</b></h2>
+        <h2 class="fw-normal text-center" style="letter-spacing: 1px;">Perfil do Cliente - @Model.Name</h2>
         <hr>
         <br>
     </div>
 
     <h3>Dados do Cliente</h3>
     <br>
+    <p>Nome: <b>@Model.Name</b></p>
+
+    @if (Model.Phone != null)
+    {
+        <p>Contato: @Model.Phone</p>
+    }
+    else
+    {
+        <p>Contato: <b style="color: red;">Não informado.</b></p>
+    }
 
     @foreach (var order in Model.Orders)
     {
@@ -26,67 +36,25 @@
     <hr>
 
     <div>
-        <a href="pedidos/editar/@Model.Id" class="btn btn-primary">
+        <a class="btn btn-primary" asp-action="Update" asp-controller="Customer" asp-route-customerId="@Model.Id">
             <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Cliente</b>
         </a>
 
-        @if (Model.IsActive)
+        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
         {
-            <button id="inactivate-customer-button" class="btn btn-danger" data-customer-id="@Model.Id">
-                <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i> <b>Desativar Cliente</b>
-            </button>
-        }
-        else
-        {
-            <button id="activate-customer-button" class="btn btn-success" data-customer-id="@Model.Id">
-                <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i> <b>Ativar Cliente</b>
-            </button>
+            @if (Model.IsActive)
+            {
+                <button id="inactivate-customer-button" class="btn btn-danger" data-customer-id="@Model.Id">
+                    <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i> <b>Desativar Cliente</b>
+                </button>
+            }
+            else
+            {
+                <button id="activate-customer-button" class="btn btn-success" data-customer-id="@Model.Id">
+                    <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i> <b>Ativar Cliente</b>
+                </button>
+            }
         }
 
     </div>
-
 </section>
-
-<script>
-    $('#inactivate-customer-button').click(function () {
-        var customerId = $(this).data('customer-id');
-
-        if (confirm('Tem certeza de que deseja desativar este cliente? \n Os pedidos desse cliente não serão perdidos.')) {
-            $.ajax({
-                url: `/clientes/desativar/${customerId}`,
-                type: 'PATCH',
-                success: function (result) {
-                    if (result.success) {
-                        alert('Cliente desativado com sucesso. Você pode reativá-lo a qualquer momento.');
-                        location.reload();
-                    } else {
-                        alert('Falha ao inativar o cliente: ' + result.message);
-                    }
-                },
-                error: function () {
-                    alert('Ocorreu um erro ao inativar o cliente.');
-                }
-            });
-        }
-    });
-
-    $('#activate-customer-button').click(function () {
-        var customerId = $(this).data('customer-id');
-
-        $.ajax({
-            url: `/clientes/ativar/${customerId}`,
-            type: 'PATCH',
-            success: function (result) {
-                if (result.success) {
-                    alert('Cliente ativado com sucesso.');
-                    location.reload();
-                } else {
-                    alert('Falha ao ativar o cliente: ' + result.message);
-                }
-            },
-            error: function () {
-                alert('Ocorreu um erro ao ativar o cliente.');
-            }
-        });
-    });
-</script>
