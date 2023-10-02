@@ -51,6 +51,51 @@ namespace Application.Services
             };
         }
 
+        public async Task<BaseResponse<Customer>> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto)
+        {
+            if (updateCustomerDto == null)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Cliente não pode ser nulo.",
+                    IsSuccess = false
+                };
+            }
+
+            if (await _customerRepository.CustomerExistsByNameAsync(updateCustomerDto.Name))
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Um cliente com esse nome já foi cadastrado. Verifique e tente novamente",
+                    IsSuccess = false
+                };
+            }
+
+            Customer customer = await _customerRepository.GetByIdAsync(updateCustomerDto.Id);
+
+            if (customer.CompanyId != updateCustomerDto.UserCompanyId)
+            {
+                return new BaseResponse<Customer>()
+                {
+                    Message = "Este cliente não pertence a sua empresa. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            customer.Update(
+                updateCustomerDto.Name,
+                updateCustomerDto.Phone
+            );
+
+            await _customerRepository.UpdateAsync(customer);
+
+            return new BaseResponse<Customer>()
+            {
+                Message = "Cliente atualizado com sucesso",
+                IsSuccess = true
+            };
+        }
+
         public async Task<BaseResponse<Customer>> GetCustomersByCompanyAsync(int companyId)
         {
             if (companyId <= 0)
