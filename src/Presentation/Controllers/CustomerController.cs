@@ -6,6 +6,7 @@ using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 using Presentation.ViewModels.Customer;
+using Presentation.ViewModels.Order;
 
 namespace Presentation.Controllers
 {
@@ -96,6 +97,25 @@ namespace Presentation.Controllers
 
                 if (result.IsSuccess)
                 {
+                    List<GetOrderViewModel> getOrderViewModelCollection = new();
+                    foreach (Order order in result.Data.Orders)
+                    {
+                        GetOrderViewModel getOrderViewModel = new()
+                        {
+                            Id = order.Id,
+                            Description = order.Description,
+                            Price = order.Price,
+                            IsPaid = order.IsPaid,
+                            PaidAt = order.PaidAt,
+                            PaymentType = order.PaymentType.Description,
+                            Meal = order.Meal.Description,
+                            Customer = order.Customer.Name,
+                            CreatedAt = order.CreatedAt
+                        };
+
+                        getOrderViewModelCollection.Add(getOrderViewModel);
+                    }
+
                     DetailCustomerViewModel detailCustomerViewModel = new()
                     {
                         Id = result.Data.Id,
@@ -103,7 +123,7 @@ namespace Presentation.Controllers
                         Phone = result.Data.Phone,
                         IsActive = result.Data.IsActive,
                         CreatedBy = result.Data.User.Name,
-                        Orders = result.Data.Orders
+                        Orders = getOrderViewModelCollection
                     };
 
                     return View(detailCustomerViewModel);
@@ -126,6 +146,7 @@ namespace Presentation.Controllers
                 {
                     UpdateCustomerViewModel updateCustomerViewModel = new()
                     {
+                        Id = result.Data.Id,
                         Name = result.Data.Name,
                         Phone = result.Data.Phone
                     };
