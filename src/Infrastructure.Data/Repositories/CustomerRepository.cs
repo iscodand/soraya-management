@@ -19,7 +19,10 @@ namespace Infrastructure.Data.Repositories
             return await _customers.AsNoTracking()
                                    .Include(x => x.User).AsNoTracking()
                                    .Include(x => x.Company).AsNoTracking()
-                                   .Include(x => x.Orders).AsNoTracking()
+                                   .Include(x => x.Orders)
+                                   .ThenInclude(x => x.Meal).AsNoTracking()
+                                   .Include(x => x.Orders)
+                                   .ThenInclude(x => x.PaymentType).AsNoTracking()
                                    .Where(x => x.Id == customerId).AsNoTracking()
                                    .FirstOrDefaultAsync()
                                    .ConfigureAwait(false);
