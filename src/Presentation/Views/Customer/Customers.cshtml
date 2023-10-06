@@ -9,27 +9,41 @@
 
 <section class="container">
 
-    <div class="row">
-        <div class="col-md-8" style="padding-top: 30px">
-            <a class="btn btn-primary-custom mb-3 btn-lg" asp-controller="Customer" asp-action="Create">+ Novo
-                Cliente</a>
+    <div class="page-title">
+        <h1 class="fw-bolder">Clientes</h1>
+    </div>
+
+    <hr>
+
+    <div class="row mb-4 mt-4">
+        <div class="col-md-4" style="padding-top: 20px">
+            <a class="btn btn-primary-custom btn-lg" asp-controller="Customer" asp-action="Create">
+                + Novo Cliente
+            </a>
         </div>
 
         @if (Model.Count > 0)
         {
-            <div class="col-md-4 justify-content-end" style="padding-left: 175px">
-                <label for="isActive-filter" class="form-label fw-thin">ATIVO:</label>
-                <select id="isActive-filter" name="isActive-filter" class="form-select form-select-lg form-control"
-                    style="width: 250px;">
-                    <option value="all">Todos</option>
-                    <option value="actives">Ativos</option>
-                    <option value="inactives">Inativos</option>
-                </select>
+            <div class="col-md-8 row justify-content-end">
+                <div class="col-md-4">
+                    <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                    <label for="isActive-filter" class="form-label fw-thin">BUSCAR:</label>
+                    <input id="search-customer-filter" class="form-control" placeholder="Busque pelo nome" />
+                </div>
+
+                <div class="col-md-4">
+                    <i class="fa-solid fa-check fa-sm" style="padding-right: 5px;"></i>
+                    <label for="isActive-filter" class="form-label fw-thin">ATIVO:</label>
+                    <select id="isActive-filter" name="isActive-filter" class="form-select form-select "
+                        style="width: 250px;">
+                        <option value="all">Todos</option>
+                        <option value="actives">Ativos</option>
+                        <option value="inactives">Inativos</option>
+                    </select>
+                </div>
             </div>
         }
     </div>
-
-    <hr>
 
     @if (Model.Count > 0)
     {
@@ -65,11 +79,15 @@
 
                         @if (customer.IsActive)
                         {
-                            <td><i id="isActive-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i></td>
+                            <td>
+                                <i id="isActive-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i>
+                            </td>
                         }
                         else
                         {
-                            <td><i class="fa-solid fa-rectangle-xmark fa-xl" style="color: #d02525;"></i></td>
+                            <td>
+                                <i class="fa-solid fa-rectangle-xmark fa-xl" style="color: #d02525;"></i>
+                            </td>
                         }
                     </tr>
                 }

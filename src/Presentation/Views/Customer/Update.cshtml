@@ -35,12 +35,14 @@
 
         <div class="pt-1 mb-4">
             <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
-                <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Editar
+                <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+                Editar
             </button>
         </div>
 
         <div class="pt-1">
-            <a asp-controller="Customer" asp-action="Customers" class="btn btn-warning pt-1">
+            <a asp-controller="Customer" asp-action="Details" asp-route-customerId="@Model.Id"
+                class="btn btn-warning pt-1">
                 <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
                 <b>Voltar</b>
             </a>

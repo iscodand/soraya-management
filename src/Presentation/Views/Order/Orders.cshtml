@@ -7,18 +7,20 @@
 
 @await Component.InvokeAsync("Menu")
 
+<link rel="stylesheet" href="~/css/box-orders.css" asp-append-version="true" />
+
 <section class="container">
 
-    <div>
-        <h3 id="orders-data-date" class="fw-bolder">
-            Dados dos Pedidos - @DateTime.Today.Date.ToString("dd/MM/yyyy")
-        </h3>
+    <div class="page-title">
+        <h1>Pedidos</h1>
     </div>
 
-    <div class="row">
+    <hr>
 
+    <div class="box-orders-section row">
         <div class="col-md-2">
             <div class="box-orders">
+                <i class="fa-solid fa-chevron-up fa-lg"></i>
                 <h2 id="new-orders-count">@Model.Count</h2>
                 <p>Novos Pedidos</p>
             </div>
@@ -26,6 +28,7 @@
 
         <div class="col-md-2">
             <div class="box-orders">
+                <i class="fa-solid fa-chart-line fa-lg"></i>
                 <h2 id="price-orders-sum">
                     R$ @Math.Round(Model.Where(x => x.IsPaid == true).Sum(x => x.Price), 2)
                 </h2>
@@ -35,13 +38,25 @@
 
         <div class="col-md-2">
             <div class="box-orders">
+                <i class="fa-solid fa-money-bill-transfer fa-lg"></i>
+                <h2 id="total-to-receive">
+                    R$ @Math.Round(Model.Where(x => x.IsPaid == false).Sum(x => x.Price), 2)
+                </h2>
+                <p>Total a Receber</p>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div id="box-orders-paid" class="box-orders">
+                <i class="fa-solid fa-check fa-lg"></i>
                 <h2 id="paid-orders-count">@Model.Where(x => x.IsPaid == true).Count()</h2>
                 <p>Pedidos Pagos</p>
             </div>
         </div>
 
         <div class="col-md-2">
-            <div class="box-orders">
+            <div id="box-orders-unpaid" class="box-orders">
+                <i class="fa-solid fa-x fa-lg"></i>
                 <h2 id="unpaid-orders-count">@Model.Where(x => x.IsPaid == false).Count()</h2>
                 <p>Pedidos NÃO Pagos</p>
             </div>
@@ -50,36 +65,50 @@
 
     <hr>
 
-    <div class="row">
+    <div class="row mb-4 mt-4">
 
-        <div class="col-md-4" style="padding-top: 30px">
+        <div class="col-md-4" style="padding-top: 20px">
             <a class="btn btn-primary-custom btn-lg" asp-controller="Order" asp-action="Create">
                 + Novo Pedido
             </a>
         </div>
 
-        <div class="col-md-4" style="padding-left: 175px">
-            <label for="payment-filter" class="form-label fw-thin">PAGAMENTO:</label>
-            <select id="payment-filter" name="payment-filter" class="form-select form-select-lg form-control"
-                style="width: 250px;">
-                <option value="all">Todos</option>
-                <option value="paid">Pagos</option>
-                <option value="unpaid">Não Pagos</option>
-            </select>
-        </div>
+        <div class="col-md-8 row justify-content-end">
+            <div class="col-md-4">
+                <label for="search-order-filter" class="form-label fw-thin">
+                    <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                    BUSCAR:
+                </label>
+                <input id="search-order-filter" class="form-control" placeholder="Busque cliente ou sabor" />
+            </div>
 
-        <div class="col-md-4">
-            <form id="filterByDate-form" asp-controller="Order" asp-action="Orders" method="GET">
-                <label for="createdAt" class="form-label fw-thin">DATA:</label>
-                <input id="createdAt" name="createdAt" type="date" class="form-control form-control-lg">
-            </form>
+            <div class="col-md-4">
+                <label for="payment-filter" class="form-label fw-thin">
+                    <i class="fa-solid fa-money-bill fa-sm" style="padding-right: 5px;"></i>
+                    PAGAMENTO:
+                </label>
+                <select id="payment-filter" name="payment-filter" class="form-select form-control"
+                    style="width: 250px;">
+                    <option value="all">Todos</option>
+                    <option value="paid">Pagos</option>
+                    <option value="unpaid">Não Pagos</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <form id="filterByDate-form" asp-controller="Order" asp-action="Orders" method="GET">
+                    <label for="createdAt" class="form-label fw-thin">
+                        <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA:
+                    </label>
+                    <input id="createdAt" name="createdAt" type="date" class="form-control" style="max-width: 300px;">
+                </form>
+            </div>
         </div>
 
     </div>
 
-    <hr>
-
     <table id="orders-table" class="styled-table table">
+        <caption id="orders-count">Pedidos Encontrados: @Model.Count</caption>
         <thead>
             <tr class="table-head-row">
                 <th>Detalhes</th>
@@ -108,11 +137,11 @@
                     <td>
                         @if (@order.PaymentType.Equals("PIX"))
                         {
-                            <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
+                            <i class="fa-brands fa-pix fa-xl"></i>
                         }
                         else
                         {
-                            <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
+                            <i class="fa-solid fa-money-bill-wave fa-xl"></i>
                         }
                     </td>
                     <td>
@@ -120,12 +149,14 @@
                         {
                             <form asp-action="MarkOrderAsPaid" method="post">
                                 <input type="hidden" name="orderId" value="@order.Id" />
-                                <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                                <button type="submit" class="btn btn-primary-custom btn-sm fw-normal">
+                                    Marcar como Pago
+                                </button>
                             </form>
                         }
                         else
                         {
-                            <i id="isPaid-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i>
+                            <i id="isPaid-icon" class="fa-solid fa-square-check fa-xl"></i>
                         }
                     </td>
                 </tr>
@@ -141,28 +172,3 @@
 
     <div id="modal-backdrop" class="modal-backdrop hidden"></div>
 </section>
-
-<script>
-    $(document).ready(function () {
-        $('.show-details').on('click', function (e) {
-            e.preventDefault();
-
-            const orderId = $(this).data('order-id');
-            const orderDetailsCard = $('.order-details-modal-card');
-            const backdrop = $('.modal-backdrop');
-
-            $.ajax({
-                url: `/pedidos/detalhes/${orderId}`,
-                type: 'GET',
-                success: function (data) {
-                    orderDetailsCard.html(data);
-                    orderDetailsCard.removeClass('hidden');
-                    backdrop.removeClass('hidden');
-                },
-                error: function () {
-                    alert('Ocorreu um erro ao carregar os detalhes da ordem.');
-                }
-            });
-        });
-    });
-</script>

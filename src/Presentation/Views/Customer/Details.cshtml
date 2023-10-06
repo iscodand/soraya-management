@@ -28,12 +28,56 @@
         <p>Contato: <b style="color: red;">Não informado.</b></p>
     }
 
-    @foreach (var order in Model.Orders)
-    {
-        <p>@order.Description</p>
-    }
-
-    <hr>
+    <div>
+        <h3>Pedidos Realizados</h3>
+        <hr>
+        @if (Model.Orders.Count > 0)
+        {
+            <table id="orders-table" class="styled-table table">
+                <thead>
+                    <tr class="table-head-row">
+                        <th>Data do Pedido</th>
+                        <th>Sabor</th>
+                        <th>Valor</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Pago</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-tableBody" class="table-group-divider">
+            @foreach (var order in Model.Orders)
+            {
+                <tr class="table-row">
+                    <td id="createdAt-order">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@order.Customer</td>
+                    <td>@order.Meal</td>
+                    <td id="order-price"><b>R$</b> @Math.Round(@order.Price, 2)</td>
+                    <td>
+                        @if (@order.PaymentType.Equals("PIX"))
+                        {
+                            <i class="fa-brands fa-pix fa-xl"></i>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-money-bill-wave fa-xl"></i>
+                        }
+                    </td>
+                    <td>
+                        @if (!order.IsPaid)
+                        {
+                            <p>ta pago nao</p>
+                        }
+                        else
+                        {
+                            <i id="isPaid-icon" class="fa-solid fa-square-check fa-xl"></i>
+                        }
+                    </td>
+                </tr>
+            }
+                </tbody>
+            </table>
+        }
+        <hr>
+    </div>
 
     <div>
         <a class="btn btn-primary" asp-action="Update" asp-controller="Customer" asp-route-customerId="@Model.Id">

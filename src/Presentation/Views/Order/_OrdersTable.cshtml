@@ -4,7 +4,7 @@
 {
     <tr class="table-row">
         <td>
-            <a href="pedidos/detalhes/@order.Id" class="show-details" data-order-id="@order.Id">
+            <a id="open-order-details" href="pedidos/detalhes/@order.Id" class="show-details" data-order-id="@order.Id">
                 <i class="fa-solid fa-circle-info fa-lg"></i>
             </a>
         </td>
@@ -15,11 +15,11 @@
         <td>
             @if (@order.PaymentType.Equals("PIX"))
             {
-                <i class="fa-brands fa-pix fa-xl" style="color: #1f513e;"></i>
+                <i class="fa-brands fa-pix fa-xl"></i>
             }
             else
             {
-                <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #1f513e;"></i>
+                <i class="fa-solid fa-money-bill-wave fa-xl"></i>
             }
         </td>
         <td>
@@ -27,12 +27,14 @@
             {
                 <form asp-action="MarkOrderAsPaid" method="post">
                     <input type="hidden" name="orderId" value="@order.Id" />
-                    <button type="submit" class="btn btn-sm btn-success">Marcar como Pago</button>
+                    <button type="submit" class="btn btn-primary-custom btn-sm fw-normal">
+                        Marcar como Pago
+                    </button>
                 </form>
             }
             else
             {
-                <i id="isPaid-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i>
+                <i id="isPaid-icon" class="fa-solid fa-square-check fa-xl"></i>
             }
         </td>
     </tr>

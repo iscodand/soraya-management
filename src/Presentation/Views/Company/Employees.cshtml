@@ -10,11 +10,31 @@
 
 <section class="container">
 
-    <a class="btn btn-primary-custom btn-lg mb-3" asp-controller="Company" asp-action="RegisterEmployee">
-        + Novo Funcionário
-    </a>
+    <div class="page-title">
+        <h1>Funcionários Cadastrados</h1>
+    </div>
 
     <hr>
+
+    <div class="row mb-4 mt-4">
+
+        <div class="col-md-4" style="padding-top: 20px">
+            <a class="btn btn-primary-custom btn-lg" asp-controller="Order" asp-action="Create">
+                + Novo Funcionário
+            </a>
+        </div>
+
+        <div class="col-md-8 row justify-content-end">
+            <div class="col-md-4">
+                <label for="search-employee-filter" class="form-label fw-thin">
+                    <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                    BUSCAR:
+                </label>
+                <input id="search-employee-filter" class="form-control" placeholder="Busque pelo nome" />
+            </div>
+        </div>
+    </div>
+
 
     <table class="table styled-table">
         <caption>Total de funcionário encontrados: <b>@Model.Count</b></caption>
@@ -25,7 +45,7 @@
                 <th>Nome de Usuário</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="employees-tableBody">
             @foreach (var user in Model)
             {
                 <tr>
