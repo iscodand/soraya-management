@@ -221,7 +221,7 @@ namespace Application.Services
 
         public async Task<BaseResponse<GetCreateOrderItemsDto>> GetCreateOrdersItemsAsync(int companyId)
         {
-            ICollection<Customer> customers = await _customerRepository.GetCustomersByCompanyAsync(companyId);
+            ICollection<Customer> customers = await _customerRepository.GetActiveCustomersByCompanyAsync(companyId);
             ICollection<Meal> meals = await _mealRepository.GetMealsByCompanyAsync(companyId);
             ICollection<PaymentType> paymentTypes = await _paymentTypeRepository.GetAllAsync();
 
