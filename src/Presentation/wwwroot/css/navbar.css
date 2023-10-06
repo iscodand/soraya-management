@@ -1,0 +1,51 @@
+.navbar {
+    background: linear-gradient(45deg, #7885F9, #4D59CB);
+    height: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    z-index: 998;
+}
+
+.navbar .navbar-brand {
+    color: #ededed;
+    font-weight: bolder;
+    font-size: 1.3em;
+}
+
+.nav-link {
+    position: relative;
+    color: #ededed;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.nav-link i {
+    color: #ededed;
+    padding-right: 3px;
+}
+
+.nav-link:hover {
+    color: #ededed;
+    transform: scale(1.05);
+}
+
+.nav-link:hover i {
+    transform: scale(1.05);
+}
+
+.nav-link:after {
+    color: #ededed;
+    content: '';
+    opacity: 0;
+    transition: all 0.3s;
+    height: 2px;
+    width: 100%;
+    background-color: #323a83;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.nav-link:hover::after {
+    opacity: 1;
+}

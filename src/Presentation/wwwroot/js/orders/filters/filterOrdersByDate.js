@@ -20,21 +20,22 @@ $(document).ready(function () {
                 $('#paid-orders-count').text(paidOrdersCount);
                 $('#unpaid-orders-count').text(unpaidOrdersCount);
 
-                let totalRevenue = 0;
+                let totalReceived = 0;
                 let filterDate;
 
                 $orders.each(function () {
-                    let priceText = $(this).find('td:eq(4)').text().replace('R$', '').trim();
-                    let price = parseFloat(priceText.replace(',', '.'));
+                    let totalReceivedField = $(this).find('td:eq(4)').text().replace('R$', '').trim();
+                    let price = parseFloat(totalReceivedField);
 
                     if (!isNaN(price)) {
-                        totalRevenue += price;
+                        totalReceived += price;
                     }
 
                     filterDate = $(this).find('td:eq(1)').text();
                 });
 
-                let formattedTotalRevenue = 'R$ ' + totalRevenue.toFixed(2);
+                let formattedTotalRevenue = 'R$ ' + totalReceived.toFixed(2);
+
                 $('#price-orders-sum').text(formattedTotalRevenue);
 
                 let ordersDataDate = $('#orders-data-date');
