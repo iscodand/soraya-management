@@ -70,6 +70,15 @@ namespace Infrastructure.Identity.Services
                 };
             }
 
+            if (!user.IsActive)
+            {
+                return new BaseResponse()
+                {
+                    Message = "Usuário está inativo no sistema. Consulte seu gestor e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
             SignInResult signIn = await _signInManager.PasswordSignInAsync(user, loginUserDto.Password!,
                                                                            isPersistent: false, lockoutOnFailure: false);
             if (!signIn.Succeeded)
