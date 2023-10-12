@@ -1,3 +1,4 @@
+using Application.Dtos.User;
 using Domain.Entities;
 using Infrastructure.Data.Contracts;
 using Infrastructure.Identity.Contracts;
@@ -15,11 +16,22 @@ namespace Presentation.Services
             _userRepository = userRepository;
         }
 
-        public async Task<User> GetAuthenticatedUserAsync()
+        public async Task<GetAuthenticatedUserDto> GetAuthenticatedUserAsync()
         {
             string username = _httpContextAccessor.HttpContext.User.Identity.Name;
             User authenticatedUser = await _userRepository.GetUserByUsernameAsync(username);
-            return authenticatedUser;
+
+            GetAuthenticatedUserDto getUserDto = new()
+            {
+                Id = authenticatedUser.Id,
+                Name = authenticatedUser.Name,
+                Email = authenticatedUser.Email,
+                Username = authenticatedUser.Name,
+                CompanyName = authenticatedUser.UserCompany.Name,
+                CompanyId = authenticatedUser.CompanyId
+            };
+
+            return getUserDto;
         }
     }
 }

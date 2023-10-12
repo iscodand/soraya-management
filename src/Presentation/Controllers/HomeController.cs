@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Entities;
 using Infrastructure.Identity.Contracts;
+using Application.Dtos.User;
 
 namespace Presentation.Controllers
 {
@@ -22,7 +22,7 @@ namespace Presentation.Controllers
         [Route("/")]
         public async Task<IActionResult> Home()
         {
-            User authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
+            GetAuthenticatedUserDto authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
             _sessionService.AddUserSession(authenticatedUser);
             return View(authenticatedUser);
         }

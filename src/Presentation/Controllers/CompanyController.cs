@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos.User;
 using Application.Responses;
-using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
@@ -42,7 +41,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
                 BaseResponse<GetUserDto> result = await _userService.GetUsersByCompanyAsync(authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -70,7 +69,7 @@ namespace Presentation.Controllers
 
         // auth/cadastro/
         [HttpGet]
-        [Route("funcionario/novo/")]
+        [Route("funcionarios/novo/")]
         public async Task<IActionResult> RegisterEmployee()
         {
             BaseResponse<GetRolesDto> roles = await _userService.GetRolesAsync();
@@ -85,12 +84,12 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("funcionario/novo/")]
+        [Route("funcionarios/novo/")]
         public async Task<IActionResult> RegisterEmployee(RegisterUserViewModel registerUserViewModel)
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
                 RegisterUserDto registerUserDto = new()
                 {
@@ -115,6 +114,32 @@ namespace Presentation.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        [Route("funcionarios/{employeeUsername}/")]
+        public async Task<IActionResult> DetailEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetUserDto> result = await _userService.DetailUserAsync(employeeUsername,
+                                                                                     authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    GetUserViewModel getUserViewModel = new()
+                    {
+                        Name = result.Data.Name,
+                        Email = result.Data.Email,
+                        Username = result.Data.Username
+                    };
+
+                    return View(getUserViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Employees));
         }
     }
 }

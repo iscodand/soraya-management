@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Domain.Entities;
 using Infrastructure.Identity.Contracts;
+using Application.Dtos.User;
 
 namespace Presentation.Services
 {
@@ -13,13 +14,13 @@ namespace Presentation.Services
             _httpContextAcessor = httpContextAcessor;
         }
 
-        public void AddUserSession(User authenticatedUser)
+        public void AddUserSession(GetAuthenticatedUserDto authenticatedUser)
         {
             string value = JsonConvert.SerializeObject(authenticatedUser);
             _httpContextAcessor.HttpContext.Session.SetString("AuthenticatedUserSession", value);
         }
 
-        public User RetrieveUserSession()
+        public GetAuthenticatedUserDto RetrieveUserSession()
         {
             string authenticatedUserSession = _httpContextAcessor.HttpContext.Session.GetString("AuthenticatedUserSession");
 
@@ -28,7 +29,7 @@ namespace Presentation.Services
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<User>(authenticatedUserSession);
+            return JsonConvert.DeserializeObject<GetAuthenticatedUserDto>(authenticatedUserSession);
         }
 
         public void RemoveUserSession()
