@@ -17,7 +17,7 @@
 
     <div class="row mb-4 mt-4">
         <div class="col-md-4" style="padding-top: 20px">
-            <a class="btn btn-primary-custom btn-lg" asp-controller="Customer" asp-action="Create">
+            <a class="btn btn-primary-custom btn-lg" asp-controller="Meal" asp-action="Create">
                 + Novo Sabor
             </a>
         </div>
@@ -35,7 +35,7 @@
     </div>
 
     <table class="table styled-table">
-        <caption>Total de sabores encontrados: <b>@Model.Count</b></caption>
+        <caption class="styled-table-caption">Total de sabores encontrados: <b>@Model.Count</b></caption>
         <thead>
             <tr>
                 <th>#</th>

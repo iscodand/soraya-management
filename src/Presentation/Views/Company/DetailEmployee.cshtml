@@ -1,0 +1,24 @@
+@model Presentation.ViewModels.User.GetUserViewModel;
+
+@{
+    ViewData["Title"] = "Funcionário - ";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<section class="container">
+
+    <div>
+        <h2>Perfil do Funcionário - <b>@Model.Name</b></h2>
+        <hr>
+    </div>
+
+    <div>
+        <h3>Dados Pessoais</h3>
+        <p>Nome: <b>@Model.Name</b></p>
+        <p>Nome de Usuário: <b>@Model.Username</b></p>
+        <p>Email: <b>@Model.Email</b></p>
+    </div>
+
+</section>

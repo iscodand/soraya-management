@@ -17,9 +17,8 @@
     <hr>
 
     <div class="row mb-4 mt-4">
-
         <div class="col-md-4" style="padding-top: 20px">
-            <a class="btn btn-primary-custom btn-lg" asp-controller="Order" asp-action="Create">
+            <a class="btn btn-primary-custom btn-lg" asp-controller="Company" asp-action="RegisterEmployee">
                 + Novo Funcionário
             </a>
         </div>
@@ -35,11 +34,11 @@
         </div>
     </div>
 
-
     <table class="table styled-table">
-        <caption>Total de funcionário encontrados: <b>@Model.Count</b></caption>
+        <caption>Total de funcionários encontrados: <b>@Model.Count</b></caption>
         <thead>
             <tr>
+                <th>Detalhes</th>
                 <th>Nome</th>
                 <th>E-mail</th>
                 <th>Nome de Usuário</th>
@@ -49,6 +48,12 @@
             @foreach (var user in Model)
             {
                 <tr>
+                    <td style="max-width: 50px;">
+                        <a type="button" asp-controller="Company" asp-action="DetailEmployee"
+                            asp-route-employeeUsername="@user.Username">
+                            <i class="fa-solid fa-circle-info fa-lg"></i>
+                        </a>
+                    </td>
                     <td>@user.Name</td>
                     <td>@user.Email</td>
                     <td>@user.Username</td>

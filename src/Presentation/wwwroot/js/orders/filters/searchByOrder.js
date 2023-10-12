@@ -15,7 +15,6 @@ $(document).ready(function () {
             }
         });
 
-        const visibleOrders = $("#orders-count");
-        visibleOrders.text("Pedidos Encontrados: " + visibleRowCount);
+        updateTableCaption("Pedidos", visibleRowCount)
     });
 });

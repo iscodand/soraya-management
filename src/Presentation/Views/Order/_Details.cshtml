@@ -33,7 +33,7 @@
             <div class="col-md-6">
                 @if (Model.PaymentType.Equals("PIX"))
                 {
-                    <p>Forma de Pagamento: <br>
+                    <p>Pagamento: <br>
                         <b>
                             <i class="fa-brands fa-pix fa-sm" style="padding-right: 3px;"></i>
                             @Model.PaymentType
@@ -42,7 +42,7 @@
                 }
                 else
                 {
-                    <p>Forma de Pagamento: <br>
+                    <p>Pagamento: <br>
                         <b>
                             <i class="fa-solid fa-money-bill-wave fa-sm" style="padding-right: 3px;"></i>
                             @Model.PaymentType
@@ -65,7 +65,7 @@
         }
         else
         {
-            <p>Pago: <br><b style="color: red;">Não</b></p>
+            <p class="mb-2">Pago: <br><b style="color: red;">Não</b></p>
         }
 
         <p>Adicionado por: <br><b>@Model.CreatedBy</b></p>

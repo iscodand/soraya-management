@@ -1,0 +1,42 @@
+/* Page Title Section */
+
+.customer-details-page-title {
+    font-weight: normal;
+}
+
+.customer-details-page-title h2 {
+    letter-spacing: 1px;
+}
+
+.customer-details-page-title b {
+    color: #37419c;
+}
+
+/* Customer Personal Details Section */
+
+.customer-personal-details {
+    margin-top: 2em;
+    margin-bottom: 1em;
+    font-size: 20px;
+}
+
+.customer-personal-details h3 {
+    font-weight: bold;
+}
+
+.customer-personal-details p {
+    font-size: 18px;
+    color: grey;
+}
+
+.customer-personal-details b {
+    font-size: 20px;
+    color: #37419c;
+}
+
+/* Customer Orders Section */
+
+.customer-orders-details h3 {
+    font-weight: bold;
+    text-align: center;
+}

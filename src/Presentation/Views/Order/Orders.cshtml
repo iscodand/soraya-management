@@ -108,7 +108,7 @@
     </div>
 
     <table id="orders-table" class="styled-table table">
-        <caption id="orders-count">Pedidos Encontrados: @Model.Count</caption>
+        <caption class="styled-table-caption">Pedidos Encontrados: @Model.Count</caption>
         <thead>
             <tr class="table-head-row">
                 <th>Detalhes</th>
@@ -116,8 +116,8 @@
                 <th>Cliente</th>
                 <th>Sabor</th>
                 <th>Valor</th>
-                <th>Forma de Pagamento</th>
-                <th>Pago</th>
+                <th>Pagamento</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody id="orders-tableBody" class="table-group-divider">
@@ -156,7 +156,7 @@
                         }
                         else
                         {
-                            <i id="isPaid-icon" class="fa-solid fa-square-check fa-xl"></i>
+                            <p>Pago</p>
                         }
                     </td>
                 </tr>

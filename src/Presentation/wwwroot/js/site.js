@@ -6,6 +6,7 @@ import './employees/filters/searchByEmployee.js'
 // Customers Actions
 import './customers/actions/inactivateCustomerAction.js'
 import './customers/actions/activateCustomerAction.js'
+import './customers/actions/deleteCustomerAction.js'
 
 // Customers Filtering
 import './customers/filters/filterByActiveStatus.js'
