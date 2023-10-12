@@ -13,6 +13,14 @@ namespace Infrastructure.Data.Repositories
         {
             _customers = context.Customers;
         }
+        public async Task<Customer> GetCustomerByIdAsync(int customerId)
+        {
+            return await _customers.AsNoTracking()
+                                   .Include(x => x.User).AsNoTracking()
+                                   .Where(x => x.Id == customerId)
+                                   .FirstOrDefaultAsync()
+                                   .ConfigureAwait(false);
+        }
 
         public async Task<Customer> DetailCustomerAsync(int customerId)
         {
