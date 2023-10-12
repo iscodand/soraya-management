@@ -65,5 +65,43 @@ namespace Application.Services
                 DataCollection = getRolesDtosCollection
             };
         }
+
+        public async Task<BaseResponse<GetUserDto>> DetailUserAsync(string username, int companyId)
+        {
+            User user = await _userRepository.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "Usuário não encontrado.",
+                    IsSuccess = false
+                };
+            }
+
+            if (user.CompanyId != companyId)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "Esse usuário não faz parte da sua empresa.",
+                    IsSuccess = false
+                };
+            }
+
+            GetUserDto getUserDto = new()
+            {
+                Name = user.Name,
+                Username = user.UserName,
+                Email = user.Email,
+                Role = "teste"
+            };
+
+            return new BaseResponse<GetUserDto>()
+            {
+                Message = "Usuário encontrado com sucesso.",
+                IsSuccess = true,
+                Data = getUserDto
+            };
+        }
     }
 }

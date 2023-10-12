@@ -6,13 +6,13 @@ namespace Application.Contracts
 {
     public interface IOrderService
     {
-        public Task<BaseResponse<Order>> GetOrdersByCompanyAsync(int companyId);
-        public Task<BaseResponse<Order>> GetOrdersByDateAsync(int companyId, DateTime? date);
-        public Task<BaseResponse<Order>> GetOrderDetailsAsync(int orderId, User authenticatedUser);
-        public Task<BaseResponse<Order>> CreateOrderAsync(CreateOrderDto createOrderDto);
+        public Task<BaseResponse<GetOrderDto>> GetOrdersByCompanyAsync(int companyId);
+        public Task<BaseResponse<GetOrderDto>> GetOrdersByDateAsync(int companyId, DateTime? date);
+        public Task<BaseResponse<DetailOrderDto>> GetOrderDetailsAsync(int orderId, int userCompanyId);
+        public Task<BaseResponse<CreateOrderDto>> CreateOrderAsync(CreateOrderDto createOrderDto);
         public Task<BaseResponse<GetCreateOrderItemsDto>> GetCreateOrdersItemsAsync(int companyId);
-        public Task<BaseResponse<Order>> UpdateOrderAsync(UpdateOrderDto updateOrderDto);
-        public Task<BaseResponse<Order>> MakeOrderPaymentAsync(int orderId, User authenticatedUser);
-        public Task<BaseResponse<Order>> DeleteOrderAsync(int orderId, User authenticatedUser);
+        public Task<BaseResponse<UpdateOrderDto>> UpdateOrderAsync(UpdateOrderDto updateOrderDto);
+        public Task<BaseResponse<UpdateOrderDto>> MakeOrderPaymentAsync(int orderId, int userCompanyId);
+        public Task<BaseResponse<GetOrderDto>> DeleteOrderAsync(int orderId, int userCompanyId);
     }
 }
