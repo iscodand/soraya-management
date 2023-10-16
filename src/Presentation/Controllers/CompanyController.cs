@@ -123,23 +123,66 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<GetUserDto> result = await _userService.DetailUserAsync(employeeUsername,
+                BaseResponse<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername,
                                                                                      authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
-                    GetUserViewModel getUserViewModel = new()
+                    DetailUserViewModel detailUserViewModel = new()
                     {
                         Name = result.Data.Name,
                         Email = result.Data.Email,
-                        Username = result.Data.Username
+                        Username = result.Data.Username,
+                        IsActive = result.Data.IsActive
                     };
 
-                    return View(getUserViewModel);
+                    return View(detailUserViewModel);
                 }
             }
 
             return RedirectToAction(nameof(Employees));
+        }
+
+        [HttpPost]
+        [Route("funcionarios/{employeeUsername}/ativar")]
+        public async Task<IActionResult> ActivateEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetUserDto> result = await _userService.ActivateUserAsync(employeeUsername,
+                                                                                     authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao ativar funcionário." });
+        }
+
+        [HttpPost]
+        [Route("funcionarios/{employeeUsername}/desativar")]
+        public async Task<IActionResult> DeactivateEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
+                                                                                     authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao desativar funcionário." });
         }
     }
 }
