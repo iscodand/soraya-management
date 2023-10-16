@@ -32,9 +32,14 @@
 </head>
 
 <body>
+    <script type="module" src="~/js/utils/preloader.js"></script>
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
     <main id="main" role="main" class="main-content pb-3">
+        <link rel="stylesheet" href="~/css/tables/styled-table.css" asp-append-version="true" />
         @RenderBody()
-        <link rel="stylesheet" href="~/css/styled-table.css" asp-append-version="true" />
     </main>
 
     @await RenderSectionAsync("Scripts", required: false)

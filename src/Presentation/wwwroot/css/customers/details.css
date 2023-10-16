@@ -1,7 +1,13 @@
 /* Page Title Section */
 
 .customer-details-page-title {
+    text-align: center;
     font-weight: normal;
+    background-color: #fafafa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: -1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 .customer-details-page-title h2 {
@@ -18,14 +24,22 @@
     margin-top: 2em;
     margin-bottom: 1em;
     font-size: 20px;
+    background-color: #fafafa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 .customer-personal-details h3 {
     font-weight: bold;
+    color: #37419c;
 }
 
 .customer-personal-details p {
     font-size: 18px;
+    padding-left: 1rem;
+    position: relative;
     color: grey;
 }
 
@@ -34,9 +48,30 @@
     color: #37419c;
 }
 
+.vertical-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    color: #37419c;
+    background-color: #37419c;
+    content: '';
+}
+
 /* Customer Orders Section */
+
+.customer-orders-details {
+    background-color: #fafafa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
 
 .customer-orders-details h3 {
     font-weight: bold;
+    color: #37419c;
     text-align: center;
+    margin-bottom: 2rem;
 }

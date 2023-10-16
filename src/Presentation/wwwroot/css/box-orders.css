@@ -26,21 +26,25 @@
 
 .box-orders i {
     padding-top: 10px;
-    color: #ededed;
+    color: #fafafa;
     margin-bottom: 15px;
 }
 
 .box-orders h2 {
     margin-top: 15px;
     font-weight: bolder;
-    color: #ededed;
+    color: #fafafa;
 }
 
 .box-orders p {
-    color: #ededed;
+    color: #fafafa;
     font-size: 14px;
 }
 
-#box-orders-unpaid {
+.box-orders.unpaid {
     background: linear-gradient(45deg, #fe727d, #FF273A);
+}
+
+.box-orders.paid {
+    background: linear-gradient(45deg, #61c078, #49b464);
 }

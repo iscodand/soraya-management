@@ -23,7 +23,9 @@
 }
 
 .styled-table thead th {
-    color: rgb(161, 161, 161);
+    color: #4D59CB;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .styled-table th {
@@ -54,4 +56,64 @@
 
 .table-group-divider {
     color: transparent;
+}
+
+.status {
+    padding: .2rem 0;
+    border-radius: 1rem;
+    text-align: center;
+    font-size: 15px;
+}
+
+.status.paid {
+    background-color: #86e49d;
+    color: #006b21;
+}
+
+.status.pending {
+    color: #6b5200;
+    background-color: #eb9a74;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease;
+    opacity: 0;
+}
+
+.no-orders-found {
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.no-orders-found h3 {
+    color: #4D59CB;
+    font-weight: bolder;
+}
+
+.no-orders-found h3 a {
+    color: #30377a;
 }

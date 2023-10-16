@@ -8,87 +8,109 @@
 @await Component.InvokeAsync("Menu")
 
 <link rel="stylesheet" href="~/css/customers/details.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/box-orders.css" asp-append-version="true" />
 
 <section class="container">
 
     <div class="customer-details-page-title">
         <h2>Perfil do Cliente - <b>@Model.Name</b></h2>
-        <hr>
     </div>
 
     <div class="customer-personal-details">
         <h3>Dados do Cliente</h3>
-        <p>Nome: <b>@Model.Name</b></p>
 
-        @if (Model.Phone != null)
-        {
-            <p>Contato: @Model.Phone</p>
-        }
-        else
-        {
-            <p>Contato: <b style="color: red;">Não informado.</b></p>
-        }
+        <div class="customer-personal-details-content">
+            <p><span class="vertical-bar">|</span> Nome: <b>@Model.Name</b></p>
 
-        <p>Adicionado por: <b>@Model.CreatedBy</b></p>
+            @if (Model.Phone != null)
+            {
+                <p><span class="vertical-bar">|</span> Contato: @Model.Phone</p>
+            }
+            else
+            {
+                <p><span class="vertical-bar">|</span> Contato: <b style="color: red;">Não informado.</b></p>
+            }
+
+            <p><span class="vertical-bar">|</span> Adicionado por: <b>@Model.CreatedBy</b></p>
+        </div>
     </div>
 
     <!-- Display all customer orders (if has orders) -->
 
     <div class="customer-orders-details">
         <h3>Pedidos Realizados</h3>
-        <p>Total de Pedidos: <b>@Model.Orders.Count</b></p>
+
+        <div class="box-orders-section row">
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <i class="fa-solid fa-chevron-up fa-lg"></i>
+                    <h2 id="new-orders-count">@Model.Orders.Count</h2>
+                    <p>Pedidos Realizados</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <i class="fa-solid fa-chevron-up fa-lg"></i>
+                    <h2 id="new-orders-count">
+                        R$ @Math.Round(Model.Orders.Where(x => x.IsPaid == true).Sum(x => x.Price), 2)
+                    </h2>
+                    <p>Total de Lucro</p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Orders.Count > 0)
+        {
+            <div class="mt-4">
+                <table id="orders-table" class="styled-table table">
+                    <thead>
+                        <tr class="table-head-row">
+                            <th>Data do Pedido</th>
+                            <th>Sabor</th>
+                            <th>Valor</th>
+                            <th>Forma de Pagamento</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-tableBody" class="table-group-divider">
+                        @foreach (var order in Model.Orders)
+                        {
+                            <tr class="table-row">
+                                <td id="createdAt-order">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
+                                <td>@order.Meal</td>
+                                <td id="order-price"><b>R$</b> @Math.Round(@order.Price, 2)</td>
+                                <td>
+                                    @if (@order.PaymentType.Equals("PIX"))
+                                    {
+                                        <i class="fa-brands fa-pix fa-xl"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-solid fa-money-bill-wave fa-xl"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (order.IsPaid)
+                                    {
+                                        <p class="status paid">Pago</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="status pending">Pendente</p>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
     </div>
 
-    @if (Model.Orders.Count > 0)
-    {
-        <div class="mt-4">
-            <table id="orders-table" class="styled-table table">
-                <thead>
-                    <tr class="table-head-row">
-                        <th>Data do Pedido</th>
-                        <th>Sabor</th>
-                        <th>Valor</th>
-                        <th>Forma de Pagamento</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="orders-tableBody" class="table-group-divider">
-                    @foreach (var order in Model.Orders)
-                    {
-                        <tr class="table-row">
-                            <td id="createdAt-order">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
-                            <td>@order.Meal</td>
-                            <td id="order-price"><b>R$</b> @Math.Round(@order.Price, 2)</td>
-                            <td>
-                                @if (@order.PaymentType.Equals("PIX"))
-                                {
-                                    <i class="fa-brands fa-pix fa-xl"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-money-bill-wave fa-xl"></i>
-                                }
-                            </td>
-                            <td>
-                                @if (order.IsPaid)
-                                {
-                                    <p>Pago</p>
-                                }
-                                else
-                                {
-                                    <p>Pendente</p>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-
-    <hr class="mt-5 mb-4">
-
-    <div>
+    <div class="custom-card">
         <a class="btn btn-primary" asp-action="Update" asp-controller="Customer" asp-route-customerId="@Model.Id">
             <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Cliente</b>
         </a>

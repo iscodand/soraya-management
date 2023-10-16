@@ -11,11 +11,11 @@
 
 <section class="container">
 
-    <div class="page-title">
-        <h1>Pedidos</h1>
+    <div class="custom-card page-title text-center">
+        <h1>
+            Pedidos
+        </h1>
     </div>
-
-    <hr>
 
     <div class="box-orders-section row">
         <div class="col-md-2">
@@ -47,7 +47,7 @@
         </div>
 
         <div class="col-md-2">
-            <div id="box-orders-paid" class="box-orders">
+            <div id="box-orders-paid" class="box-orders paid">
                 <i class="fa-solid fa-check fa-lg"></i>
                 <h2 id="paid-orders-count">@Model.Where(x => x.IsPaid == true).Count()</h2>
                 <p>Pedidos Pagos</p>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="col-md-2">
-            <div id="box-orders-unpaid" class="box-orders">
+            <div id="box-orders-unpaid" class="box-orders unpaid">
                 <i class="fa-solid fa-x fa-lg"></i>
                 <h2 id="unpaid-orders-count">@Model.Where(x => x.IsPaid == false).Count()</h2>
                 <p>Pedidos NÃO Pagos</p>
@@ -63,108 +63,119 @@
         </div>
     </div>
 
-    <hr>
+    <section class="custom-card">
 
-    <div class="row mb-4 mt-4">
+        <div class="row mb-4 mt-4">
 
-        <div class="col-md-4" style="padding-top: 20px">
-            <a class="btn btn-primary-custom btn-lg" asp-controller="Order" asp-action="Create">
-                + Novo Pedido
-            </a>
-        </div>
-
-        <div class="col-md-8 row justify-content-end">
-            <div class="col-md-4">
-                <label for="search-order-filter" class="form-label fw-thin">
-                    <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
-                    BUSCAR:
-                </label>
-                <input id="search-order-filter" class="form-control" placeholder="Busque cliente ou sabor" />
+            <div class="col-md-4" style="padding-top: 20px">
+                <a class="btn btn-primary-custom btn-lg" asp-controller="Order" asp-action="Create">
+                    + Novo Pedido
+                </a>
             </div>
 
-            <div class="col-md-4">
-                <label for="payment-filter" class="form-label fw-thin">
-                    <i class="fa-solid fa-money-bill fa-sm" style="padding-right: 5px;"></i>
-                    PAGAMENTO:
-                </label>
-                <select id="payment-filter" name="payment-filter" class="form-select form-control"
-                    style="width: 250px;">
-                    <option value="all">Todos</option>
-                    <option value="paid">Pagos</option>
-                    <option value="unpaid">Não Pagos</option>
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <form id="filterByDate-form" asp-controller="Order" asp-action="Orders" method="GET">
-                    <label for="createdAt" class="form-label fw-thin">
-                        <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA:
+            <div class="col-md-8 row justify-content-end">
+                <div class="col-md-4">
+                    <label for="search-order-filter" class="form-label fw-thin">
+                        <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                        BUSCAR:
                     </label>
-                    <input id="createdAt" name="createdAt" type="date" class="form-control" style="max-width: 300px;">
-                </form>
+                    <input id="search-order-filter" class="form-control" placeholder="Busque cliente ou sabor" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="payment-filter" class="form-label fw-thin">
+                        <i class="fa-solid fa-money-bill fa-sm" style="padding-right: 5px;"></i>
+                        PAGAMENTO:
+                    </label>
+                    <select id="payment-filter" name="payment-filter" class="form-select form-control"
+                        style="width: 250px;">
+                        <option value="all">Todos</option>
+                        <option value="paid">Pagos</option>
+                        <option value="unpaid">Não Pagos</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <form id="filterByDate-form" asp-controller="Order" asp-action="Orders" method="GET">
+                        <label for="createdAt" class="form-label fw-thin">
+                            <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA:
+                        </label>
+                        <input id="createdAt" name="createdAt" type="date" class="form-control"
+                            style="max-width: 300px;">
+                    </form>
+                </div>
             </div>
+
         </div>
 
-    </div>
+        @if (Model.Count > 0)
+        {
+            <table id="orders-table" class="styled-table table">
+                <caption class="styled-table-caption">Pedidos Encontrados: @Model.Count</caption>
+                <thead>
+                    <tr class="table-head-row">
+                        <th>Detalhes</th>
+                        <th>Data do Pedido</th>
+                        <th>Cliente</th>
+                        <th>Sabor</th>
+                        <th>Valor</th>
+                        <th>Pagamento</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-tableBody" class="table-group-divider">
+                    @foreach (var order in Model)
+                    {
+                        <tr class="table-row">
+                            <td>
+                                <a id="open-order-details" href="pedidos/detalhes/@order.Id" class="show-details"
+                                    data-order-id="@order.Id">
+                                    <i class="fa-solid fa-circle-info fa-lg"></i>
+                                </a>
+                            </td>
+                            <td id="createdAt-order">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
+                            <td>@order.Customer</td>
+                            <td>@order.Meal</td>
+                            <td id="order-price"><b>R$</b> @Math.Round(@order.Price, 2)</td>
+                            <td>
+                                @if (@order.PaymentType.Equals("PIX"))
+                                {
+                                    <i class="fa-brands fa-pix fa-xl"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-money-bill-wave fa-xl"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (!order.IsPaid)
+                                {
+                                    <form asp-action="MarkOrderAsPaid" method="post">
+                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                        <button type="submit" class="btn btn-primary-custom btn-sm fw-normal">
+                                            Marcar como Pago
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <p class="status paid">Pago</p>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="no-orders-found">
+                <h3>Nenhum pedido encontrado. <a asp-controller="Order" asp-action="Create">Clique aqui</a>
+                    para cadastrar um novo pedido.</h3>
+            </div>
+        }
 
-    <table id="orders-table" class="styled-table table">
-        <caption class="styled-table-caption">Pedidos Encontrados: @Model.Count</caption>
-        <thead>
-            <tr class="table-head-row">
-                <th>Detalhes</th>
-                <th>Data do Pedido</th>
-                <th>Cliente</th>
-                <th>Sabor</th>
-                <th>Valor</th>
-                <th>Pagamento</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="orders-tableBody" class="table-group-divider">
-            @foreach (var order in Model)
-            {
-                <tr class="table-row">
-                    <td>
-                        <a id="open-order-details" href="pedidos/detalhes/@order.Id" class="show-details"
-                            data-order-id="@order.Id">
-                            <i class="fa-solid fa-circle-info fa-lg"></i>
-                        </a>
-                    </td>
-                    <td id="createdAt-order">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
-                    <td>@order.Customer</td>
-                    <td>@order.Meal</td>
-                    <td id="order-price"><b>R$</b> @Math.Round(@order.Price, 2)</td>
-                    <td>
-                        @if (@order.PaymentType.Equals("PIX"))
-                        {
-                            <i class="fa-brands fa-pix fa-xl"></i>
-                        }
-                        else
-                        {
-                            <i class="fa-solid fa-money-bill-wave fa-xl"></i>
-                        }
-                    </td>
-                    <td>
-                        @if (!order.IsPaid)
-                        {
-                            <form asp-action="MarkOrderAsPaid" method="post">
-                                <input type="hidden" name="orderId" value="@order.Id" />
-                                <button type="submit" class="btn btn-primary-custom btn-sm fw-normal">
-                                    Marcar como Pago
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <p>Pago</p>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <p id="orders-info" class="text-center hidden">Não foram encontrados pedidos para esses filtros.</p>
+    </section>
 
     <div id="order-details-modal-card" class="hidden order-details-modal-card">
         <!-- Get a modal of order details (Being loaded on _Details.cshtml) -->

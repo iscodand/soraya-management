@@ -11,35 +11,35 @@ $(document).ready(function () {
             success: function (result) {
                 $('#orders-tableBody').html(result);
 
-                let $orders = $('#orders-tableBody tr');
-                let newOrdersCount = $orders.length;
-                let paidOrdersCount = $orders.filter(':has(.fa-square-check)').length;
-                let unpaidOrdersCount = newOrdersCount - paidOrdersCount;
-
-                $('#new-orders-count').text(newOrdersCount);
-                $('#paid-orders-count').text(paidOrdersCount);
-                $('#unpaid-orders-count').text(unpaidOrdersCount);
-
                 let totalReceived = 0;
-                let filterDate;
+                let totalToReceive = 0;
+                let paidOrdersCount = 0;
+                let unpaidOrdersCount = 0;
 
-                $orders.each(function () {
+                $('#orders-tableBody tr').each(function () {
+                    let isPaid = $(this).find('.status.paid').length > 0;
                     let totalReceivedField = $(this).find('td:eq(4)').text().replace('R$', '').trim();
                     let price = parseFloat(totalReceivedField);
 
                     if (!isNaN(price)) {
                         totalReceived += price;
+                        if (isPaid) {
+                            paidOrdersCount++;
+                        } else {
+                            unpaidOrdersCount++;
+                            totalToReceive += price;
+                        }
                     }
-
-                    filterDate = $(this).find('td:eq(1)').text();
                 });
 
-                let formattedTotalRevenue = 'R$ ' + totalReceived.toFixed(2);
+                let formattedTotalReceived = 'R$ ' + totalReceived.toFixed(2);
+                let formattedTotalToReceive = 'R$ ' + totalToReceive.toFixed(2);
 
-                $('#price-orders-sum').text(formattedTotalRevenue);
-
-                let ordersDataDate = $('#orders-data-date');
-                ordersDataDate.text(`Dados dos Pedidos - ${filterDate}`);
+                $('#new-orders-count').text(paidOrdersCount + unpaidOrdersCount);
+                $('#price-orders-sum').text(formattedTotalReceived);
+                $('#total-to-receive').text(formattedTotalToReceive);
+                $('#paid-orders-count').text(paidOrdersCount);
+                $('#unpaid-orders-count').text(unpaidOrdersCount);
             },
             error: function () {
                 alert('Ocorreu um erro ao processar a solicitação.');

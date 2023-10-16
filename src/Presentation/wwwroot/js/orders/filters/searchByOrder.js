@@ -8,13 +8,14 @@ $(document).ready(function () {
             let mealName = $(this).find("td:eq(3)").text().toLowerCase();
 
             if (customerName.includes(searchTerm) || mealName.includes(searchTerm)) {
-                $(this).show();
+                $(this).addClass("fade-in").removeClass("fade-out");
                 visibleRowCount++;
             } else {
-                $(this).hide();
+                $(this).addClass("fade-out").removeClass("fade-in");
             }
         });
 
-        updateTableCaption("Pedidos", visibleRowCount)
+        const caption = $(".styled-table-caption");
+        caption.text(`Pedidos Encontrados: ${visibleRowCount}`);
     });
 });
