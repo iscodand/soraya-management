@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Identity.Contracts;
 using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
+using Presentation.ViewModels.Authentication;
 
 namespace Presentation.Controllers
 {
@@ -28,10 +29,16 @@ namespace Presentation.Controllers
         // auth/login
         [HttpPost]
         [Route("login/")]
-        public async Task<IActionResult> Login(LoginUserDto loginUserDto)
+        public async Task<IActionResult> Login(LoginUserViewModel loginUserViewModel)
         {
             if (ModelState.IsValid)
             {
+                LoginUserDto loginUserDto = new()
+                {
+                    UserName = loginUserViewModel.UserName,
+                    Password = loginUserViewModel.Password
+                };
+
                 BaseResponse result = await _authenticationService.LoginAsync(loginUserDto);
                 ViewData["Message"] = result.Message;
 
