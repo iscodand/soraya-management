@@ -13,13 +13,24 @@ namespace Infrastructure.Data.Repositories
         {
             _customers = context.Customers;
         }
+        public async Task<Customer> GetCustomerByIdAsync(int customerId)
+        {
+            return await _customers.AsNoTracking()
+                                   .Include(x => x.User).AsNoTracking()
+                                   .Where(x => x.Id == customerId)
+                                   .FirstOrDefaultAsync()
+                                   .ConfigureAwait(false);
+        }
 
         public async Task<Customer> DetailCustomerAsync(int customerId)
         {
             return await _customers.AsNoTracking()
                                    .Include(x => x.User).AsNoTracking()
                                    .Include(x => x.Company).AsNoTracking()
-                                   .Include(x => x.Orders).AsNoTracking()
+                                   .Include(x => x.Orders)
+                                   .ThenInclude(x => x.Meal).AsNoTracking()
+                                   .Include(x => x.Orders)
+                                   .ThenInclude(x => x.PaymentType).AsNoTracking()
                                    .Where(x => x.Id == customerId).AsNoTracking()
                                    .FirstOrDefaultAsync()
                                    .ConfigureAwait(false);

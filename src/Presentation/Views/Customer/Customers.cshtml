@@ -9,89 +9,99 @@
 
 <section class="container">
 
-    <div class="row justify-content-end">
-        <div>
-            <a class="btn btn-primary-custom mb-3 btn-lg" asp-controller="Customer" asp-action="Create">+ Novo
-                Cliente</a>
-        </div>
-
-        <div class="col-md-4" style="padding-left: 175px">
-            <label for="isActive-filter" class="form-label fw-thin">ATIVO:</label>
-            <select id="isActive-filter" name="isActive-filter" class="form-select form-select-lg form-control"
-                style="width: 250px;">
-                <option value="all">Todos</option>
-                <option value="actives">Ativos</option>
-                <option value="inactives">Inativos</option>
-            </select>
-        </div>
+    <div class="page-title">
+        <h1>
+            <i class="fa-solid fa-users fa-2xs"></i>
+            Clientes
+        </h1>
     </div>
 
-    <table class="table styled-table">
-        <caption>Total de clientes encontrados: <b>@Model.Count</b></caption>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nome do Cliente</th>
-                <th>Telefone do Cliente</th>
-                <th>Ativo</th>
-            </tr>
-        </thead>
-        <tbody id="customers-tableBody">
-            @foreach (var customer in Model.ToList().OrderBy(x => x.IsActive == false))
-            {
+    <hr>
+
+    <div class="row mb-4 mt-4">
+        <div class="col-md-4" style="padding-top: 20px">
+            <a class="btn btn-primary-custom btn-lg" asp-controller="Customer" asp-action="Create">
+                + Novo Cliente
+            </a>
+        </div>
+
+        @if (Model.Count > 0)
+        {
+            <div class="col-md-8 row justify-content-end">
+                <div class="col-md-4">
+                    <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                    <label for="isActive-filter" class="form-label fw-thin">BUSCAR:</label>
+                    <input id="search-customer-filter" class="form-control" placeholder="Busque pelo nome" />
+                </div>
+
+                <div class="col-md-4">
+                    <i class="fa-solid fa-check fa-sm" style="padding-right: 5px;"></i>
+                    <label for="isActive-filter" class="form-label fw-thin">ATIVO:</label>
+                    <select id="isActive-filter" name="isActive-filter" class="form-select form-select "
+                        style="width: 250px;">
+                        <option value="all">Todos</option>
+                        <option value="actives">Ativos</option>
+                        <option value="inactives">Inativos</option>
+                    </select>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.Count > 0)
+    {
+        <table class="styled-table table">
+            <thead>
                 <tr>
-                    <td>
-                        <a type="button" class="btn btn-sm btn-success" asp-controller="Customer" asp-action="Details"
-                            asp-route-customerId="@customer.Id">Detalhes</a>
-                    </td>
-                    <td>@customer.Name</td>
-
-                    @if (customer.Phone == null)
-                    {
-                        <td style="color: red">Não adicionado</td>
-                    }
-                    else
-                    {
-                        <td>@customer.Phone</td>
-                    }
-
-                    @if (customer.IsActive)
-                    {
-                        <td><i id="isActive-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i></td>
-                    }
-                    else
-                    {
-                        <td><i class="fa-solid fa-rectangle-xmark fa-xl" style="color: #d02525;"></i></td>
-                    }
+                    <th>#</th>
+                    <th>Nome do Cliente</th>
+                    <th>Telefone do Cliente</th>
+                    <th>Ativo</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="customers-tableBody">
+                @foreach (var customer in Model)
+                {
+                    <tr class="table-row">
+                        <td style="max-width: 50px;">
+                            <a type="button" asp-controller="Customer" asp-action="Details" asp-route-customerId="@customer.Id">
+                                <i class="fa-solid fa-circle-info fa-lg"></i>
+                            </a>
+                        </td>
+                        <td>@customer.Name</td>
+
+                        @if (customer.Phone == null)
+                        {
+                            <td style="color: red">Não Informado</td>
+                        }
+                        else
+                        {
+                            <td>@customer.Phone</td>
+                        }
+
+                        @if (customer.IsActive)
+                        {
+                            <td>
+                                <i id="isActive-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <i class="fa-solid fa-rectangle-xmark fa-xl" style="color: #d02525;"></i>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="text-center">
+            <h4 class="fw-bolder mt-5">Nenhum cliente encontrado. <a href="clientes/novo">Clique aqui para adicionar.</a>
+            </h4>
+        </div>
+    }
 
 </section>
-
-<script>
-    $(document).ready(function () {
-        // Bind an input event listener to the is active filter input
-        $("#isActive-filter").on("change", function () {
-            const isActiveFilter = $("#isActive-filter").val();
-
-            // Loop through each row in the table body
-            $("#customers-tableBody tr").each(function () {
-                const isActiveColumn = $(this).find("td:nth-child(4)");
-
-                // Check if the isActive status matches the selected filter
-                const isActive = isActiveColumn.find("#isActive-icon").length > 0;
-
-                // Determine whether to show or hide the row based on the isActive status filter
-                if ((isActiveFilter === "all") ||
-                    (isActiveFilter === "actives" && isActive) ||
-                    (isActiveFilter === "inactives" && !isActive)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-    });
-</script>

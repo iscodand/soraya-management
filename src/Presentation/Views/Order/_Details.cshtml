@@ -1,40 +1,74 @@
 @model Presentation.ViewModels.Order.GetOrderViewModel;
 
-<div id="order-details-modal">
+<div id="order-details-modal" class="order-details-modal-card">
 
-    <div class="text-center">
+    <div class="order-details-title text-center mt-3">
         <i class="fa-solid fa-circle-info fa-2xl mb-4"></i>
-        <h4>Detalhes do Pedido </h4>
-        <h4><b style="color: #386d63;">N° @Model.Id</b></h4>
+        <h4>Detalhes do Pedido</h4>
         <hr>
     </div>
 
     <div class="order-details-modal-content mb-3">
         @if (Model.Description == null)
         {
-            <p>Descrição: <b>Sem descrição</b></p>
+            <p class="mb-2">Descrição: <br><b>Sem descrição</b></p>
         }
         else
         {
-            <p>Descrição: <b>@Model.Description</b></p>
+            <p class="mb-2">Descrição: <br><b>@Model.Description</b></p>
         }
 
-        <p>Cliente: <b>@Model.Customer</b></p>
-        <p>Sabor: <b>@Model.Meal</b></p>
-        <p>Preço: <b>R$ @Math.Round(Model.Price, 2)</b></p>
-        <p>Forma de Pagamento: <b>@Model.PaymentType</b></p>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <p>Cliente: <br><b>@Model.Customer</b></p>
+            </div>
+            <div class="col-md-6">
+                <p>Sabor: <br><b>@Model.Meal</b></p>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <p>Preço: <br><b>R$ @Math.Round(Model.Price, 2)</b></p>
+            </div>
+            <div class="col-md-6">
+                @if (Model.PaymentType.Equals("PIX"))
+                {
+                    <p>Pagamento: <br>
+                        <b>
+                            <i class="fa-brands fa-pix fa-sm" style="padding-right: 3px;"></i>
+                            @Model.PaymentType
+                        </b>
+                    </p>
+                }
+                else
+                {
+                    <p>Pagamento: <br>
+                        <b>
+                            <i class="fa-solid fa-money-bill-wave fa-sm" style="padding-right: 3px;"></i>
+                            @Model.PaymentType
+                        </b>
+                    </p>
+                }
+            </div>
+        </div>
 
         @if (Model.IsPaid)
         {
-            <p>Pago: <b>Sim</b></p>
-            <p>Data de Pagamento: <b>@Model.PaidAt</b></p>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <p>Pago: <br><b>Sim</b></p>
+                </div>
+                <div class="col-md-6">
+                    <p>Data de Pagamento: <br><b>@Model.PaidAt</b></p>
+                </div>
+            </div>
         }
         else
         {
-            <p>Pago: <b style="color: red;">Não</b></p>
+            <p class="mb-2">Pago: <br><b style="color: red;">Não</b></p>
         }
 
-        <p>Adicionado por: <b>@Model.CreatedBy</b></p>
+        <p>Adicionado por: <br><b>@Model.CreatedBy</b></p>
     </div>
 
     <hr>

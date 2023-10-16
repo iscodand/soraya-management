@@ -1,9 +1,9 @@
-using Domain.Entities;
+using Application.Dtos.User;
 
 namespace Infrastructure.Identity.Contracts
 {
     public interface IAuthenticatedUserService
     {
-        public Task<User> GetAuthenticatedUserAsync();
+        public Task<GetAuthenticatedUserDto> GetAuthenticatedUserAsync();
     }
 }

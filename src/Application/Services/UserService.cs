@@ -65,5 +65,123 @@ namespace Application.Services
                 DataCollection = getRolesDtosCollection
             };
         }
+
+        public async Task<BaseResponse<DetailUserDto>> DetailUserAsync(string username, int companyId)
+        {
+            User user = await _userRepository.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return new BaseResponse<DetailUserDto>()
+                {
+                    Message = "Usuário não encontrado.",
+                    IsSuccess = false
+                };
+            }
+
+            if (user.CompanyId != companyId)
+            {
+                return new BaseResponse<DetailUserDto>()
+                {
+                    Message = "Esse usuário não faz parte da sua empresa.",
+                    IsSuccess = false
+                };
+            }
+
+            DetailUserDto detailUserDto = new()
+            {
+                Name = user.Name,
+                Username = user.UserName,
+                Email = user.Email,
+                IsActive = user.IsActive
+            };
+
+            return new BaseResponse<DetailUserDto>()
+            {
+                Message = "Usuário encontrado com sucesso.",
+                IsSuccess = true,
+                Data = detailUserDto
+            };
+        }
+
+        public async Task<BaseResponse<GetUserDto>> ActivateUserAsync(string username, int companyId)
+        {
+            User user = await _userRepository.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "Usuário não encontrado.",
+                    IsSuccess = false
+                };
+            }
+
+            if (user.CompanyId != companyId)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "Esse usuário não faz parte da sua empresa.",
+                    IsSuccess = false
+                };
+            }
+
+            if (user.IsActive)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "O usuário já está ativo.",
+                    IsSuccess = false
+                };
+            }
+
+            user.Activate();
+
+            return new BaseResponse<GetUserDto>()
+            {
+                Message = "Usuário foi ativo com sucesso.",
+                IsSuccess = true
+            };
+        }
+
+        public async Task<BaseResponse<GetUserDto>> DeactivateUserAsync(string username, int companyId)
+        {
+            User user = await _userRepository.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "Usuário não encontrado.",
+                    IsSuccess = false
+                };
+            }
+
+            if (user.CompanyId != companyId)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "Esse usuário não faz parte da sua empresa.",
+                    IsSuccess = false
+                };
+            }
+
+            if (!user.IsActive)
+            {
+                return new BaseResponse<GetUserDto>()
+                {
+                    Message = "O usuário já está inativo.",
+                    IsSuccess = false
+                };
+            }
+
+            user.Deactivate();
+
+            return new BaseResponse<GetUserDto>()
+            {
+                Message = "Usuário foi desativado com sucesso.",
+                IsSuccess = true
+            };
+        }
     }
 }

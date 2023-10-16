@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos.Customer;
 using Application.Responses;
-using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 using Presentation.ViewModels.Customer;
+using Presentation.ViewModels.Order;
+using Application.Dtos.Order;
+using Application.Dtos.User;
 
 namespace Presentation.Controllers
 {
@@ -27,11 +29,11 @@ namespace Presentation.Controllers
         [Route("")]
         public async Task<IActionResult> Customers()
         {
-            User authenticatedUser = _sessionService.RetrieveUserSession();
-            BaseResponse<Customer> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            BaseResponse<GetCustomerDto> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
-            List<GetCustomerViewModel> viewModelCollection = new();
-            foreach (Customer customer in customers.DataCollection)
+            List<GetCustomerViewModel> getCustomerDtoCollection = new();
+            foreach (GetCustomerDto customer in customers.DataCollection)
             {
                 GetCustomerViewModel viewModel = new()
                 {
@@ -39,13 +41,13 @@ namespace Presentation.Controllers
                     Name = customer.Name,
                     Phone = customer.Phone,
                     IsActive = customer.IsActive,
-                    CreatedBy = customer.User.Name
+                    CreatedBy = customer.CreatedBy
                 };
 
-                viewModelCollection.Add(viewModel);
+                getCustomerDtoCollection.Add(viewModel);
             }
 
-            return View(viewModelCollection);
+            return View(getCustomerDtoCollection.OrderBy(x => x.IsActive == false).ToList());
         }
 
         [HttpGet]
@@ -62,7 +64,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
                 CreateCustomerDto createCustomerDto = new()
                 {
@@ -72,13 +74,13 @@ namespace Presentation.Controllers
                     CompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<Customer> response = await _customerService.CreateCustomerAsync(createCustomerDto);
+                BaseResponse<CreateCustomerDto> response = await _customerService.CreateCustomerAsync(createCustomerDto);
                 ViewData["Message"] = response.Message;
 
                 if (response.IsSuccess)
                 {
                     ViewData["IsSuccess"] = true;
-                    return View(nameof(Customers));
+                    return RedirectToAction(nameof(Customers));
                 }
             }
 
@@ -91,19 +93,38 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<Customer> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<DetailCustomerDto> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
+                    List<GetOrderViewModel> getOrderViewModelCollection = new();
+                    foreach (GetOrderDto order in result.Data.Orders)
+                    {
+                        GetOrderViewModel getOrderViewModel = new()
+                        {
+                            Id = order.Id,
+                            Description = order.Description,
+                            Price = order.Price,
+                            IsPaid = order.IsPaid,
+                            PaidAt = order.PaidAt,
+                            PaymentType = order.PaymentType,
+                            Meal = order.Meal,
+                            Customer = order.Customer,
+                            CreatedAt = order.CreatedAt
+                        };
+
+                        getOrderViewModelCollection.Add(getOrderViewModel);
+                    }
+
                     DetailCustomerViewModel detailCustomerViewModel = new()
                     {
                         Id = result.Data.Id,
                         Name = result.Data.Name,
                         Phone = result.Data.Phone,
                         IsActive = result.Data.IsActive,
-                        CreatedBy = result.Data.User.Name,
-                        Orders = result.Data.Orders
+                        CreatedBy = result.Data.CreatedBy,
+                        Orders = getOrderViewModelCollection
                     };
 
                     return View(detailCustomerViewModel);
@@ -113,14 +134,91 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Customers));
         }
 
+        [HttpGet]
+        [Route("editar/{customerId}")]
+        public async Task<IActionResult> Update(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetCustomerDto> result = await _customerService.GetCustomerByIdAsync(customerId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    UpdateCustomerViewModel updateCustomerViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Name = result.Data.Name,
+                        Phone = result.Data.Phone
+                    };
+
+                    return View(updateCustomerViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Customers));
+        }
+
+        [HttpPost]
+        [Route("editar/{customerId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int customerId, UpdateCustomerViewModel updateCustomerViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+
+                UpdateCustomerDto updateCustomerDto = new()
+                {
+                    Id = customerId,
+                    Name = updateCustomerViewModel.Name,
+                    Phone = updateCustomerViewModel.Phone,
+                    UserCompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<UpdateCustomerDto> result = await _customerService.UpdateCustomerAsync(updateCustomerDto);
+                ViewData["Message"] = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    ViewData["IsSuccess"] = result.IsSuccess;
+                    return RedirectToAction(nameof(Customers));
+                }
+            }
+
+            return View();
+        }
+
         [HttpPatch]
+        [Authorize(Roles = "Manager, Admin")]
+        [Route("ativar/{customerId}")]
+        public async Task<IActionResult> Activate(int customerId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<UpdateCustomerDto> result = await _customerService.ActivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, message = result.Message });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao ativar cliente." });
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = "Manager, Admin")]
         [Route("desativar/{customerId}")]
         public async Task<IActionResult> Inactivate(int customerId)
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<Customer> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<UpdateCustomerDto> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
@@ -133,14 +231,15 @@ namespace Presentation.Controllers
             return Json(new { success = false, message = "Falha ao desativar cliente." });
         }
 
-        [HttpPatch]
-        [Route("ativar/{customerId}")]
-        public async Task<IActionResult> Activate(int customerId)
+        [HttpDelete]
+        [Authorize(Roles = "Manager, Admin")]
+        [Route("deletar/{customerId}")]
+        public async Task<IActionResult> DeleteCustomer(int customerId)
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
-                BaseResponse<Customer> result = await _customerService.ActivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetCustomerDto> result = await _customerService.DeleteCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
@@ -150,7 +249,7 @@ namespace Presentation.Controllers
                 return Json(new { success = false, message = result.Message });
             }
 
-            return Json(new { success = false, message = "Falha ao ativar cliente." });
+            return Json(new { success = false, message = "Falha ao deletar cliente." });
         }
     }
 }

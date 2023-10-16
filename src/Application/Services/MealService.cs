@@ -15,11 +15,11 @@ namespace Application.Services
             _mealRepository = mealRepository;
         }
 
-        public async Task<BaseResponse<Meal>> CreateMealAsync(CreateMealDto createMealDto)
+        public async Task<BaseResponse<CreateMealDto>> CreateMealAsync(CreateMealDto createMealDto)
         {
             if (createMealDto == null)
             {
-                return new BaseResponse<Meal>()
+                return new BaseResponse<CreateMealDto>()
                 {
                     Message = "Cliente não pode ser nulo.",
                     IsSuccess = false
@@ -35,18 +35,18 @@ namespace Application.Services
 
             await _mealRepository.CreateAsync(meal);
 
-            return new BaseResponse<Meal>()
+            return new BaseResponse<CreateMealDto>()
             {
                 Message = "Sabor salvo com sucesso.",
                 IsSuccess = true
             };
         }
 
-        public async Task<BaseResponse<Meal>> GetMealsByCompanyAsync(int companyId)
+        public async Task<BaseResponse<GetMealDto>> GetMealsByCompanyAsync(int companyId)
         {
             if (companyId <= 0)
             {
-                return new BaseResponse<Meal>()
+                return new BaseResponse<GetMealDto>()
                 {
                     Message = "Empresa não encontrada. Verifique e tente novamente",
                     IsSuccess = false
@@ -55,11 +55,25 @@ namespace Application.Services
 
             ICollection<Meal> meals = await _mealRepository.GetMealsByCompanyAsync(companyId);
 
-            return new BaseResponse<Meal>()
+            List<GetMealDto> getMealDtoCollection = new();
+            foreach (Meal meal in meals)
+            {
+                GetMealDto getMealDto = new()
+                {
+                    Id = meal.Id,
+                    Description = meal.Description,
+                    Accompaniments = meal.Accompaniments,
+                    CreatedBy = meal.User.Name
+                };
+
+                getMealDtoCollection.Add(getMealDto);
+            }
+
+            return new BaseResponse<GetMealDto>()
             {
                 Message = "Sabores encontrados com sucesso",
                 IsSuccess = true,
-                DataCollection = meals
+                DataCollection = getMealDtoCollection
             };
         }
     }

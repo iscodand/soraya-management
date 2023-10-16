@@ -8,43 +8,47 @@
 @await Component.InvokeAsync("Menu")
 
 <section class="container">
+    <section class="create-form container">
 
-    <form asp-action="Create" asp-antiforgery="true">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <h5 class="fw-normal" style="letter-spacing: 1px;">Adicione um novo cliente</h5>
-        <hr>
-        <br>
+            <h5 class="fw-normal" style="letter-spacing: 1px;">Adicione um novo cliente</h5>
+            <hr>
+            <br>
 
-        <div class="form-outline mb-4">
-            <label class="form-label fw-bolder">Nome do Cliente</label>
-            <input class="form-control form-control-lg" asp-for="Name" />
-            <span class="text-danger fw-bolder sm" asp-validation-for="Name"></span>
-        </div>
+            <div class="form-outline mb-4">
+                <i class="fa-solid fa-user fa-sm"></i>
+                <label class="form-label fw-bolder">Nome do Cliente</label>
+                <input class="form-control form-control-lg" asp-for="Name" />
+                <span class="text-danger fw-bolder sm" asp-validation-for="Name"></span>
+            </div>
 
-        <div class="form-outline mb-4">
-            <label class="form-label fw-bolder">Telefone do Cliente (Não Obrigatório)</label>
-            <input id="customerPhoneInput" type="text" class="form-control form-control-lg" asp-for="Phone"
-                maxlength="17" />
-            <span class="text-danger fw-bolder sm" asp-validation-for="Phone"></span>
-        </div>
+            <div class="form-outline mb-4">
+                <i class="fa-solid fa-phone fa-sm"></i>
+                <label class="form-label fw-bolder">Telefone do Cliente (Não Obrigatório)</label>
+                <input id="customerPhoneInput" type="text" class="form-control form-control-lg" asp-for="Phone"
+                    maxlength="16" />
+                <span class="text-danger fw-bolder sm" asp-validation-for="Phone"></span>
+            </div>
 
-        <script src="~/js/utils/formatPhoneNumber.js"></script>
+            <script src="~/js/utils/formatPhoneNumber.js"></script>
 
-        <partial name="../Shared/Partials/_Messages.cshtml" />
+            <partial name="../Shared/Partials/_Messages.cshtml" />
 
-        <div class="pt-1 mb-4">
-            <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
-                <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Salvar
-            </button>
-        </div>
+            <div class="pt-1 mb-4">
+                <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
+                    <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Salvar
+                </button>
+            </div>
 
-        <div class="pt-1">
-            <a asp-controller="Customer" asp-action="Customers" class="btn btn-warning pt-1">
-                <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
-                <b>Voltar</b>
-            </a>
-        </div>
-    </form>
+            <div class="pt-1">
+                <a asp-controller="Customer" asp-action="Customers" class="btn btn-warning pt-1">
+                    <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+                    <b>Voltar</b>
+                </a>
+            </div>
+        </form>
 
+    </section>
 </section>

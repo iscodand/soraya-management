@@ -32,10 +32,11 @@ namespace Domain.Entities
             return customer;
         }
 
-        public Customer Inactivate()
+        public Customer Update(string name, string phone)
         {
-            IsActive = false;
-            InactivatedAt = DateTime.Now;
+            Name = name;
+            Phone = phone;
+            UpdatedAt = DateTime.Now;
             return this;
         }
 
@@ -43,6 +44,13 @@ namespace Domain.Entities
         {
             IsActive = true;
             InactivatedAt = null;
+            return this;
+        }
+
+        public Customer Inactivate()
+        {
+            IsActive = false;
+            InactivatedAt = DateTime.Now;
             return this;
         }
     }

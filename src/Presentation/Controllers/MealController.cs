@@ -1,7 +1,7 @@
 using Application.Contracts;
 using Application.Dtos.Meal;
+using Application.Dtos.User;
 using Application.Responses;
-using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,18 +26,18 @@ namespace Presentation.Controllers
         [Route("")]
         public async Task<IActionResult> Meals()
         {
-            User authenticatedUser = _sessionService.RetrieveUserSession();
-            BaseResponse<Meal> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
+            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            BaseResponse<GetMealDto> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetMealViewModel> viewModelCollection = new();
-            foreach (Meal meal in meals.DataCollection)
+            foreach (GetMealDto meal in meals.DataCollection)
             {
                 GetMealViewModel viewModel = new()
                 {
                     Id = meal.Id,
                     Description = meal.Description,
                     Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.User.Name
+                    CreatedBy = meal.CreatedBy
                 };
 
                 viewModelCollection.Add(viewModel);
@@ -60,7 +60,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                User authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
                 CreateMealDto createMealDto = new()
                 {
@@ -70,7 +70,7 @@ namespace Presentation.Controllers
                     UserId = authenticatedUser.Id
                 };
 
-                BaseResponse<Meal> result = await _mealService.CreateMealAsync(createMealDto);
+                BaseResponse<CreateMealDto> result = await _mealService.CreateMealAsync(createMealDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)

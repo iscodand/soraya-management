@@ -8,9 +8,14 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
         public string NormalizedName { get; set; }
+        public bool IsActive { get; set; }
 
         public Company UserCompany { get; set; }
         public int CompanyId { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
+        public ICollection<Customer> Customers { get; set; }
+        public ICollection<Meal> Meals { get; set; }
 
         public User()
         {
@@ -27,11 +32,24 @@ namespace Domain.Entities
                 Name = name,
                 NormalizedName = name.Trim().ToUpper(),
                 Email = email,
+                IsActive = true,
                 UserName = username,
                 CompanyId = companyId
             };
 
             return user;
+        }
+
+        public User Deactivate()
+        {
+            IsActive = false;
+            return this;
+        }
+
+        public User Activate()
+        {
+            IsActive = true;
+            return this;
         }
     }
 }

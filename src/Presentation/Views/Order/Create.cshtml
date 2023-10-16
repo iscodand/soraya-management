@@ -9,7 +9,7 @@
 
 <section class="container">
 
-    <section class="container">
+    <section class="create-form container">
 
         <form asp-action="Create" asp-antiforgery="true">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -20,6 +20,7 @@
 
             <div class="row">
                 <div class="form-outline mb-4">
+                    <i class="fa-solid fa-file-lines fa-sm"></i>
                     <label class="form-label fw-bolder">Descrição do Pedido (Não obrigatório)</label>
                     <textarea class="form-control form-control-lg" asp-for="Description"
                         placeholder="Adicione uma descrição para o pedido.">
@@ -29,6 +30,7 @@
 
                 <div class="form-outline mb-4 row">
                     <div class="col-md-10">
+                        <i class="fa-solid fa-user fa-sm"></i>
                         <label class="form-label fw-bolder">Cliente</label>
                         @Html.DropDownListFor(model => model.CustomerId, new
                                  SelectList(Model.CreateOrderDropdown.Customers, "Id",
@@ -43,6 +45,7 @@
 
                 <div class="form-outline mb-4 row">
                     <div class="col-md-10">
+                        <i class="fa-solid fa-utensils fa-sm"></i>
                         <label class="form-label fw-bolder">Sabor da Quentinha</label>
                         @Html.DropDownListFor(model => model.MealId, new
                                  SelectList(Model.CreateOrderDropdown.Meals, "Id",
@@ -56,6 +59,7 @@
                 </div>
 
                 <div class="form-outline mb-4 col-md-4">
+                    <i class="fa-solid fa-dollar-sign fa-sm"></i>
                     <label class="form-label fw-bolder">Valor</label>
                     <div class="input-group">
                         <span class="input-group-text">R$</span>
@@ -65,6 +69,7 @@
                 </div>
 
                 <div class="form-outline mb-4 col-md-4">
+                    <i class="fa-solid fa-money-bill-wave fa-sm"></i>
                     <label class="form-label fw-bolder">Forma de Pagamento</label>
                     @Html.DropDownListFor(model => model.PaymentTypeId, new
                              SelectList(Model.CreateOrderDropdown.PaymentTypes, "Id",

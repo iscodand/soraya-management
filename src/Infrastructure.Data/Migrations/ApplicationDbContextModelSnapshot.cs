@@ -239,7 +239,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fac8fb25-e8b0-43ef-8e85-02694e2baa8c",
+                            Id = "294c3992-b104-4a7f-bafa-8c7b46b91163",
                             ConcurrencyStamp = "ADMIN",
                             Description = "Administrador",
                             Name = "Admin",
@@ -247,7 +247,7 @@ namespace Infrastructure.Data.Migrations
                         },
                         new
                         {
-                            Id = "6aaf2420-a32c-4bb9-94f8-214778ae469b",
+                            Id = "45d27d28-2e29-48dc-8675-02aef58ad776",
                             ConcurrencyStamp = "MANAGER",
                             Description = "Gerente",
                             Name = "Manager",
@@ -255,7 +255,7 @@ namespace Infrastructure.Data.Migrations
                         },
                         new
                         {
-                            Id = "a468f53e-c1bc-4f7f-9599-5ae25e6cffd6",
+                            Id = "2a548182-158f-4fae-a9ca-98aa73390c1f",
                             ConcurrencyStamp = "EMPLOYEE",
                             Description = "Funcionário",
                             Name = "Employee",
@@ -283,6 +283,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

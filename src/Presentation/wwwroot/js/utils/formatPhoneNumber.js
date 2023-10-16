@@ -11,7 +11,7 @@ function formatPhoneNumber(inputElementId) {
         phoneNumber = phoneNumber.replace(/\D/g, '');
 
         if (phoneNumber.length >= 11) {
-            phoneNumber = `(${phoneNumber.substring(0, 2)}) ${phoneNumber.substring(2, 3)} ${phoneNumber.substring(3, 8)}-${phoneNumber.substring(8)}`;
+            phoneNumber = `(${phoneNumber.substring(0, 2)}) ${phoneNumber.substring(2, 3)} ${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7)}`;
         } else if (phoneNumber.length >= 3) {
             phoneNumber = `(${phoneNumber.substring(0, 2)}) ${phoneNumber.substring(2, 3)} ${phoneNumber.substring(3)}`;
         }

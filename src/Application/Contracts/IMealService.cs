@@ -6,7 +6,7 @@ namespace Application.Contracts
 {
     public interface IMealService
     {
-        public Task<BaseResponse<Meal>> CreateMealAsync(CreateMealDto createMealDto);
-        public Task<BaseResponse<Meal>> GetMealsByCompanyAsync(int companyId);
+        public Task<BaseResponse<CreateMealDto>> CreateMealAsync(CreateMealDto createMealDto);
+        public Task<BaseResponse<GetMealDto>> GetMealsByCompanyAsync(int companyId);
     }
 }
