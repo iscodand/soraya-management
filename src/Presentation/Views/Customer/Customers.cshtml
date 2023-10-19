@@ -9,24 +9,21 @@
 
 <section class="container">
 
-    <div class="page-title">
-        <h1>
-            <i class="fa-solid fa-users fa-2xs"></i>
+    <div class="custom-card page-title text-center">
+        <h3>
+            @* <i class="fa-solid fa-users"></i> *@
             Clientes
-        </h1>
+        </h3>
     </div>
 
-    <hr>
+    <section class="custom-card">
+        <div class="row mb-4 mt-4">
+            <div class="col-md-4" style="padding-top: 20px">
+                <a class="btn btn-primary-custom btn-lg" asp-controller="Customer" asp-action="Create">
+                    + Novo Cliente
+                </a>
+            </div>
 
-    <div class="row mb-4 mt-4">
-        <div class="col-md-4" style="padding-top: 20px">
-            <a class="btn btn-primary-custom btn-lg" asp-controller="Customer" asp-action="Create">
-                + Novo Cliente
-            </a>
-        </div>
-
-        @if (Model.Count > 0)
-        {
             <div class="col-md-8 row justify-content-end">
                 <div class="col-md-4">
                     <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
@@ -45,63 +42,65 @@
                     </select>
                 </div>
             </div>
-        }
-    </div>
-
-    @if (Model.Count > 0)
-    {
-        <table class="styled-table table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nome do Cliente</th>
-                    <th>Telefone do Cliente</th>
-                    <th>Ativo</th>
-                </tr>
-            </thead>
-            <tbody id="customers-tableBody">
-                @foreach (var customer in Model)
-                {
-                    <tr class="table-row">
-                        <td style="max-width: 50px;">
-                            <a type="button" asp-controller="Customer" asp-action="Details" asp-route-customerId="@customer.Id">
-                                <i class="fa-solid fa-circle-info fa-lg"></i>
-                            </a>
-                        </td>
-                        <td>@customer.Name</td>
-
-                        @if (customer.Phone == null)
-                        {
-                            <td style="color: red">Não Informado</td>
-                        }
-                        else
-                        {
-                            <td>@customer.Phone</td>
-                        }
-
-                        @if (customer.IsActive)
-                        {
-                            <td>
-                                <i id="isActive-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i>
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                <i class="fa-solid fa-rectangle-xmark fa-xl" style="color: #d02525;"></i>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="text-center">
-            <h4 class="fw-bolder mt-5">Nenhum cliente encontrado. <a href="clientes/novo">Clique aqui para adicionar.</a>
-            </h4>
         </div>
-    }
+
+        @if (Model.Count > 0)
+        {
+            <table class="styled-table table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome do Cliente</th>
+                        <th>Telefone do Cliente</th>
+                        <th>Ativo</th>
+                    </tr>
+                </thead>
+                <tbody id="customers-tableBody">
+                    @foreach (var customer in Model)
+                    {
+                        <tr class="table-row">
+                            <td style="max-width: 50px;">
+                                <a type="button" asp-controller="Customer" asp-action="Details"
+                                    asp-route-customerId="@customer.Id">
+                                    <i class="fa-solid fa-circle-info fa-lg"></i>
+                                </a>
+                            </td>
+                            <td>@customer.Name</td>
+
+                            @if (customer.Phone == null)
+                            {
+                                <td style="color: red">Não Informado</td>
+                            }
+                            else
+                            {
+                                <td>@customer.Phone</td>
+                            }
+
+                            @if (customer.IsActive)
+                            {
+                                <td>
+                                    <i id="isActive-icon" class="fa-solid fa-square-check fa-xl" style="color: #2ead3d;"></i>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <i class="fa-solid fa-rectangle-xmark fa-xl" style="color: #d02525;"></i>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="no-orders-found">
+                <img src="~/img/nao-encontrado.png">
+                <h4>Nenhum cliente encontrado. <a asp-controller="Customer" asp-action="Create">Clique aqui</a>
+                    para cadastrar um novo cliente.</h4>
+            </div>
+        }
+    </section>
 
 </section>

@@ -1,4 +1,4 @@
-@model Presentation.ViewModels.Customer.DetailCustomerViewModel;
+@model Presentation.ViewModels.Meal.DetailMealViewModel;
 
 @{
     ViewData["Title"] = "Novo Cliente";
@@ -13,28 +13,18 @@
 <section class="container">
 
     <div class="details-page-title">
-        <h2>Perfil do Cliente - <b>@Model.Name</b></h2>
+        <h2>Sabor - <b>@Model.Description</b></h2>
     </div>
 
     <div class="main-details">
-        <h3>Dados do Cliente</h3>
+        <h3>Dados do Sabor</h3>
         <div class="main-details-content">
-            <p><span class="vertical-bar">|</span> Nome: <b>@Model.Name</b></p>
-
-            @if (Model.Phone != null)
-            {
-                <p><span class="vertical-bar">|</span> Contato: @Model.Phone</p>
-            }
-            else
-            {
-                <p><span class="vertical-bar">|</span> Contato: <b style="color: red;">Não informado.</b></p>
-            }
-
+            <p><span class="vertical-bar">|</span> Descrição: <b>@Model.Description</b></p>
+            <p><span class="vertical-bar">|</span> Acompanhamentos: <b>@Model.Accompaniments</b></p>
+            <p><span class="vertical-bar">|</span> Total de Pedidos: <b>@Model.Orders.Count</b></p>
             <p><span class="vertical-bar">|</span> Adicionado por: <b>@Model.CreatedBy</b></p>
         </div>
     </div>
-
-    <!-- Display all customer orders (if has orders) -->
 
     <div class="orders-details">
         <h3>Pedidos Realizados</h3>
@@ -51,7 +41,7 @@
 
             <div class="col-md-2">
                 <div class="box-orders">
-                    <i class="fa-solid fa-chevron-up fa-lg"></i>
+                    <i class="fa-solid fa-chart-line fa-lg"></i>
                     <h2 id="new-orders-count">
                         R$ @Math.Round(Model.Orders.Where(x => x.IsPaid == true).Sum(x => x.Price), 2)
                     </h2>
@@ -67,7 +57,7 @@
                     <thead>
                         <tr class="table-head-row">
                             <th>Data do Pedido</th>
-                            <th>Sabor</th>
+                            <th>Cliente</th>
                             <th>Valor</th>
                             <th>Forma de Pagamento</th>
                             <th>Status</th>
@@ -78,7 +68,7 @@
                         {
                             <tr class="table-row">
                                 <td id="createdAt-order">@order.CreatedAt.Date.ToString("dd/MM/yyyy")</td>
-                                <td>@order.Meal</td>
+                                <td>@order.Customer</td>
                                 <td id="order-price"><b>R$</b> @Math.Round(@order.Price, 2)</td>
                                 <td>
                                     @if (@order.PaymentType.Equals("PIX"))
@@ -110,30 +100,14 @@
     </div>
 
     <div class="custom-card">
-        <a class="btn btn-primary" asp-action="Update" asp-controller="Customer" asp-route-customerId="@Model.Id">
-            <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Cliente</b>
+        <a class="btn btn-primary" asp-action="Update" asp-controller="Meal" asp-route-customerId="@Model.Id">
+            <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Pedido</b>
         </a>
-
-        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-        {
-            @if (Model.IsActive)
-            {
-                <button id="inactivate-customer-button" class="btn btn-warning" data-customer-id="@Model.Id">
-                    <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i> <b>Desativar Cliente</b>
-                </button>
-            }
-            else
-            {
-                <button id="activate-customer-button" class="btn btn-success" data-customer-id="@Model.Id">
-                    <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i> <b>Ativar Cliente</b>
-                </button>
-            }
-        }
 
         @if (Model.Orders.Count == 0)
         {
             <button id="delete-customer-button" class="btn btn-danger" data-customer-id="@Model.Id">
-                <i class="fa-solid fa-trash" style="color: #ffffff; padding-right: 4px;"></i> <b>Deletar Cliente</b>
+                <i class="fa-solid fa-trash" style="color: #ffffff; padding-right: 4px;"></i> <b>Deletar Pedido</b>
             </button>
         }
 

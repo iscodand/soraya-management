@@ -12,9 +12,9 @@
 <section class="container">
 
     <div class="custom-card page-title text-center">
-        <h1>
+        <h3>
             Pedidos
-        </h1>
+        </h3>
     </div>
 
     <div class="box-orders-section row">
@@ -170,8 +170,9 @@
         else
         {
             <div class="no-orders-found">
-                <h3>Nenhum pedido encontrado. <a asp-controller="Order" asp-action="Create">Clique aqui</a>
-                    para cadastrar um novo pedido.</h3>
+                <img src="~/img/nao-encontrado.png">
+                <h4>Nenhum pedido encontrado. <a asp-controller="Order" asp-action="Create">Clique aqui</a>
+                    para cadastrar um novo pedido.</h4>
             </div>
         }
 
