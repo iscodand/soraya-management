@@ -176,8 +176,11 @@ namespace Application.Services
         {
             Customer customer = await _customerRepository.DetailCustomerAsync(customerId);
 
+            // iscodand - 16/10/23 => Filtering orders by current month
+            ICollection<Order> customerOrders = customer.Orders.Where(x => x.CreatedAt.Month == DateTime.Now.Month).ToList();
+
             List<GetOrderDto> getOrderDtoCollection = new();
-            foreach (Order order in customer.Orders)
+            foreach (Order order in customerOrders)
             {
                 GetOrderDto getOrderDto = new()
                 {
