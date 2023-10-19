@@ -13,7 +13,7 @@ namespace Domain.Entities
         public Company Company { get; set; }
         public int CompanyId { get; set; }
 
-        public ICollection<Order> Orders { get; } = new List<Order>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
 
         public static Meal Create(string description,
                                   string accompaniments,
@@ -29,6 +29,14 @@ namespace Domain.Entities
             };
 
             return meal;
+        }
+
+        public virtual void Update(string description,
+                                   string accompaniments)
+        {
+            Description = description;
+            Accompaniments = accompaniments;
+            UpdatedAt = DateTime.Now;
         }
     }
 }
