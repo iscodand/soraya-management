@@ -82,5 +82,73 @@ namespace Presentation.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        [Route("detalhes/{mealId}")]
+        public async Task<IActionResult> Details(int mealId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    DetailMealViewModel detailMealViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Description = result.Data.Description,
+                        Accompaniments = result.Data.Accompaniments,
+                        Orders = result.Data.Orders,
+                        CreatedBy = result.Data.CreatedBy
+                    };
+
+                    return View(detailMealViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Meals));
+        }
+
+        [HttpGet]
+        [Route("editar/{mealId}")]
+        public async Task<IActionResult> Update(int mealId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("editar/{mealId}")]
+        public async Task<IActionResult> Update(int mealId, UpdateMealViewModel updateMealViewModel)
+        {
+            return View();
+        }
+
+        [HttpDelete]
+        [Route("deletar/{mealId}")]
+        public async Task<IActionResult> Delete(int mealId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+
+                DeleteMealDto deleteMealDto = new()
+                {
+                    Id = mealId,
+                    UserCompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<GetMealDto> result = await _mealService.DeleteMealAsync(deleteMealDto);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, message = result.Message });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao deletar sabor." });
+        }
     }
 }
