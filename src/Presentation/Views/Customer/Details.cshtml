@@ -23,13 +23,13 @@
 
             @if (Model.Phone != null)
             {
-                <p><span class="vertical-bar">|</span> Contato: @Model.Phone</p>
+                <p><span class="vertical-bar">|</span> Contato: <b>@Model.Phone</b></p>
             }
             else
             {
                 <p><span class="vertical-bar">|</span> Contato: <b style="color: red;">Não informado.</b></p>
             }
-
+            <p><span class="vertical-bar">|</span> Total de Pedidos: <b>@Model.Orders.Count</b></p>
             <p><span class="vertical-bar">|</span> Adicionado por: <b>@Model.CreatedBy</b></p>
         </div>
     </div>

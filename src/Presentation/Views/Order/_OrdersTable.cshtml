@@ -25,12 +25,7 @@
         <td>
             @if (!order.IsPaid)
             {
-                <form asp-action="MarkOrderAsPaid" method="post">
-                    <input type="hidden" name="orderId" value="@order.Id" />
-                    <button type="submit" class="btn btn-primary-custom btn-sm fw-normal">
-                        Marcar como Pago
-                    </button>
-                </form>
+                <p class="status pending">Pendente</p>
             }
             else
             {
@@ -43,27 +38,4 @@
 <div id="order-details-modal-card" class="hidden">
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('.show-details').on('click', function (e) {
-            e.preventDefault();
-
-            const orderId = $(this).data('order-id');
-            const orderDetailsCard = $('#order-details-modal-card');
-            const backdrop = $('.modal-backdrop');
-
-            $.ajax({
-                url: `/pedidos/detalhes/${orderId}`,
-                type: 'GET',
-                success: function (data) {
-                    orderDetailsCard.html(data);
-                    orderDetailsCard.removeClass('hidden');
-                    backdrop.removeClass('hidden');
-                },
-                error: function () {
-                    alert('Ocorreu um erro ao carregar os detalhes do pedido.');
-                }
-            });
-        });
-    });
-</script>
+<script src="~/js/orders/actions/detailOrderAction.js"></script>

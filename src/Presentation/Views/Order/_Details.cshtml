@@ -1,5 +1,8 @@
 @model Presentation.ViewModels.Order.GetOrderViewModel;
 
+<script src="~/js/orders/actions/markOrderAsPaidAction.js"></script>
+<script src="~/js/orders/actions/deleteOrderAction.js"></script>
+
 <div id="order-details-modal" class="order-details-modal-card">
 
     <div class="order-details-title text-center mt-3">
@@ -56,7 +59,7 @@
         {
             <div class="row mb-2">
                 <div class="col-md-6">
-                    <p>Pago: <br><b>Sim</b></p>
+                    <p>Status: <br><b style="color: green;">Pago</b></p>
                 </div>
                 <div class="col-md-6">
                     <p>Data de Pagamento: <br><b>@Model.PaidAt</b></p>
@@ -65,7 +68,7 @@
         }
         else
         {
-            <p class="mb-2">Pago: <br><b style="color: red;">Não</b></p>
+            <p class="mb-2">Status: <br><b style="color: red;">Pendente</b></p>
         }
 
         <p>Adicionado por: <br><b>@Model.CreatedBy</b></p>
@@ -74,36 +77,20 @@
     <hr>
 
     <div class="mb-5 text-center">
-        <a href="pedidos/editar/@Model.Id" class="btn btn-primary btn-sm">
+        @if (!Model.IsPaid)
+        {
+            <button id="mark-as-paid-button" class="btn btn-success btn-sm" data-order-id="@Model.Id">
+                <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i> <b>Marcar como Pago</b>
+            </button>
+        }
+
+        <a asp-action="Update" asp-controller="Order" asp-route-orderId=@Model.Id class="btn btn-primary btn-sm">
             <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Editar Pedido</b>
         </a>
-        <button id="delete-order-button" class="btn btn-danger btn-sm test-button" data-order-id="@Model.Id">
+
+        <button id="delete-order-button" class="btn btn-danger btn-sm" data-order-id="@Model.Id">
             <i class="fa-solid fa-trash" style="color: #ffffff; padding-right: 4px;"></i> <b>Deletar Pedido</b>
         </button>
+
     </div>
-
 </div>
-
-<script>
-    $('#delete-order-button').click(function () {
-        var orderId = $(this).data('order-id');
-
-        if (confirm('Tem certeza de que deseja excluir este pedido?')) {
-            $.ajax({
-                url: `/pedidos/deletar/${orderId}`,
-                type: 'DELETE',
-                success: function (result) {
-                    if (result.success) {
-                        alert('Pedido excluído com sucesso.');
-                        location.reload();
-                    } else {
-                        alert('Falha ao excluir o pedido: ' + result.message);
-                    }
-                },
-                error: function () {
-                    alert('Ocorreu um erro ao excluir o pedido.');
-                }
-            });
-        }
-    });
-</script>
