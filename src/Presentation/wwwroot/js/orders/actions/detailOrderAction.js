@@ -3,7 +3,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         const orderId = $(this).data('order-id');
-        const orderDetailsCard = $('.order-details-modal-card');
+        const orderDetailsCard = $('#order-details-modal-card');
         const backdrop = $('.modal-backdrop');
 
         $.ajax({
@@ -15,7 +15,7 @@ $(document).ready(function () {
                 backdrop.removeClass('hidden');
             },
             error: function () {
-                alert('Ocorreu um erro ao carregar os detalhes da ordem.');
+                alert('Ocorreu um erro ao carregar os detalhes do pedido.');
             }
         });
     });
