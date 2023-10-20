@@ -27,7 +27,7 @@ namespace Application.Services
                 };
             }
 
-            if (await _customerRepository.CustomerExistsByNameAsync(createCustomerDto.Name))
+            if (await _customerRepository.CustomerExistsByCompanyAsync(createCustomerDto.Name, createCustomerDto.CompanyId))
             {
                 return new BaseResponse<CreateCustomerDto>()
                 {
@@ -63,7 +63,7 @@ namespace Application.Services
                 };
             }
 
-            if (await _customerRepository.CustomerExistsByNameAsync(updateCustomerDto.Name))
+            if (await _customerRepository.CustomerExistsByCompanyAsync(updateCustomerDto.Name, updateCustomerDto.UserCompanyId))
             {
                 return new BaseResponse<UpdateCustomerDto>()
                 {
@@ -204,6 +204,7 @@ namespace Application.Services
                 Name = customer.Name,
                 Phone = customer.Phone,
                 IsActive = customer.IsActive,
+                CreatedBy = customer.User.Name,
                 Orders = getOrderDtoCollection
             };
 
