@@ -144,24 +144,24 @@ namespace Presentation.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPatch]
+        [Route("marcar-como-pago/{orderId}")]
         public async Task<IActionResult> MarkOrderAsPaid(int orderId)
         {
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
                 BaseResponse<UpdateOrderDto> result = await _orderService.MakeOrderPaymentAsync(orderId, authenticatedUser.CompanyId);
-                ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)
                 {
-                    ViewData["IsSuccess"] = true;
-                    return RedirectToAction(nameof(Orders));
+                    return Json(new { success = true, message = result.Message });
                 }
+
+                return Json(new { success = false, message = result.Message });
             }
 
-            return RedirectToAction(nameof(Orders));
+            return Json(new { success = false, message = "Falha ao atualizar o pedido." });
         }
 
         [HttpGet]
