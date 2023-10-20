@@ -146,6 +146,7 @@ i {
 .page-title h3 {
     color: #4D59CB;
     font-weight: bolder;
+    font-size: 35px;
 }
 
 .page-title p {
@@ -214,4 +215,10 @@ i {
 
 .create-form label {
     color: #37419c;
+}
+
+#current-date {
+    font-style: italic;
+    color: grey;
+    font-size: 15px;
 }

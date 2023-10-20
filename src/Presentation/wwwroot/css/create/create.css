@@ -1,0 +1,14 @@
+.create-page-title {
+    font-weight: normal;
+    background-color: #fafafa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: -1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.create-page-title h4 {
+    font-weight: bolder;
+    letter-spacing: 1px;
+    color: #37419c;
+}
