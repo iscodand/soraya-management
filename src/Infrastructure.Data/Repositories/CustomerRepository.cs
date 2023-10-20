@@ -68,9 +68,10 @@ namespace Infrastructure.Data.Repositories
                                    .ConfigureAwait(false);
         }
 
-        public async Task<bool> CustomerExistsByNameAsync(string name)
+        public async Task<bool> CustomerExistsByCompanyAsync(string name, int companyId)
         {
-            return await _customers.AnyAsync(x => x.Name == name)
+            return await _customers.Where(x => x.CompanyId == companyId)
+                                   .AnyAsync(x => x.Name == name)
                                    .ConfigureAwait(false);
         }
     }
