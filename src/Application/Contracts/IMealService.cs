@@ -7,6 +7,7 @@ namespace Application.Contracts
     {
         public Task<BaseResponse<CreateMealDto>> CreateMealAsync(CreateMealDto createMealDto);
         public Task<BaseResponse<GetMealDto>> GetMealsByCompanyAsync(int companyId);
+        public Task<BaseResponse<GetMealDto>> GetMealByIdAsync(int mealId, int userCompanyId);
         public Task<BaseResponse<DetailMealDto>> DetailMealAsync(int mealId, int userCompanyId);
         public Task<BaseResponse<GetMealDto>> UpdateMealAsync(UpdateMealDto updateMealDto);
         public Task<BaseResponse<GetMealDto>> DeleteMealAsync(DeleteMealDto deleteMealDto);
