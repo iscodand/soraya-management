@@ -32,8 +32,17 @@ namespace Infrastructure.Data.Repositories
             return await _meals.AsNoTracking()
                                .Include(x => x.User).AsNoTracking()
                                .Include(x => x.Company).AsNoTracking()
+                               .Include(x => x.Orders).AsNoTracking()
                                .Where(x => x.CompanyId == companyId).AsNoTracking()
                                .ToListAsync()
+                               .ConfigureAwait(false);
+        }
+
+        public async Task<bool> MealExistsByDescriptionAsync(string description, int companyId)
+        {
+            return await _meals.AsNoTracking()
+                               .Where(x => x.CompanyId == companyId).AsNoTracking()
+                               .AnyAsync(x => x.Description == description)
                                .ConfigureAwait(false);
         }
     }
