@@ -16,6 +16,44 @@ namespace Application.Services
             _mealRepository = mealRepository;
         }
 
+        public async Task<BaseResponse<GetMealDto>> GetMealByIdAsync(int mealId, int userCompanyId)
+        {
+            Meal meal = await _mealRepository.GetByIdAsync(mealId);
+
+            if (meal == null)
+            {
+                return new BaseResponse<GetMealDto>()
+                {
+                    Message = "Sabor não encontrado",
+                    IsSuccess = false
+                };
+            }
+
+            if (meal.CompanyId != userCompanyId)
+            {
+                return new BaseResponse<GetMealDto>()
+                {
+                    Message = "Esse sabor não pertence a sua empresa",
+                    IsSuccess = false
+                };
+            }
+
+            GetMealDto getMealDto = new()
+            {
+                Id = meal.Id,
+                Description = meal.Description,
+                Accompaniments = meal.Accompaniments,
+                CreatedBy = meal.UserId
+            };
+
+            return new BaseResponse<GetMealDto>()
+            {
+                Message = "Sabor encontrado com sucesso",
+                IsSuccess = true,
+                Data = getMealDto
+            };
+        }
+
         public async Task<BaseResponse<DetailMealDto>> DetailMealAsync(int mealId, int userCompanyId)
         {
             Meal meal = await _mealRepository.DetailMealAsync(mealId);
@@ -122,7 +160,8 @@ namespace Application.Services
                     Id = meal.Id,
                     Description = meal.Description,
                     Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.User.Name
+                    CreatedBy = meal.User.Name,
+                    OrdersCount = meal.Orders.Count
                 };
 
                 getMealDtoCollection.Add(getMealDto);
@@ -154,6 +193,17 @@ namespace Application.Services
                 return new BaseResponse<GetMealDto>()
                 {
                     Message = "Sabor não encontrado",
+                    IsSuccess = false
+                };
+            }
+
+            bool mealExists = await _mealRepository.MealExistsByDescriptionAsync(updateMealDto.Description, updateMealDto.UserCompanyId);
+
+            if (mealExists)
+            {
+                return new BaseResponse<GetMealDto>()
+                {
+                    Message = "Um sabor já foi cadastrado com essa Descrição. Verifique e tente novamente",
                     IsSuccess = false
                 };
             }
