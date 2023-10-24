@@ -7,7 +7,7 @@
 
 @await Component.InvokeAsync("Menu")
 
-<link rel="stylesheet" href="~/css/box-orders.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/elements/box-orders.css" asp-append-version="true" />
 
 <section class="container">
 
@@ -157,13 +157,6 @@
                                     @if (!order.IsPaid)
                                     {
                                         <p class="status pending">Pendente</p>
-
-                                        @* <form asp-action="MarkOrderAsPaid" method="post">
-                            <input type="hidden" name="orderId" value="@order.Id" />
-                            <button type="submit" class="btn btn-primary-custom btn-sm fw-normal">
-                            Marcar como Pago
-                            </button>
-                            </form> *@
                                     }
                                     else
                                     {

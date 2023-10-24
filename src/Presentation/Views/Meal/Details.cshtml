@@ -8,7 +8,7 @@
 @await Component.InvokeAsync("Menu")
 
 <link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
-<link rel="stylesheet" href="~/css/box-orders.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/elements/box-orders.css" asp-append-version="true" />
 
 <section class="container">
 
@@ -106,7 +106,7 @@
 
         @if (Model.Orders.Count == 0)
         {
-            <script type="module" src="~/js/meals/actions/deleteMealAction.js"></script>
+            <script src="~/js/meals/actions/deleteMealAction.js"></script>
 
             <button id="delete-meal-button" class="btn btn-danger" data-meal-id="@Model.Id">
                 <i class="fa-solid fa-trash" style="color: #ffffff; padding-right: 4px;"></i> <b>Deletar Sabor</b>

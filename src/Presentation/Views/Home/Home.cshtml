@@ -4,3 +4,151 @@
 }
 
 @await Component.InvokeAsync("Menu")
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/home/charts.js"></script>
+
+<section class="container">
+
+    <section class="custom-card">
+        @Model.CompanyName
+    </section>
+
+    <section>
+        <div class="custom-card">
+            <canvas id="mealsChart" style="max-width: 400px; max-height: 430px;"></canvas>
+        </div>
+
+        <div class="custom-card">
+            <canvas id="customersChart" style="max-width: 400px; max-height: 430px;"></canvas>
+        </div>
+
+        <div class="custom-card">
+            <canvas id="ordersChart" style="max-width: 400px; max-height: 430px;"></canvas>
+        </div>
+    </section>
+</section>
+
+<script>
+    const mealsChart = document.getElementById('mealsChart');
+    const customersChart = document.getElementById('customersChart');
+    const ordersChart = document.getElementById('ordersChart');
+
+    let meals = [];
+    let mealsDescription = [];
+    let mealsOrdersCount = [];
+
+    let customers = [];
+    let customersName = [];
+    let customersOrdersCount = [];
+
+    let orders = [];
+    let ordersDays = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+    let ordersPerDayCount = [];
+
+    window.addEventListener("DOMContentLoaded", () => {
+        $.ajax({
+            url: `data/`,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    meals = result.data["meals"]
+                    customers = result.data["customers"]
+                    orders = result.data["orders"]
+
+                    for (var i = 0; i < meals.length; i++) {
+                        var description = meals[i].description;
+                        var ordersCount = meals[i].ordersCount;
+
+                        mealsDescription.push(description);
+                        mealsOrdersCount.push(ordersCount);
+                    }
+
+                    for (var i = 0; i < customers.length; i++) {
+                        var name = customers[i].name;
+                        var ordersCount = customers[i].ordersCount
+
+                        customersName.push(name);
+                        customersOrdersCount.push(ordersCount);
+                    }
+
+                    for (var i = 0; i < orders.length; i++) {
+                        var ordersCount = orders[i]
+
+                        ordersPerDayCount.push(ordersCount);
+                    }
+
+                    createMealsChart(mealsDescription, mealsOrdersCount);
+                    createCustomersChart(customersName, customersOrdersCount);
+                    createOrdersChart(ordersDays, ordersPerDayCount);
+                }
+            },
+            error: function () {
+                alert('Ocorreu um erro ao recuperar os dados.');
+            }
+        });
+    });
+
+    function createMealsChart(labels, data) {
+        new Chart(mealsChart, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sabores mais Pedidos',
+                    data: data,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function createCustomersChart(labels, data) {
+        new Chart(customersChart, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Clientes que mais pediram',
+                    data: data,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function createOrdersChart(labels, data) {
+        new Chart(ordersChart, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Pedidos por dia',
+                    data: data,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
