@@ -41,6 +41,7 @@ namespace Infrastructure.Data.Repositories
             return await _customers.AsNoTracking()
                                    .Include(x => x.User).AsNoTracking()
                                    .Include(x => x.Company).AsNoTracking()
+                                   .Include(x => x.Orders).AsNoTracking()
                                    .Where(x => x.CompanyId == companyId).AsNoTracking()
                                    .ToListAsync()
                                    .ConfigureAwait(false);
