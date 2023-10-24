@@ -6,61 +6,6 @@ body {
     background-color: #e5ebff;
 }
 
-/* Preloader Section */
-
-.preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    background: #e5ebff;
-    align-items: center;
-    opacity: 1;
-    transition: opacity 1s;
-    /* Adiciona uma transição de fade */
-}
-
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4D59CB;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-        display: none;
-        /* Oculta o preloader quando a animação de fade terminar */
-    }
-}
-
-.fade-out-content {
-    opacity: 0;
-    transition: opacity 1s 2s;
-    /* Adiciona uma transição de fade para o conteúdo da página */
-}
-
 p {
     margin: 0;
     background-color: inherit;
