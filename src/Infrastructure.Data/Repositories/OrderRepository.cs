@@ -52,5 +52,14 @@ namespace Infrastructure.Data.Repositories
                                 .ToListAsync()
                                 .ConfigureAwait(false);
         }
+
+        public async Task<ICollection<Order>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
+        {
+            return await _orders.AsNoTracking()
+                                .Where(x => x.CreatedAt.Date >= initialDate.Value.Date && x.CreatedAt.Date <= finalDate.Value.Date)
+                                .Where(x => x.CompanyId == companyId).AsNoTracking()
+                                .ToListAsync()
+                                .ConfigureAwait(false);
+        }
     }
 }
