@@ -158,7 +158,8 @@ namespace Application.Services
                     Name = customer.Name,
                     Phone = customer.Phone,
                     IsActive = customer.IsActive,
-                    CreatedBy = customer.User.Name
+                    CreatedBy = customer.User.Name,
+                    OrdersCount = customer.Orders.Count
                 };
 
                 getCustomerDtoCollection.Add(getCustomerDto);
