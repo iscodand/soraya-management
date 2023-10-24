@@ -114,14 +114,53 @@ namespace Presentation.Controllers
         [Route("editar/{mealId}")]
         public async Task<IActionResult> Update(int mealId)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetMealDto> result = await _mealService.GetMealByIdAsync(mealId, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    UpdateMealViewModel updateMealViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Description = result.Data.Description,
+                        Accompaniments = result.Data.Accompaniments,
+                        UserCompanyId = authenticatedUser.CompanyId
+                    };
+
+                    return View(updateMealViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Meals));
         }
 
         [HttpPost]
         [Route("editar/{mealId}")]
         public async Task<IActionResult> Update(int mealId, UpdateMealViewModel updateMealViewModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+
+                UpdateMealDto updateMealDto = new()
+                {
+                    Id = mealId,
+                    Description = updateMealViewModel.Description,
+                    Accompaniments = updateMealViewModel.Accompaniments,
+                    UserCompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<GetMealDto> result = await _mealService.UpdateMealAsync(updateMealDto);
+
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Meals));
+                }
+            }
+
+            return View(updateMealViewModel);
         }
 
         [HttpDelete]
