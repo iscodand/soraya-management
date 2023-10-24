@@ -24,6 +24,7 @@ namespace Tests.Services
         // 2 - Invalid CompanyId
         // 3 - Null meal (not found)
         // 4 - Null UpdateMealDto
+        // 5 - Update Meal with existent Description by Company
 
         [Fact]
         public async Task UpdateMeal_ValidUpdate_ReturnsSuccess()
@@ -42,6 +43,7 @@ namespace Tests.Services
 
             // Act
             A.CallTo(() => _mealRepository.GetByIdAsync(updateMealDto.Id)).Returns(meal);
+            A.CallTo(() => _mealRepository.MealExistsByDescriptionAsync(updateMealDto.Description, updateMealDto.UserCompanyId)).Returns(false);
             A.CallTo(() => meal.Update(updateMealDto.Description, updateMealDto.Accompaniments));
             A.CallTo(() => _mealRepository.SaveAsync());
 
@@ -107,6 +109,7 @@ namespace Tests.Services
 
             // Act
             A.CallTo(() => _mealRepository.GetByIdAsync(updateMealDto.Id)).Returns(meal);
+
             var result = await _mealService.UpdateMealAsync(updateMealDto);
 
             BaseResponse<GetMealDto> response = new()
@@ -140,6 +143,127 @@ namespace Tests.Services
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
             result.IsSuccess.Should().Be(response.IsSuccess);
+        }
+
+        [Fact]
+        public async Task UpdateMeal_ExistentDescriptionByCompany_ReturnsError()
+        {
+            Meal meal = A.Fake<Meal>();
+            meal.CompanyId = 1;
+
+            UpdateMealDto updateMealDto = new()
+            {
+                Id = meal.Id,
+                Description = "Testing",
+                Accompaniments = "Test Accompaniments",
+                UserCompanyId = meal.CompanyId
+            };
+
+            // Act
+            A.CallTo(() => _mealRepository.GetByIdAsync(updateMealDto.Id)).Returns(meal);
+            A.CallTo(() => _mealRepository.MealExistsByDescriptionAsync(updateMealDto.Description, updateMealDto.UserCompanyId)).Returns(true);
+
+            var result = await _mealService.UpdateMealAsync(updateMealDto);
+
+            BaseResponse<GetMealDto> response = new()
+            {
+                Message = "Um sabor já foi cadastrado com essa Descrição. Verifique e tente novamente",
+                IsSuccess = false
+            };
+
+            // Assert
+            result.Should().BeEquivalentTo(response);
+            result.Message.Should().Be(response.Message);
+            result.IsSuccess.Should().Be(response.IsSuccess);
+        }
+
+        // Scenarios - Get Meal By Id
+        // 1 - Valid meal
+        // 2 - Invalid CompanyId
+        // 3 - Null meal (not found)
+
+        [Fact]
+        public async Task GetMealById_ValidMeal_ReturnsSuccess()
+        {
+            // Arrange
+            Meal meal = A.Fake<Meal>();
+            meal.Id = 1;
+            meal.CompanyId = 1;
+
+            GetMealDto getMealDto = new()
+            {
+                Id = meal.Id,
+                Description = meal.Description,
+                Accompaniments = meal.Accompaniments,
+                CreatedBy = meal.UserId
+            };
+
+            BaseResponse<GetMealDto> response = new()
+            {
+                Message = "Sabor encontrado com sucesso",
+                IsSuccess = true,
+                Data = getMealDto
+            };
+
+            // Act
+            A.CallTo(() => _mealRepository.GetByIdAsync(meal.Id)).Returns(meal);
+
+            var result = await _mealService.GetMealByIdAsync(meal.Id, 1);
+
+            // Assert
+            result.Should().BeEquivalentTo(response);
+            result.Message.Should().Be(response.Message);
+            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Data.Should().BeEquivalentTo(response.Data);
+        }
+
+        [Fact]
+        public async Task GetMealById_InvalidCompanyId_ReturnsError()
+        {
+            // Arrange
+            Meal meal = A.Fake<Meal>();
+            meal.CompanyId = 1;
+
+            BaseResponse<GetMealDto> response = new()
+            {
+                Message = "Esse sabor não pertence a sua empresa",
+                IsSuccess = false,
+            };
+
+            // Act
+            A.CallTo(() => _mealRepository.GetByIdAsync(meal.Id)).Returns(meal);
+
+            var result = await _mealService.GetMealByIdAsync(meal.Id, 2);
+
+            // Assert
+            result.Should().BeEquivalentTo(response);
+            result.Message.Should().Be(response.Message);
+            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Data.Should().Be(response.Data);
+        }
+
+        [Fact]
+        public async Task GetMealById_NullMeal_ReturnsError()
+        {
+            // Arrange
+            Meal? meal = null;
+
+            BaseResponse<GetMealDto> response = new()
+            {
+                Message = "Sabor não encontrado",
+                IsSuccess = false,
+            };
+
+            // Act
+            A.CallTo(() => _mealRepository.GetByIdAsync(1)).Returns(meal);
+
+            var result = await _mealService.GetMealByIdAsync(1, 1);
+
+            // Assert
+            result.Should().BeEquivalentTo(response);
+            result.Message.Should().Be(response.Message);
+            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Data.Should().Be(response.Data);
         }
 
         // Scenarios - Detail Meal
