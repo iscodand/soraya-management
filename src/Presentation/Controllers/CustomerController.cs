@@ -111,6 +111,7 @@ namespace Presentation.Controllers
                             PaymentType = order.PaymentType,
                             Meal = order.Meal,
                             Customer = order.Customer,
+                            CreatedBy = order.CreatedBy,
                             CreatedAt = order.CreatedAt
                         };
 

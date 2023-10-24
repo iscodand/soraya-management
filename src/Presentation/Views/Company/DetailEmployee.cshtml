@@ -1,4 +1,4 @@
-@model Presentation.ViewModels.User.GetUserViewModel;
+@model Presentation.ViewModels.User.DetailUserViewModel;
 
 @{
     ViewData["Title"] = "Funcionário - ";
@@ -9,12 +9,11 @@
 
 <section class="container">
 
-    <div>
-        <h2>Perfil do Funcionário - <b>@Model.Name</b></h2>
-        <hr>
+    <div class="custom-card">
+        <h3>Perfil do Funcionário - <b>@Model.Name</b></h3>
     </div>
 
-    <div>
+    <div class="">
         <h3>Dados Pessoais</h3>
         <p>Nome: <b>@Model.Name</b></p>
         <p>Nome de Usuário: <b>@Model.Username</b></p>

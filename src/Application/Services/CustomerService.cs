@@ -27,7 +27,7 @@ namespace Application.Services
                 };
             }
 
-            if (await _customerRepository.CustomerExistsByNameAsync(createCustomerDto.Name))
+            if (await _customerRepository.CustomerExistsByCompanyAsync(createCustomerDto.Name, createCustomerDto.CompanyId))
             {
                 return new BaseResponse<CreateCustomerDto>()
                 {
@@ -63,7 +63,7 @@ namespace Application.Services
                 };
             }
 
-            if (await _customerRepository.CustomerExistsByNameAsync(updateCustomerDto.Name))
+            if (await _customerRepository.CustomerExistsByCompanyAsync(updateCustomerDto.Name, updateCustomerDto.UserCompanyId))
             {
                 return new BaseResponse<UpdateCustomerDto>()
                 {
@@ -158,7 +158,8 @@ namespace Application.Services
                     Name = customer.Name,
                     Phone = customer.Phone,
                     IsActive = customer.IsActive,
-                    CreatedBy = customer.User.Name
+                    CreatedBy = customer.User.Name,
+                    OrdersCount = customer.Orders.Count
                 };
 
                 getCustomerDtoCollection.Add(getCustomerDto);
@@ -176,8 +177,11 @@ namespace Application.Services
         {
             Customer customer = await _customerRepository.DetailCustomerAsync(customerId);
 
+            // iscodand - 16/10/23 => Filtering orders by current month
+            ICollection<Order> customerOrders = customer.Orders.Where(x => x.CreatedAt.Month == DateTime.Now.Month).ToList();
+
             List<GetOrderDto> getOrderDtoCollection = new();
-            foreach (Order order in customer.Orders)
+            foreach (Order order in customerOrders)
             {
                 GetOrderDto getOrderDto = new()
                 {
@@ -201,6 +205,7 @@ namespace Application.Services
                 Name = customer.Name,
                 Phone = customer.Phone,
                 IsActive = customer.IsActive,
+                CreatedBy = customer.User.Name,
                 Orders = getOrderDtoCollection
             };
 

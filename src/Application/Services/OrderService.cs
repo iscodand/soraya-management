@@ -241,6 +241,42 @@ namespace Application.Services
             };
         }
 
+        public async Task<BaseResponse<GetOrderDto>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
+        {
+            ICollection<Order> orders = await _orderRepository.GetOrdersByDateRangeAsync(companyId, initialDate, finalDate);
+
+            if (orders == null)
+            {
+                return new BaseResponse<GetOrderDto>()
+                {
+                    Message = "Pedidos não encontrados com o filtro atual.",
+                    IsSuccess = false
+                };
+            }
+
+            List<GetOrderDto> getOrderDtoCollection = new();
+            foreach (Order order in orders)
+            {
+                GetOrderDto getOrderDto = new()
+                {
+                    Id = order.Id,
+                    Price = order.Price,
+                    IsPaid = order.IsPaid,
+                    PaidAt = order.PaidAt,
+                    CreatedAt = order.CreatedAt
+                };
+
+                getOrderDtoCollection.Add(getOrderDto);
+            }
+
+            return new BaseResponse<GetOrderDto>()
+            {
+                Message = "Pedidos encontrados com sucesso",
+                IsSuccess = true,
+                DataCollection = getOrderDtoCollection
+            };
+        }
+
         public async Task<BaseResponse<UpdateOrderDto>> MakeOrderPaymentAsync(int orderId, int userCompanyId)
         {
             Order order = await _orderRepository.GetOrderDetailsAsync(orderId);

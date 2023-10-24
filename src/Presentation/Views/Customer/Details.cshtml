@@ -7,37 +7,36 @@
 
 @await Component.InvokeAsync("Menu")
 
-<link rel="stylesheet" href="~/css/customers/details.css" asp-append-version="true" />
-<link rel="stylesheet" href="~/css/box-orders.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/elements/box-orders.css" asp-append-version="true" />
 
 <section class="container">
 
-    <div class="customer-details-page-title">
+    <div class="details-page-title">
         <h2>Perfil do Cliente - <b>@Model.Name</b></h2>
     </div>
 
-    <div class="customer-personal-details">
+    <div class="main-details">
         <h3>Dados do Cliente</h3>
-
-        <div class="customer-personal-details-content">
+        <div class="main-details-content">
             <p><span class="vertical-bar">|</span> Nome: <b>@Model.Name</b></p>
 
             @if (Model.Phone != null)
             {
-                <p><span class="vertical-bar">|</span> Contato: @Model.Phone</p>
+                <p><span class="vertical-bar">|</span> Contato: <b>@Model.Phone</b></p>
             }
             else
             {
                 <p><span class="vertical-bar">|</span> Contato: <b style="color: red;">Não informado.</b></p>
             }
-
+            <p><span class="vertical-bar">|</span> Total de Pedidos: <b>@Model.Orders.Count</b></p>
             <p><span class="vertical-bar">|</span> Adicionado por: <b>@Model.CreatedBy</b></p>
         </div>
     </div>
 
     <!-- Display all customer orders (if has orders) -->
 
-    <div class="customer-orders-details">
+    <div class="orders-details">
         <h3>Pedidos Realizados</h3>
 
         <div class="box-orders-section row">

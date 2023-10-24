@@ -1,6 +1,8 @@
+/* Aditional style for details pages (Detail Order, Detail Customer, Detail Meal...) */
+
 /* Page Title Section */
 
-.customer-details-page-title {
+.details-page-title {
     text-align: center;
     font-weight: normal;
     background-color: #fafafa;
@@ -10,17 +12,17 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-.customer-details-page-title h2 {
+.details-page-title h2 {
     letter-spacing: 1px;
 }
 
-.customer-details-page-title b {
+.details-page-title b {
     color: #37419c;
 }
 
-/* Customer Personal Details Section */
+/* Main Details Section */
 
-.customer-personal-details {
+.main-details {
     margin-top: 2em;
     margin-bottom: 1em;
     font-size: 20px;
@@ -31,19 +33,19 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-.customer-personal-details h3 {
+.main-details h3 {
     font-weight: bold;
     color: #37419c;
 }
 
-.customer-personal-details p {
+.main-details p {
     font-size: 18px;
     padding-left: 1rem;
     position: relative;
     color: grey;
 }
 
-.customer-personal-details b {
+.main-details b {
     font-size: 20px;
     color: #37419c;
 }
@@ -59,9 +61,9 @@
     content: '';
 }
 
-/* Customer Orders Section */
+/* Orders Section */
 
-.customer-orders-details {
+.orders-details {
     background-color: #fafafa;
     padding: 2rem;
     border-radius: 10px;
@@ -69,7 +71,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-.customer-orders-details h3 {
+.orders-details h3 {
     font-weight: bold;
     color: #37419c;
     text-align: center;

@@ -1,3 +1,5 @@
+/* Aditional style for tables */
+
 .styled-table {
     border-collapse: collapse;
     font-family: sans-serif;
@@ -106,14 +108,21 @@
 
 .no-orders-found {
     text-align: center;
-    margin-top: 5rem;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
 }
 
-.no-orders-found h3 {
+.no-orders-found h4 {
     color: #4D59CB;
     font-weight: bolder;
+    font-size: 18px;
 }
 
-.no-orders-found h3 a {
+.no-orders-found h4 a {
     color: #30377a;
+}
+
+.no-orders-found img {
+    width: 15rem;
+    margin-bottom: 2rem;
 }

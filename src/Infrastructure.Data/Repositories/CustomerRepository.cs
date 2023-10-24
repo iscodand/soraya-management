@@ -41,6 +41,7 @@ namespace Infrastructure.Data.Repositories
             return await _customers.AsNoTracking()
                                    .Include(x => x.User).AsNoTracking()
                                    .Include(x => x.Company).AsNoTracking()
+                                   .Include(x => x.Orders).AsNoTracking()
                                    .Where(x => x.CompanyId == companyId).AsNoTracking()
                                    .ToListAsync()
                                    .ConfigureAwait(false);
@@ -68,9 +69,10 @@ namespace Infrastructure.Data.Repositories
                                    .ConfigureAwait(false);
         }
 
-        public async Task<bool> CustomerExistsByNameAsync(string name)
+        public async Task<bool> CustomerExistsByCompanyAsync(string name, int companyId)
         {
-            return await _customers.AnyAsync(x => x.Name == name)
+            return await _customers.Where(x => x.CompanyId == companyId)
+                                   .AnyAsync(x => x.Name == name)
                                    .ConfigureAwait(false);
         }
     }

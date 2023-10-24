@@ -13,8 +13,8 @@ import './customers/filters/filterByActiveStatus.js'
 import './customers/filters/searchByCustomer.js'
 
 // Order Actions
-import './orders/actions/closeOrderDetails.js'
-import './orders/actions/detailOrder.js'
+import './orders/actions/detailOrderAction.js'
+import './orders/actions/closeOrderDetailsAction.js'
 
 // Orders Filtering
 import './orders/filters/filterOrdersByDate.js'
@@ -23,3 +23,6 @@ import './orders/filters/searchByOrder.js'
 
 //  Utils
 import './utils/setCurrentDateInSelectByDate.js'
+import './utils/getCurrentDate.js'
+
+import './orders/actions/markOrderAsPaidAction.js'
