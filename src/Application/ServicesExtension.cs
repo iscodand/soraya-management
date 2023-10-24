@@ -12,6 +12,7 @@ namespace Application
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IMealService, MealService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IDataService, DataService>();
 
             return services;
         }
