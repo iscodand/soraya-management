@@ -38,15 +38,30 @@ namespace Presentation.Controllers
         // TODO => get a better name for controller and route
         [HttpGet]
         [Route("data/")]
-        public async Task<IActionResult> GetData(DateTime initialDate, DateTime finalDate)
+        public async Task<IActionResult> GetData(string dateRangeSelected, DateTime initialDate, DateTime finalDate)
         {
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
-                initialDate = DateTime.ParseExact("16/10/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                // if no date range selected, default is Today
+                initialDate = DateTime.Today.Date;
+                finalDate = DateTime.Today.Date;
 
-                BaseResponse<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, DateTime.Today);
+                if (dateRangeSelected == "yesterday")
+                {
+                    initialDate = finalDate.AddDays(-1);
+                }
+                else if (dateRangeSelected == "last7Days")
+                {
+                    initialDate = finalDate.AddDays(-7);
+                }
+                else if (dateRangeSelected == "last15Days")
+                {
+                    initialDate = finalDate.AddDays(-15);
+                }
+
+                BaseResponse<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, finalDate);
 
                 if (result.IsSuccess)
                 {
