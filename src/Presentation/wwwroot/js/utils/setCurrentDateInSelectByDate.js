@@ -8,5 +8,13 @@ function setCurrentDateInSelectByDate() {
     return `${year}-${month}-${day}`;
 }
 
-// Set current date to createdAt filter on Views/Order/Orders
-document.getElementById('createdAt').value = setCurrentDateInSelectByDate();
+let createdAtFilter = document.getElementById('createdAt');
+
+if (createdAtFilter) {
+    // Set current date to createdAt filter on Views/Order/Orders.cshtml
+    createdAtFilter.value = setCurrentDateInSelectByDate();
+} else {
+    // Set current date to initial and final dates filter on Views/Home/Home.cshtml
+    document.getElementById('initialDate').value = setCurrentDateInSelectByDate();
+    document.getElementById('finalDate').value = setCurrentDateInSelectByDate();
+}
