@@ -175,6 +175,33 @@ namespace Application.Services
             };
         }
 
+        public async Task<BaseResponse<GetMealDto>> GetMealsByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate)
+        {
+            ICollection<Meal> meals = await _mealRepository.GetMealsByDateRangeAsync(userCompanyId, initialDate.Date, finalDate.Date);
+
+            List<GetMealDto> getMealDtoCollection = new();
+            foreach (Meal meal in meals)
+            {
+                GetMealDto getMealDto = new()
+                {
+                    Id = meal.Id,
+                    Description = meal.Description,
+                    Accompaniments = meal.Accompaniments,
+                    CreatedBy = meal.User.Name,
+                    OrdersCount = meal.Orders.Count
+                };
+
+                getMealDtoCollection.Add(getMealDto);
+            }
+
+            return new BaseResponse<GetMealDto>()
+            {
+                Message = "Sabores encontrados com sucesso",
+                IsSuccess = true,
+                DataCollection = getMealDtoCollection
+            };
+        }
+
         public async Task<BaseResponse<GetMealDto>> UpdateMealAsync(UpdateMealDto updateMealDto)
         {
             if (updateMealDto == null)
