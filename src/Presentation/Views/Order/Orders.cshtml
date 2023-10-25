@@ -8,6 +8,8 @@
 @await Component.InvokeAsync("Menu")
 
 <link rel="stylesheet" href="~/css/elements/box-orders.css" asp-append-version="true" />
+<script type="module" src="~/js/orders/ordersFiltersImport.js"></script>
+<script src="~/js/orders/actions/detailOrderAction.js"></script>
 
 <section class="container">
 
@@ -17,10 +19,8 @@
             <div class="mb-1">
                 <i class="fa-solid fa-clipboard-list fa-lg"></i>
             </div>
-            <h3>
-                Pedidos
-            </h3>
-            <span id="current-date">.</span>
+            <h3>Pedidos</h3>
+            <span id="current-date"></span>
         </div>
 
         <div class="box-orders-section row">
@@ -111,7 +111,6 @@
                         </form>
                     </div>
                 </div>
-
             </div>
 
             @if (Model.Count > 0)
