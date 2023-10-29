@@ -2,9 +2,36 @@
 
 > Sistema de Gerenciamento para pequenas empresas de vendas de marmita.
 
-<hr>
-
 ## Tech Stack
+
+> Development (Back-End)
+- `.NET 7`
+- `MSSQL SQL Server`
+- `Entity Framework Core`
+
+> Development (Front-End)
+- `HTML, CSS, Javascript`
+- `Bootstrap`
+- `Jquery`
+
+> Unit Testing
+- `xUnit`
+- `FakeItEasy`
+- `FluentAssertions`
+
+> Practices
+- `TDD`
+- `Clean Architecture`
+- `SOLID`
+
+> DevOps
+- `Docker and Docker Compose`
+
+<p align="right">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=cs,dotnet,html,css,js,bootstrap,jquery,docker" />
+  </a>
+</p>
 
 ## Como Rodar Localmente
 
