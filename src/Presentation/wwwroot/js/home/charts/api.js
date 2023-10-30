@@ -1,7 +1,16 @@
-export function fetchData(selectedDate) {
+export function fetchData(selectedDate, initialDate, finalDate) {
+    let baseUrl = [];
+    baseUrl.push(`data`)
+
+    if (!initialDate || !finalDate) {
+        baseUrl.push(`?selectedDate=${selectedDate}`)
+    } else {
+        baseUrl.push(`?initialDate=${initialDate}&finalDate=${finalDate}`)
+    }
+
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: `data?dateRangeSelected=${selectedDate}`,
+            url: baseUrl.join(""),
             type: 'GET',
             success: (result) => {
                 if (result.success) {
