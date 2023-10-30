@@ -187,7 +187,6 @@ namespace Application.Services
                     Id = meal.Id,
                     Description = meal.Description,
                     Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.User.Name,
                     OrdersCount = meal.Orders.Count
                 };
 
