@@ -260,6 +260,8 @@ namespace Application.Services
                 GetOrderDto getOrderDto = new()
                 {
                     Id = order.Id,
+                    Customer = order.Customer.Name,
+                    Meal = order.Meal.Description,
                     Price = order.Price,
                     IsPaid = order.IsPaid,
                     PaidAt = order.PaidAt,

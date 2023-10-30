@@ -56,6 +56,9 @@ namespace Infrastructure.Data.Repositories
         public async Task<ICollection<Order>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
         {
             return await _orders.AsNoTracking()
+                                .Include(x => x.Customer).AsNoTracking()
+                                .Include(x => x.Meal).AsNoTracking()
+                                .Include(x => x.PaymentType).AsNoTracking()
                                 .Where(x => x.CreatedAt.Date >= initialDate.Value.Date && x.CreatedAt.Date <= finalDate.Value.Date).AsNoTracking()
                                 .Where(x => x.CompanyId == companyId).AsNoTracking()
                                 .ToListAsync()
