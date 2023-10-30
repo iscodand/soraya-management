@@ -41,8 +41,6 @@ namespace Infrastructure.Data.Repositories
         public async Task<ICollection<Meal>> GetMealsByDateRangeAsync(int companyId, DateTime initialDate, DateTime finalDate)
         {
             return await _meals.AsNoTracking()
-                               .Include(x => x.User).AsNoTracking()
-                               .Include(x => x.Company).AsNoTracking()
                                .Include(x => x.Orders.Where(x => x.CreatedAt.Date >= initialDate.Date && x.CreatedAt.Date <= finalDate.Date))
                                .Where(x => x.CompanyId == companyId)
                                .ToListAsync()
