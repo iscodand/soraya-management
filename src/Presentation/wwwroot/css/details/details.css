@@ -9,6 +9,7 @@
     padding: 2rem;
     border-radius: 10px;
     margin-bottom: -1rem;
+    margin-top: 2rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -71,9 +72,18 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-.orders-details h3 {
+.details-title {
+    text-align: center;
+}
+
+.details-title h3 {
     font-weight: bold;
     color: #37419c;
     text-align: center;
-    margin-bottom: 2rem;
+}
+
+.details-title span {
+    font-style: italic;
+    color: grey;
+    font-size: 15px;
 }

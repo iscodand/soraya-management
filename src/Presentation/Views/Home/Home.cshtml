@@ -8,27 +8,30 @@
 <!-- JS imports -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="~/js/home/charts/main.js"></script>
+<script src="~/js/utils/pagination.js"></script>
 
 <!-- CSS imports -->
 <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/charts/charts.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/elements/filter.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/elements/box-orders.css" asp-append-version="true" />
 
-<section class="container">
+<section class="container-fluid custom-card" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
 
-    <div class="custom-card home-page-title">
-        <h3>@Model.CompanyName</h3>
+    <div class="home-title row mb-4">
+        <div class="col-md-6">
+            <h2>@Model.CompanyName</h2>
+            <span id="current-date"></span>
+        </div>
     </div>
 
-    <div class="filter-display row">
-        <!-- TODO: change this to date input -->
-        <div class="col-md-4">
+    <div class="filter-display row justify-content-end mb-3">
+        <div class="col-md-3">
             <label for="dateRangeSelected" class="form-label fw-thin">
                 <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i>
                 DATA:
             </label>
-            <select id="dateRangeSelected" name="dateRangeSelected" class="form-select form-control"
-                style="width: 400px;">
+            <select id="dateRangeSelected" name="dateRangeSelected" class="form-select  form-control">
                 <option value="today">Hoje</option>
                 <option value="yesterday">Ontem</option>
                 <option value="last7Days">7 Dias</option>
@@ -36,39 +39,146 @@
             </select>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="initialDate" class="form-label fw-thin">
                 <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA INICIAL:
             </label>
-            <input id="initialDate" name="initialDate" type="date" class="form-control" style="max-width: 400px;">
+            <input id="initialDate" name="initialDate" type="date" class="form-control">
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="finalDate" class="form-label fw-thin">
                 <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA FINAL:
             </label>
-            <input id="finalDate" name="finalDate" type="date" class="form-control" style="max-width: 400px;">
+            <input id="finalDate" name="finalDate" type="date" class="form-control">
         </div>
     </div>
 
-    <section class="row ">
-        <div class="chart-card custom-card col-md-6">
-            <h3>Sabores mais Pedidos</h3>
-            <canvas id="mealsChart" class="chart-display"></canvas>
+    <div>
+        <div class="box-orders-section row">
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <i class="fa-solid fa-chevron-up fa-lg"></i>
+                    <h2 id="home-new-orders-count"></h2>
+                    <p>Novos Pedidos</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <i class="fa-solid fa-chart-line fa-lg"></i>
+                    <h2 id="home-paid-orders-sum">
+                    </h2>
+                    <p>Total de Lucro</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="box-orders">
+                    <i class="fa-solid fa-money-bill-transfer fa-lg"></i>
+                    <h2 id="home-unpaid-orders-sum"></h2>
+                    <p>Total a Receber</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div id="box-orders-paid" class="box-orders paid">
+                    <i class="fa-solid fa-check fa-lg"></i>
+                    <h2 id="home-paid-orders-count"></h2>
+                    <p>Pedidos Pagos</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div id="box-orders-unpaid" class="box-orders unpaid">
+                    <i class="fa-solid fa-x fa-lg"></i>
+                    <h2 id="home-unpaid-orders-count"></h2>
+                    <p>Pedidos NÃO Pagos</p>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div id="box-orders-unpaid" class="box-orders unpaid">
+                    <i class="fa-solid fa-x fa-lg"></i>
+                    <h2>10</h2>
+                    <p>Descobrir o que colocar</p>
+                </div>
+            </div>
         </div>
 
-        <div class="chart-card custom-card col-md-6">
-            <h3>Clientes que mais Pediram</h3>
-            <canvas id="customersChart" class="chart-display"></canvas>
-        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="custom-card table-home-data">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h3>
+                                <i class="fas fa-chart-bar fa-fw me-3"></i>
+                                Últimos Pedidos
+                            </h3>
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-primary-custom" asp-controller="Order" asp-action="Create">
+                                + Novo Pedido
+                            </a>
+                        </div>
+                    </div>
 
-        <div class="custom-card">
-            <canvas id="ordersChart" class="chart-display"></canvas>
+                    <hr>
+
+                    <table id="orders-table" class="styled-table table small">
+                        <thead>
+                            <tr class="table-head-row">
+                                <th>Data</th>
+                                <th>Cliente</th>
+                                <th>Sabor</th>
+                                <th>Valor</th>
+                                <th>Pagamento</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tableBody" class="table-group-divider">
+                            <tr class="table-row">
+                                <td id="createdAt-order"></td>
+                                <td></td>
+                                <td></td>
+                                <td id="order-price"><b>R$</b></td>
+                                <td>
+                                    <i class="fa-brands fa-pix fa-xl"></i>
+                                </td>
+                                <td>
+                                    <p class="status pending">Pendente</p>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="chart-card custom-card col-md-4">
+                <h3>
+                    <i class="fas fa-utensils fa-fw me-3"></i>
+                    Sabores mais Pedidos
+                </h3>
+                <hr>
+                <canvas id="mealsChart" class="chart-display"></canvas>
+            </div>
+
+            <div class="chart-card custom-card col-md-4">
+                <h3>
+                    <i class="fas fa-users fa-fw me-3"></i>
+                    Top Clientes
+                </h3>
+                <canvas id="customersChart" class="chart-display"></canvas>
+            </div>
+
+            <div class="chart-card custom-card col-md-8">
+                <h3>
+                    <i class="fa-solid fa-clipboard-list fa-fw me-3"></i>
+                    Histórico de Pedidos
+                </h3>
+                <canvas id="ordersChart" class="chart-display"></canvas>
+            </div>
         </div>
-    </section>
 </section>
-
-<script>
-    // Bind an input event listener to the is active filter input
-
-</script>

@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400&display=swap');
+
+
 * {
-    font-family: 'Graphik', sans-serif;
+    font-family: 'Outfit', sans-serif;
 }
 
 body {
-    background-color: #e5ebff;
+    background-color: #dfe9f5;
 }
 
 p {
