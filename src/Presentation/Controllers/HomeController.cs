@@ -5,7 +5,6 @@ using Application.Dtos.User;
 using Application.Contracts;
 using Application.Responses;
 using Application.Dtos.Data;
-using System.Globalization;
 
 namespace Presentation.Controllers
 {
@@ -38,26 +37,32 @@ namespace Presentation.Controllers
         // TODO => get a better name for controller and route
         [HttpGet]
         [Route("data/")]
-        public async Task<IActionResult> GetData(string dateRangeSelected, DateTime initialDate, DateTime finalDate)
+        public async Task<IActionResult> GetData(string selectedDate, DateTime initialDate, DateTime finalDate)
         {
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
-                // if no date range selected, default is Today
-                initialDate = DateTime.Today.Date;
-                finalDate = DateTime.Today.Date;
-
-                if (dateRangeSelected == "yesterday")
+                if (selectedDate == "today")
                 {
-                    initialDate = finalDate.AddDays(-1);
+                    finalDate = DateTime.Today.Date;
+                    initialDate = DateTime.Today.Date;
+                    Console.WriteLine("entrou");
                 }
-                else if (dateRangeSelected == "last7Days")
+                else if (selectedDate == "yesterday")
                 {
+                    finalDate = DateTime.Today.Date;
+                    initialDate = finalDate.AddDays(-1);
+                    Console.WriteLine("entrou 2");
+                }
+                else if (selectedDate == "last7Days")
+                {
+                    finalDate = DateTime.Today.Date;
                     initialDate = finalDate.AddDays(-7);
                 }
-                else if (dateRangeSelected == "last15Days")
+                else if (selectedDate == "last15Days")
                 {
+                    finalDate = DateTime.Today.Date;
                     initialDate = finalDate.AddDays(-15);
                 }
 
@@ -67,7 +72,10 @@ namespace Presentation.Controllers
                 {
                     return Json(new { success = true, message = result.Message, data = result.Data });
                 }
+
+                return Json(new { success = false, message = result.Message });
             }
+
             return Json(new { success = false, message = "Ocorreu um erro ao processar a solicitação" });
         }
     }
