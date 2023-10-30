@@ -5,7 +5,7 @@ $(document).ready(function () {
 
         // Loop through each row in the table body
         $("#customers-tableBody tr").each(function () {
-            const isActiveColumn = $(this).find("td:nth-child(4)");
+            const isActiveColumn = $(this).find("td:nth-child(5)");
 
             // Check if the isActive status matches the selected filter
             const isActive = isActiveColumn.find("#isActive-icon").length > 0;
