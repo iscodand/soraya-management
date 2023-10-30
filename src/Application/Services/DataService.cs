@@ -22,13 +22,13 @@ namespace Application.Services
             _customerService = customerService;
         }
 
-        public async Task<BaseResponse<GetDataDto>> GetDataAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
+        public async Task<BaseResponse<GetDataDto>> GetDataAsync(int companyId, DateTime initialDate, DateTime finalDate)
         {
             BaseResponse<GetOrderDto> orders = await _orderService.GetOrdersByDateRangeAsync(companyId, initialDate, finalDate);
 
             // todo => select just the last 6 meals/customers with the higher num of orders at range of initial and final date
-            BaseResponse<GetMealDto> meals = await _mealService.GetMealsByDateRangeAsync(companyId, initialDate.Value, finalDate.Value);
-            BaseResponse<GetCustomerDto> customers = await _customerService.GetCustomersByCompanyAsync(companyId);
+            BaseResponse<GetMealDto> meals = await _mealService.GetMealsByDateRangeAsync(companyId, initialDate, finalDate);
+            BaseResponse<GetCustomerDto> customers = await _customerService.GetCustomersByDateRangeAsync(companyId, initialDate, finalDate);
 
             GetDataDto getDataDto = new()
             {
