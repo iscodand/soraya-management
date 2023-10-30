@@ -41,7 +41,8 @@ namespace Presentation.Controllers
                     Name = customer.Name,
                     Phone = customer.Phone,
                     IsActive = customer.IsActive,
-                    CreatedBy = customer.CreatedBy
+                    CreatedBy = customer.CreatedBy,
+                    OrdersCount = customer.OrdersCount
                 };
 
                 getCustomerDtoCollection.Add(viewModel);

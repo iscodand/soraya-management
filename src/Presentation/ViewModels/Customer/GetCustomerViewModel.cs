@@ -7,5 +7,6 @@ namespace Presentation.ViewModels.Customer
         public string Phone { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
+        public int OrdersCount { get; set; }
     }
 }

@@ -44,6 +44,7 @@
                         <th>#</th>
                         <th>Descrição do Sabor</th>
                         <th>Acompanhamentos</th>
+                        <th>Qtd. Pedidos</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +58,9 @@
                             </td>
                             <td>@meal.Description</td>
                             <td>@meal.Accompaniments</td>
+                            <td>
+                                <b style="color: #37419c;">@meal.OrdersCount</b> pedidos
+                            </td>
                         </tr>
                     }
                 </tbody>

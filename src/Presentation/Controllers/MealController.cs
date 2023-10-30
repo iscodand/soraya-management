@@ -37,7 +37,8 @@ namespace Presentation.Controllers
                     Id = meal.Id,
                     Description = meal.Description,
                     Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.CreatedBy
+                    CreatedBy = meal.CreatedBy,
+                    OrdersCount = meal.OrdersCount
                 };
 
                 viewModelCollection.Add(viewModel);
