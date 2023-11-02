@@ -1,6 +1,7 @@
 import { fetchData } from './api.js';
 import { createOrUpdateBarChart } from './barChart.js';
 import { createOrUpdateDoughnutChart } from './doughnutChart.js';
+import { createOrUpdateLineChart } from './lineChart.js';
 
 // Elements for Charts
 let mealsChartElement = document.getElementById('mealsChart').getContext('2d');
@@ -29,7 +30,8 @@ let customersName = [];
 let customersOrdersCount = [];
 
 let orders = [];
-let ordersDays = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+let ordersByDayOfWeek = [];
+let ordersByDayOfWeekCount = [];
 let ordersPerDayCount = [];
 
 // When DOM loads, get data and create chart
@@ -58,6 +60,7 @@ function createChart(selectedValue, initialDate, finalDate) {
             meals = data['meals'];
             customers = data['customers'];
             orders = data['orders'];
+            ordersByDayOfWeek = data['ordersByDayOfWeek'];
 
             fillOrdersTable(orders);
 
@@ -84,6 +87,8 @@ function createChart(selectedValue, initialDate, finalDate) {
                 }
             }
 
+            let testingDays = [];
+
             let paidOrdersSumValue = 0;
             let unpaidOrdersSumValue = 0;
             let paidOrdersCountValue = 0
@@ -103,8 +108,8 @@ function createChart(selectedValue, initialDate, finalDate) {
 
             // Define value of boxes data
             newOrdersCount.textContent = calculateSum(mealsOrdersCount);
-            paidOrdersSum.textContent = "R$ " + paidOrdersSumValue.toPrecision();
-            unpaidOrdersSum.textContent = "R$ " + unpaidOrdersSumValue.toPrecision();
+            paidOrdersSum.textContent = "R$ " + paidOrdersSumValue.toFixed(2);
+            unpaidOrdersSum.textContent = "R$ " + unpaidOrdersSumValue.toFixed(2);
             paidOrdersCount.textContent = paidOrdersCountValue;
             unpaidOrdersCount.textContent = unpaidOrdersCountValue;
 
@@ -116,7 +121,7 @@ function createChart(selectedValue, initialDate, finalDate) {
                 customersName, customersOrdersCount, 'Clientes que Mais Pediram');
 
             ordersChart = createOrUpdateBarChart(ordersChartElement, ordersChart, 'Pedidos',
-                ordersDays, ordersPerDayCount, 'Quantidade de Pedidos');
+                testingDays, ordersByDayOfWeekCount, 'Quantidade de Pedidos');
         })
         .catch((error) => {
             alert(error);
@@ -135,7 +140,8 @@ function fillOrdersTable(data) {
 
     tableBody.innerHTML = "";
 
-    const lastOrders = data.slice(-3)
+    const lastOrders = data.slice(-3);
+    lastOrders.reverse();
 
     lastOrders.forEach(order => {
         const row = tableBody.insertRow();
@@ -148,13 +154,7 @@ function fillOrdersTable(data) {
         const paymentTypeCell = row.insertCell();
         const isPaidCell = row.insertCell();
 
-        const date = new Date(order.createdAt);
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        const formatedDate = `${day}/${month}/${year}`;
-
-        createdAtCell.textContent = formatedDate;
+        createdAtCell.textContent = formatDate(order.createdAt);
         customerCell.textContent = order.customer;
         mealCell.textContent = order.meal;
         priceCell.innerHTML = `<b>R$ ${order.price.toFixed(2)}</b>`;
@@ -167,3 +167,70 @@ function fillOrdersTable(data) {
         }
     });
 }
+
+function getWeekByToday() {
+    var date = new Date();
+    var dates = [];
+
+    for (var i = 0; i < 7; i++) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var formatedDate = day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+        dates.push(formatedDate);
+
+        date.setDate(date.getDate() - 1);
+    }
+
+    return dates;
+}
+
+function formatDate(dateInput) {
+    const date = new Date(dateInput);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
+// // Função para extrair a data (sem a hora) a partir do campo "createdAt"
+// function extrairDataSemHora(createdAt) {
+//     const data = new Date(createdAt);
+//     data.setHours(0, 0, 0, 0); // Define a hora para meia-noite
+//     return data.toISOString().split('T')[0]; // Retorna a data no formato 'aaaa-mm-dd'
+// }
+
+// // Encontre a data mais antiga e mais recente na lista de pedidos
+// let dataMaisAntiga = null;
+// let dataMaisRecente = null;
+
+// pedidos.forEach(pedido => {
+//     const dataCriacao = extrairDataSemHora(pedido.createdAt);
+//     if (!dataMaisAntiga || dataCriacao < dataMaisAntiga) {
+//         dataMaisAntiga = dataCriacao;
+//     }
+//     if (!dataMaisRecente || dataCriacao > dataMaisRecente) {
+//         dataMaisRecente = dataCriacao;
+//     }
+// })
+
+// // Crie um objeto para rastrear o número de pedidos por dia
+// const pedidosPorDia = {};
+
+// // Preencha o objeto com todos os dias entre as datas mais antigas e mais recentes
+// const dataAtual = new Date(dataMaisAntiga);
+
+// while (dataAtual <= new Date(dataMaisRecente)) {
+//     const dataFormatada = dataAtual.toISOString().split('T')[0];
+//     pedidosPorDia[dataFormatada] = 0; // Inicialize com 0 pedidos
+//     dataAtual.setDate(dataAtual.getDate() + 1); // Avance para o próximo dia
+// }
+
+// // Percorra a matriz de pedidos e conte os pedidos por dia
+// pedidos.forEach(pedido => {
+//     const dataCriacao = extrairDataSemHora(pedido.createdAt);
+//     pedidosPorDia[dataCriacao]++;
+// });
+
+// // Agora você tem um objeto 'pedidosPorDia' que contém o número de pedidos para cada dia
+// console.log(pedidosPorDia);
