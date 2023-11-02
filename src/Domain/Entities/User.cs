@@ -40,6 +40,14 @@ namespace Domain.Entities
             return user;
         }
 
+        public virtual void Update(string name, string email, string username)
+        {
+            Name = name;
+            NormalizedName = name.Trim().ToUpper();
+            Email = email;
+            UserName = username;
+        }
+
         public User Deactivate()
         {
             IsActive = false;
