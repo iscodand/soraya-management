@@ -1,5 +1,3 @@
-using Application.Dtos.Order;
-
 namespace Application.Dtos.Meal
 {
     public class GetMealDto
