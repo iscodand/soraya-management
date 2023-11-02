@@ -3,8 +3,6 @@ $(document).ready(function () {
     var currentPage = 1;
     var totalItems = $('.styled-table .table-row').length;
 
-    console.log(totalItems)
-
     var totalPages = Math.ceil(totalItems / itemsPerPage);
     $('#totalPages').text(' de ' + totalPages);
 
