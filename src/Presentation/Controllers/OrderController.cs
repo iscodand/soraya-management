@@ -56,7 +56,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("filtering/")]
+        [Route("buscar/")]
         public async Task<IActionResult> FilteringOrders(DateTime? createdAt)
         {
             GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
