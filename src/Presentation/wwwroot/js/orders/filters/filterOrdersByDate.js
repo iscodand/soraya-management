@@ -5,7 +5,7 @@ $(document).ready(function () {
         let formData = $(this).serialize();
 
         $.ajax({
-            url: '/pedidos/filtering',
+            url: '/pedidos/buscar',
             type: 'GET',
             data: formData,
             success: function (result) {
@@ -17,18 +17,16 @@ $(document).ready(function () {
                 let unpaidOrdersCount = 0;
 
                 $('#orders-tableBody tr').each(function () {
-                    let isPaid = $(this).find('.status.paid').length > 0;
+                    let isPaid = $(this).find('.paid').length > 0;
                     let totalReceivedField = $(this).find('td:eq(4)').text().replace('R$', '').trim();
                     let price = parseFloat(totalReceivedField);
 
-                    if (!isNaN(price)) {
+                    if (isPaid) {
                         totalReceived += price;
-                        if (isPaid) {
-                            paidOrdersCount++;
-                        } else {
-                            unpaidOrdersCount++;
-                            totalToReceive += price;
-                        }
+                        paidOrdersCount++;
+                    } else {
+                        unpaidOrdersCount++;
+                        totalToReceive += price;
                     }
                 });
 

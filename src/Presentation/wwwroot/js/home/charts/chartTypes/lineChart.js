@@ -1,18 +1,22 @@
-export function createOrUpdateBarChart(ctx, chart, datasetLabel, labels, data, title) {
+export function createOrUpdateLineChart(ctx, chart, datasetLabel, labels, data, title) {
     if (chart) {
         chart.destroy();
         chart = null;
     }
 
     return new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: labels,
             datasets: [{
                 label: datasetLabel,
                 data: data,
                 borderWidth: 2,
-                backgroundColor: '#4D59CB',
+                pointStyle: 'circle',
+                pointRadius: 3,
+                pointHoverRadius: 15,
+                fill: true,
+                backgroundColor: '#4d5acba9',
             }]
         },
         options: {
