@@ -48,6 +48,23 @@ i {
     font-weight: bolder;
 }
 
+.btn-success {
+    color: #ffffff;
+    background-color: #49b464;
+    font-weight: bolder;
+    border: none;
+}
+
+.btn-success:active {
+    color: #ffffff;
+    background-color: #61c078;
+}
+
+.btn-success:hover {
+    color: #ffffff;
+    background-color: #61c078;
+}
+
 .btn-primary-custom:active {
     background-color: #37419c;
 }
