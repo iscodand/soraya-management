@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400&display=swap');
+
+
 * {
-    font-family: 'Graphik', sans-serif;
+    font-family: 'Outfit', sans-serif;
 }
 
 body {
-    background-color: #e5ebff;
+    background-color: #dfe9f5;
 }
 
 p {
@@ -43,6 +46,23 @@ i {
     color: #ffffff;
     background-color: #4D59CB;
     font-weight: bolder;
+}
+
+.btn-success {
+    color: #ffffff;
+    background-color: #49b464;
+    font-weight: bolder;
+    border: none;
+}
+
+.btn-success:active {
+    color: #ffffff;
+    background-color: #61c078;
+}
+
+.btn-success:hover {
+    color: #ffffff;
+    background-color: #61c078;
 }
 
 .btn-primary-custom:active {

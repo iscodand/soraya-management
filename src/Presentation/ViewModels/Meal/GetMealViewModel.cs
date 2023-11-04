@@ -6,5 +6,6 @@ namespace Presentation.ViewModels.Meal
         public string Description { get; set; }
         public string Accompaniments { get; set; }
         public string CreatedBy { get; set; }
+        public int OrdersCount { get; set; }
     }
 }

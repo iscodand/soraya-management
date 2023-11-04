@@ -12,7 +12,9 @@ window.addEventListener("DOMContentLoaded", () => {
         modalBackdrop.classList.add('hidden');
     }
 
-    modalBackdrop.addEventListener('click', () => {
-        closeModal();
-    });
+    if (modalBackdrop) {
+        modalBackdrop.addEventListener('click', () => {
+            closeModal();
+        });
+    }
 })

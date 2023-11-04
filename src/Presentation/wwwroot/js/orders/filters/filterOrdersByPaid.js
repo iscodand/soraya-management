@@ -23,8 +23,5 @@ $(document).ready(function () {
                 $(this).hide();
             }
         });
-
-        const caption = $(".styled-table-caption");
-        caption.text(`Pedidos Encontrados: ${visibleRowCount}`);
     });
 });

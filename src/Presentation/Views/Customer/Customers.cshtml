@@ -7,6 +7,9 @@
 
 @await Component.InvokeAsync("Menu")
 
+<script type="module" src="~/js/customers/customersFiltersImport.js"></script>
+<script type="module" src="~/js/utils/pagination.js"></script>
+
 <section class="container">
 
     <div class="custom-card page-title text-center">
@@ -54,6 +57,7 @@
                         <th>#</th>
                         <th>Nome do Cliente</th>
                         <th>Telefone do Cliente</th>
+                        <th>Qtd. Pedidos</th>
                         <th>Ativo</th>
                     </tr>
                 </thead>
@@ -78,6 +82,10 @@
                                 <td>@customer.Phone</td>
                             }
 
+                            <td>
+                                <b style="color: #37419c;">@customer.OrdersCount</b> pedidos
+                            </td>
+
                             @if (customer.IsActive)
                             {
                                 <td>
@@ -94,6 +102,21 @@
                     }
                 </tbody>
             </table>
+
+            <div class="pagination justify-content-center">
+                <button id="previousPage" class="btn btn-primary-custom btn-sm previous-page">
+                    <i class="fa-solid fa-chevron-left" style="color: #ffffff;"></i>
+                </button>
+
+                <div class="current-and-total-pages">
+                    <span id="currentPage" class="current-page-filter">Página 1 </span>
+                    <span id="totalPages" class="total-page-filter"> de 1</span>
+                </div>
+
+                <button id="nextPage" class="btn btn-primary-custom btn-sm ">
+                    <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
+                </button>
+            </div>
         }
         else
         {

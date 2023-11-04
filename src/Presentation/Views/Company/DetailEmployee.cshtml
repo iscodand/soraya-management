@@ -7,17 +7,27 @@
 
 @await Component.InvokeAsync("Menu")
 
+<link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
+
 <section class="container">
 
-    <div class="custom-card">
-        <h3>Perfil do Funcionário - <b>@Model.Name</b></h3>
+    <div class="details-page-title">
+        <h2>Perfil do Funcionário - <b>@Model.Name</b></h2>
     </div>
 
-    <div class="">
-        <h3>Dados Pessoais</h3>
-        <p>Nome: <b>@Model.Name</b></p>
-        <p>Nome de Usuário: <b>@Model.Username</b></p>
-        <p>Email: <b>@Model.Email</b></p>
+    <div class="main-details">
+        <h3>Dados do Funcionário</h3>
+        <div class="main-details-content">
+            <p><span class="vertical-bar">|</span> Nome: <b>@Model.Name</b></p>
+            <p><span class="vertical-bar">|</span> Usuário: <b>@Model.Username</b></p>
+            <p><span class="vertical-bar">|</span> E-mail: <b>@Model.Email</b></p>
+        </div>
+    </div>
+
+    <div class="custom-card">
+        <a class="btn btn-primary" asp-action="Update" asp-controller="User">
+            <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Atualizar Dados</b>
+        </a>
     </div>
 
 </section>

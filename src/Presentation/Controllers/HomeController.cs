@@ -5,7 +5,6 @@ using Application.Dtos.User;
 using Application.Contracts;
 using Application.Responses;
 using Application.Dtos.Data;
-using System.Globalization;
 
 namespace Presentation.Controllers
 {
@@ -38,21 +37,41 @@ namespace Presentation.Controllers
         // TODO => get a better name for controller and route
         [HttpGet]
         [Route("data/")]
-        public async Task<IActionResult> GetData(DateTime initialDate, DateTime finalDate)
+        public async Task<IActionResult> GetData(string selectedDate, DateTime initialDate, DateTime finalDate)
         {
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
-                initialDate = DateTime.ParseExact("16/10/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                finalDate = DateTime.Today.Date;
 
-                BaseResponse<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, DateTime.Today);
+                if (selectedDate == "today")
+                {
+                    initialDate = DateTime.Today.Date;
+                }
+                else if (selectedDate == "lastWeek")
+                {
+                    initialDate = finalDate.AddDays(-7);
+                }
+                else if (selectedDate == "last15Days")
+                {
+                    initialDate = finalDate.AddDays(-15);
+                }
+                else if (selectedDate == "lastMonth")
+                {
+                    initialDate = finalDate.AddDays(-30);
+                }
+
+                BaseResponse<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, finalDate);
 
                 if (result.IsSuccess)
                 {
                     return Json(new { success = true, message = result.Message, data = result.Data });
                 }
+
+                return Json(new { success = false, message = result.Message });
             }
+
             return Json(new { success = false, message = "Ocorreu um erro ao processar a solicitação" });
         }
     }

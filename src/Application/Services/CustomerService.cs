@@ -173,6 +173,32 @@ namespace Application.Services
             };
         }
 
+        public async Task<BaseResponse<GetCustomerDto>> GetCustomersByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate)
+        {
+            ICollection<Customer> customers = await _customerRepository.GetCustomersByDateRangeAsync(userCompanyId, initialDate, finalDate);
+            ICollection<GetCustomerDto> getCustomerDtoCollection = new List<GetCustomerDto>();
+            foreach (Customer customer in customers)
+            {
+                GetCustomerDto getCustomerDto = new()
+                {
+                    Id = customer.Id,
+                    Name = customer.Name,
+                    Phone = customer.Phone,
+                    IsActive = customer.IsActive,
+                    OrdersCount = customer.Orders.Count
+                };
+
+                getCustomerDtoCollection.Add(getCustomerDto);
+            }
+
+            return new BaseResponse<GetCustomerDto>()
+            {
+                Message = "Clientes encontrados com sucesso.",
+                IsSuccess = true,
+                DataCollection = getCustomerDtoCollection
+            };
+        }
+
         public async Task<BaseResponse<DetailCustomerDto>> DetailCustomerAsync(int customerId, int userCompanyId)
         {
             Customer customer = await _customerRepository.DetailCustomerAsync(customerId);

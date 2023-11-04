@@ -38,6 +38,15 @@ namespace Infrastructure.Data.Repositories
                                .ConfigureAwait(false);
         }
 
+        public async Task<ICollection<Meal>> GetMealsByDateRangeAsync(int companyId, DateTime initialDate, DateTime finalDate)
+        {
+            return await _meals.AsNoTracking()
+                               .Include(x => x.Orders.Where(x => x.CreatedAt.Date >= initialDate.Date && x.CreatedAt.Date <= finalDate.Date))
+                               .Where(x => x.CompanyId == companyId)
+                               .ToListAsync()
+                               .ConfigureAwait(false);
+        }
+
         public async Task<bool> MealExistsByDescriptionAsync(string description, int companyId)
         {
             return await _meals.AsNoTracking()

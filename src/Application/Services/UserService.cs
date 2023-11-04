@@ -104,6 +104,65 @@ namespace Application.Services
             };
         }
 
+        public async Task<BaseResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
+        {
+            if (updateUserDto == null)
+            {
+                return new BaseResponse<UpdateUserDto>()
+                {
+                    Message = "Usuário não pode ser nulo. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            User user = await _userRepository.GetUserByUsernameAsync(updateUserDto.Username);
+
+            if (user == null)
+            {
+                return new BaseResponse<UpdateUserDto>()
+                {
+                    Message = "Usuário não encontrado. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            if (user.CompanyId != updateUserDto.CompanyId)
+            {
+                return new BaseResponse<UpdateUserDto>()
+                {
+                    Message = "Usuário não encontrado. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            if (await _userRepository.UserExistsByUsernameAsync(updateUserDto.NewUsername))
+            {
+                return new BaseResponse<UpdateUserDto>()
+                {
+                    Message = "Esse nome de usuário já está sendo utilizado. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            if (await _userRepository.UserExistsByEmailAsync(updateUserDto.NewEmail))
+            {
+                return new BaseResponse<UpdateUserDto>()
+                {
+                    Message = "Esse e-mail já está sendo utilizado. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            user.Update(updateUserDto.Name, updateUserDto.NewEmail, updateUserDto.NewUsername);
+            await _userRepository.SaveAsync();
+
+            return new BaseResponse<UpdateUserDto>()
+            {
+                Message = "Usuário atualizado com sucesso",
+                IsSuccess = true
+            };
+        }
+
         public async Task<BaseResponse<GetUserDto>> ActivateUserAsync(string username, int companyId)
         {
             User user = await _userRepository.GetUserByUsernameAsync(username);

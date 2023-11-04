@@ -75,5 +75,14 @@ namespace Infrastructure.Data.Repositories
                                    .AnyAsync(x => x.Name == name)
                                    .ConfigureAwait(false);
         }
+
+        public async Task<ICollection<Customer>> GetCustomersByDateRangeAsync(int companyId, DateTime initialDate, DateTime finalDate)
+        {
+            return await _customers.AsNoTracking()
+                                   .Include(x => x.Orders.Where(x => x.CreatedAt.Date >= initialDate.Date && x.CreatedAt.Date <= finalDate.Date))
+                                   .Where(x => x.CompanyId == companyId)
+                                   .ToListAsync()
+                                   .ConfigureAwait(false);
+        }
     }
 }

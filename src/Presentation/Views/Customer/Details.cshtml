@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/elements/box-orders.css" asp-append-version="true" />
 
+<script type="module" src="~/js/customers/customersActionsImport.js"></script>
+<script src="~/js/utils/pagination.js"></script>
+
 <section class="container">
 
     <div class="details-page-title">
@@ -37,7 +40,11 @@
     <!-- Display all customer orders (if has orders) -->
 
     <div class="orders-details">
-        <h3>Pedidos Realizados</h3>
+
+        <div class="details-title">
+            <h3>Pedidos Realizados</h3>
+            <span class="last-month-data">Dados do Último Mês</span>
+        </div>
 
         <div class="box-orders-section row">
 
@@ -104,6 +111,21 @@
                         }
                     </tbody>
                 </table>
+
+                <div class="pagination justify-content-center">
+                    <button id="previousPage" class="btn btn-primary-custom btn-sm previous-page">
+                        <i class="fa-solid fa-chevron-left" style="color: #ffffff;"></i>
+                    </button>
+
+                    <div class="current-and-total-pages">
+                        <span id="currentPage" class="current-page-filter">Página 1 </span>
+                        <span id="totalPages" class="total-page-filter"> de 1</span>
+                    </div>
+
+                    <button id="nextPage" class="btn btn-primary-custom btn-sm ">
+                        <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
+                    </button>
+                </div>
             </div>
         }
 
