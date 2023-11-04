@@ -43,27 +43,23 @@ namespace Presentation.Controllers
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
 
+                finalDate = DateTime.Today.Date;
+
                 if (selectedDate == "today")
                 {
-                    finalDate = DateTime.Today.Date;
                     initialDate = DateTime.Today.Date;
-                    Console.WriteLine("entrou");
                 }
-                else if (selectedDate == "yesterday")
+                else if (selectedDate == "lastWeek")
                 {
-                    finalDate = DateTime.Today.Date;
-                    initialDate = finalDate.AddDays(-1);
-                    Console.WriteLine("entrou 2");
-                }
-                else if (selectedDate == "last7Days")
-                {
-                    finalDate = DateTime.Today.Date;
                     initialDate = finalDate.AddDays(-7);
                 }
                 else if (selectedDate == "last15Days")
                 {
-                    finalDate = DateTime.Today.Date;
                     initialDate = finalDate.AddDays(-15);
+                }
+                else if (selectedDate == "lastMonth")
+                {
+                    initialDate = finalDate.AddDays(-30);
                 }
 
                 BaseResponse<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, finalDate);
