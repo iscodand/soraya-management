@@ -113,7 +113,6 @@
         @if (Model.Count > 0)
         {
             <table id="orders-table" class="styled-table table">
-                <caption class="styled-table-caption">Pedidos Encontrados: @Model.Count</caption>
                 <thead>
                     <tr class="table-head-row">
                         <th>Detalhes</th>
@@ -125,9 +124,9 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="orders-tableBody" class="table-group-divider">
-                    @foreach (var order in Model)
-                    {
+                @foreach (var order in Model)
+                {
+                    <tbody id="orders-tableBody" class="table-group-divider">
                         <tr class="table-row">
                             <td>
                                 <a id="open-order-details" href="pedidos/detalhes/@order.Id" class="show-details"
@@ -160,8 +159,8 @@
                                 }
                             </td>
                         </tr>
-                    }
-                </tbody>
+                    </tbody>
+                }
             </table>
 
             <div class="pagination justify-content-center">
@@ -187,7 +186,6 @@
                     para cadastrar um novo pedido.</h4>
             </div>
         }
-
     </section>
 
     <div id="order-details-modal-card" class="hidden order-details-modal-card">
@@ -197,17 +195,3 @@
     <div id="modal-backdrop" class="modal-backdrop hidden"></div>
 
 </section>
-</section>
-
-<script>
-    let table = new DataTable('#orders-table');
-
-    $(document).ready(function () {
-        $('#orders-table').DataTable({
-            "pageLength": 10, // Número de registros por página
-            "searching": true, // Habilitar pesquisa
-            "ordering": true, // Habilitar classificação
-            // Mais opções aqui
-        });
-    });
-</script>

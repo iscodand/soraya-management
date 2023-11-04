@@ -33,28 +33,28 @@
             </label>
             <select id="dateRangeSelected" name="dateRangeSelected" class="form-select  form-control">
                 <option value="today">Hoje</option>
-                <option value="yesterday">Ontem</option>
-                <option value="last7Days" selected>7 Dias</option>
-                <option value="last15Days">15 Dias</option>
+                <option value="lastWeek" selected>Última Semana</option>
+                <option value="last15Days">Última Quinzena</option>
+                <option value="lastMonth">Último Mês</option>
             </select>
         </div>
 
-        <div class="col-md-3">
-            <label for="initialDate" class="form-label fw-thin">
-                <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA INICIAL:
-            </label>
-            <input id="initialDate" name="initialDate" type="date" class="form-control">
+        @* <div class="col-md-3">
+        <label for="initialDate" class="form-label fw-thin">
+        <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA INICIAL:
+        </label>
+        <input id="initialDate" name="initialDate" type="date" class="form-control">
         </div>
 
         <div class="col-md-3">
-            <label for="finalDate" class="form-label fw-thin">
-                <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA FINAL:
-            </label>
-            <input id="finalDate" name="finalDate" type="date" class="form-control">
-        </div>
+        <label for="finalDate" class="form-label fw-thin">
+        <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA FINAL:
+        </label>
+        <input id="finalDate" name="finalDate" type="date" class="form-control">
+        </div> *@
     </div>
 
-    <div>
+    <div class="custom-card">
         <div class="box-orders-section row">
             <div class="col-md-2">
                 <div class="box-orders">
@@ -164,21 +164,40 @@
                 <hr>
                 <canvas id="mealsChart" class="chart-display"></canvas>
             </div>
+        </div>
 
+        <div class="row">
             <div class="chart-card custom-card col-md-4">
                 <h3>
                     <i class="fas fa-users fa-fw me-3"></i>
                     Top Clientes
                 </h3>
+                <hr>
                 <canvas id="customersChart" class="chart-display"></canvas>
             </div>
 
-            <div class="chart-card custom-card col-md-8">
-                <h3>
-                    <i class="fa-solid fa-clipboard-list fa-fw me-3"></i>
-                    Histórico de Pedidos
-                </h3>
-                <canvas id="ordersChart" class="chart-display"></canvas>
+            <div class="col-md-8">
+                <div class="chart-card custom-card">
+                    <h3>
+                        <i class="fa-solid fa-clipboard-list fa-fw me-3"></i>
+                        Histórico de Pedidos
+                    </h3>
+                    <hr>
+                    <canvas id="ordersChart" class="chart-display"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-card custom-card">
+                    <h3>
+                        <i class="fa-solid fa-chart-simple fa-fw me-3"></i>
+                        Histórico de Lucro
+                    </h3>
+                    <hr>
+                    <canvas id="ordersProfitChart" class="chart-display"></canvas>
+                </div>
             </div>
         </div>
 </section>
