@@ -25,14 +25,16 @@
                 <div class="form-outline mb-4">
                     <i class="fa-solid fa-utensils fa-sm"></i>
                     <label class="form-label fw-bolder">Sabor</label>
-                    <input class="form-control form-control-lg" asp-for="Description" />
+                    <input class="form-control form-control-lg" asp-for="Description"
+                        placeholder="Descrição do Sabor" />
                     <span class="text-danger fw-bolder sm" asp-validation-for="Description"></span>
                 </div>
 
                 <div class="form-outline mb-4">
                     <i class="fa-solid fa-bowl-food"></i>
-                    <label class="form-label fw-bolder">Acompanhamentos</label>
-                    <textarea class="form-control form-control-lg" asp-for="Accompaniments"></textarea>
+                    <label class="form-label fw-bolder">Acompanhamentos (Opcional)</label>
+                    <textarea class="form-control form-control-lg" asp-for="Accompaniments"
+                        placeholder="O que esse sabor acompanha?"></textarea>
                     <span class="text-danger fw-bolder sm" asp-validation-for="Accompaniments"></span>
                 </div>
 

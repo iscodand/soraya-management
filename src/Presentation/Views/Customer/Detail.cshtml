@@ -141,13 +141,15 @@
             @if (Model.IsActive)
             {
                 <button id="inactivate-customer-button" class="btn btn-warning" data-customer-id="@Model.Id">
-                    <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i> <b>Desativar Cliente</b>
+                    <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i>
+                    <b>Desativar Cliente</b>
                 </button>
             }
             else
             {
                 <button id="activate-customer-button" class="btn btn-success" data-customer-id="@Model.Id">
-                    <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i> <b>Ativar Cliente</b>
+                    <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i>
+                    <b>Ativar Cliente</b>
                 </button>
             }
         }
@@ -158,6 +160,12 @@
                 <i class="fa-solid fa-trash" style="color: #ffffff; padding-right: 4px;"></i> <b>Deletar Cliente</b>
             </button>
         }
+    </div>
 
+    <div class="pt-1">
+        <a asp-controller="Customer" asp-action="Customers" class="btn btn-warning pt-1">
+            <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+            <b>Voltar</b>
+        </a>
     </div>
 </section>

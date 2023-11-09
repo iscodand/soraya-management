@@ -5,6 +5,9 @@
     Layout = "_Layout";
 }
 
+<script type="module" src="~/js/meals/filters/searchByMeal.js"></script>
+<script type="module" src="~/js/utils/pagination.js"></script>
+
 @await Component.InvokeAsync("Menu")
 
 <section class="container">
@@ -29,16 +32,15 @@
             <div class="col-md-8 row justify-content-end">
                 <div class="col-md-6">
                     <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
-                    <label for="isActive-filter" class="form-label fw-thin">BUSCAR:</label>
-                    <input id="search-customer-filter" class="form-control" placeholder="Busque por um sabor" />
+                    <label for="search-meal-filter" class="form-label fw-thin">BUSCAR:</label>
+                    <input id="search-meal-filter" class="form-control" placeholder="Busque por um sabor" />
                 </div>
             </div>
         </div>
 
         @if (Model.Count > 0)
         {
-            <table class="table styled-table">
-                <caption class="styled-table-caption">Total de sabores encontrados: <b>@Model.Count</b></caption>
+            <table class="styled-table table">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -47,17 +49,25 @@
                         <th>Qtd. Pedidos</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="meals-tableBody">
                     @foreach (var meal in Model.ToList())
                     {
-                        <tr>
+                        <tr class="table-row">
                             <td style="max-width: 50px;">
-                                <a type="button" asp-controller="Meal" asp-action="Details" asp-route-mealId="@meal.Id">
+                                <a type="button" asp-controller="Meal" asp-action="Detail" asp-route-mealId="@meal.Id">
                                     <i class="fa-solid fa-circle-info fa-lg"></i>
                                 </a>
                             </td>
                             <td>@meal.Description</td>
-                            <td>@meal.Accompaniments</td>
+
+                            @if (meal.Accompaniments == null)
+                            {
+                                <td style="color: red">Não Informado</td>
+                            }
+                            else
+                            {
+                                <td>@meal.Accompaniments</td>
+                            }
                             <td>
                                 <b style="color: #37419c;">@meal.OrdersCount</b> pedidos
                             </td>
@@ -65,6 +75,21 @@
                     }
                 </tbody>
             </table>
+
+            <div class="pagination justify-content-center">
+                <button id="previousPage" class="btn btn-primary-custom btn-sm previous-page">
+                    <i class="fa-solid fa-chevron-left" style="color: #ffffff;"></i>
+                </button>
+
+                <div class="current-and-total-pages">
+                    <span id="currentPage" class="current-page-filter">Página 1 </span>
+                    <span id="totalPages" class="total-page-filter"> de 1</span>
+                </div>
+
+                <button id="nextPage" class="btn btn-primary-custom btn-sm ">
+                    <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
+                </button>
+            </div>
         }
         else
         {

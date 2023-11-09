@@ -25,17 +25,17 @@
         </div>
     </div>
 
-    <div class="filter-display row justify-content-end mb-3">
-        <div class="col-md-3">
+    <div class="filter-display row mb-3 justify-content-end">
+        <div class="col-md-4">
             <label for="dateRangeSelected" class="form-label fw-thin">
                 <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i>
                 DATA:
             </label>
             <select id="dateRangeSelected" name="dateRangeSelected" class="form-select  form-control">
                 <option value="today">Hoje</option>
-                <option value="lastWeek" selected>Última Semana</option>
-                <option value="last15Days">Última Quinzena</option>
-                <option value="lastMonth">Último Mês</option>
+                <option value="lastWeek" selected>Últimos 7 Dias</option>
+                <option value="last15Days">Últimos 15 Dias</option>
+                <option value="lastMonth">Últimos 30 Dias</option>
             </select>
         </div>
 
@@ -153,27 +153,40 @@
                             </tr>
                         </tbody>
                     </table>
+                    <p class="text-end">
+                        <a class="link" asp-controller="Order" asp-action="Orders">>> Ver mais Pedidos</a>
+                    </p>
                 </div>
             </div>
 
-            <div class="chart-card custom-card col-md-4">
-                <h3>
-                    <i class="fas fa-utensils fa-fw me-3"></i>
-                    Sabores mais Pedidos
-                </h3>
-                <hr>
-                <canvas id="mealsChart" class="chart-display"></canvas>
+            <div class="col-md-4">
+                <div class="chart-card custom-card">
+                    <h3>
+                        <i class="fas fa-utensils fa-fw me-3"></i>
+                        Sabores mais Pedidos
+                    </h3>
+                    <hr>
+                    <canvas id="mealsChart" class="chart-display"></canvas>
+                    <p class="text-end mt-4">
+                        <a class="link" asp-controller="Meal" asp-action="Meals">>> Ver mais Sabores</a>
+                    </p>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="chart-card custom-card col-md-4">
-                <h3>
-                    <i class="fas fa-users fa-fw me-3"></i>
-                    Top Clientes
-                </h3>
-                <hr>
-                <canvas id="customersChart" class="chart-display"></canvas>
+            <div class="col-md-4">
+                <div class="chart-card custom-card">
+                    <h3>
+                        <i class="fas fa-users fa-fw me-3"></i>
+                        Top Clientes
+                    </h3>
+                    <hr>
+                    <canvas id="customersChart" class="chart-display"></canvas>
+                    <p class="text-end mt-4">
+                        <a class="link" asp-controller="Meal" asp-action="Meals">>> Ver mais Clientes</a>
+                    </p>
+                </div>
             </div>
 
             <div class="col-md-8">
@@ -193,7 +206,7 @@
                 <div class="chart-card custom-card">
                     <h3>
                         <i class="fa-solid fa-chart-simple fa-fw me-3"></i>
-                        Histórico de Lucro
+                        Margem de Lucro
                     </h3>
                     <hr>
                     <canvas id="ordersProfitChart" class="chart-display"></canvas>
