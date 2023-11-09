@@ -25,6 +25,7 @@ namespace Infrastructure.Data
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
             return services;
         }
