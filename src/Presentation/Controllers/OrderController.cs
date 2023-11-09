@@ -166,7 +166,7 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("detalhes/{orderId}")]
-        public async Task<IActionResult> Details(int orderId)
+        public async Task<IActionResult> Detail(int orderId)
         {
             if (ModelState.IsValid)
             {
@@ -189,7 +189,7 @@ namespace Presentation.Controllers
                         CreatedAt = result.Data.CreatedAt
                     };
 
-                    return PartialView("_Details", getOrderViewModel);
+                    return PartialView("_Detail", getOrderViewModel);
                 }
             }
 

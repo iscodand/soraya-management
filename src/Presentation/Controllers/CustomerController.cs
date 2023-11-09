@@ -48,7 +48,7 @@ namespace Presentation.Controllers
                 getCustomerDtoCollection.Add(viewModel);
             }
 
-            return View(getCustomerDtoCollection.OrderBy(x => x.IsActive == false).ToList());
+            return View(getCustomerDtoCollection.OrderByDescending(x => x.OrdersCount).ToList());
         }
 
         [HttpGet]
@@ -90,7 +90,7 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("detalhes/{customerId}")]
-        public async Task<IActionResult> Details(int customerId)
+        public async Task<IActionResult> Detail(int customerId)
         {
             if (ModelState.IsValid)
             {
