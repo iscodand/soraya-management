@@ -4,22 +4,22 @@
 
 ## Tech Stack
 
-> Development (Back-End)
+> Desenvolvimento (Back-End)
 - `.NET 7`
 - `MSSQL SQL Server`
 - `Entity Framework Core`
 
-> Development (Front-End)
+> Desenvolvimento (Front-End)
 - `HTML, CSS, Javascript`
 - `Bootstrap`
 - `Jquery`
 
-> Unit Testing
+> Teste de Unidade
 - `xUnit`
 - `FakeItEasy`
 - `FluentAssertions`
 
-> Practices
+> Boas Práticas
 - `TDD`
 - `Clean Architecture`
 - `SOLID`
@@ -35,10 +35,7 @@
 
 ## Como Rodar Localmente
 
-> DEVELOPMENT ENVIRONMENT
-
 1°  Clone o repositório localmente
-
 ```bash
 $ git clone 'https://github.com/iscodand/soraya-management'
 $ git checkout -b development
@@ -46,7 +43,6 @@ $ git pull origin development
 ```
 
 2°  Prepare o ambiente com Docker e docker-compose
-
 ```bash
 $ docker-compose build
 ```
