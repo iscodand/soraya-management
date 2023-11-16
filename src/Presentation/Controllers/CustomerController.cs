@@ -52,6 +52,32 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Route("listar-clientes/")]
+        public async Task<IActionResult> ListCustomers()
+        {
+            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            BaseResponse<GetCustomerDto> result = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+
+            List<GetCustomerViewModel> getCustomerDtoCollection = new();
+            foreach (GetCustomerDto customer in result.DataCollection)
+            {
+                GetCustomerViewModel viewModel = new()
+                {
+                    Id = customer.Id,
+                    Name = customer.Name,
+                    Phone = customer.Phone,
+                    IsActive = customer.IsActive,
+                    CreatedBy = customer.CreatedBy,
+                    OrdersCount = customer.OrdersCount
+                };
+
+                getCustomerDtoCollection.Add(viewModel);
+            }
+
+            return Json(new { success = true, message = result.Message, data = getCustomerDtoCollection });
+        }
+
+        [HttpGet]
         [Route("novo/")]
         public IActionResult Create()
         {
