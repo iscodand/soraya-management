@@ -126,7 +126,16 @@ export function createChart(selectedValue, initialDate, finalDate) {
             orders = data['orders'];
 
             // Fill recent orders table
-            fillOrdersTable(orders);
+
+            if (orders.length > 0) {
+                fillOrdersTable(orders);
+            } else {
+                const ordersTable = document.getElementById("orders-table");
+                const noOrdersFound = document.getElementById("no-orders-found");
+
+                ordersTable.classList.add("hidden");
+                noOrdersFound.classList.remove("hidden");
+            }
 
             // Get quantity of orders per day
             const ordersByDay = getOrdersDataByDay(orders, false);

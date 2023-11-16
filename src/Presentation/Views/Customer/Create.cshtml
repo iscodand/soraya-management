@@ -13,8 +13,18 @@
     <section class="create-form container">
 
         <div class="custom-card create-page-title">
-            <h4>Adicione um novo Cliente</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Cadastre um novo Cliente</h4>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4>
+                        <i class="fa-solid fa-user-plus fa-lg"></i>
+                    </h4>
+                </div>
+            </div>
         </div>
+
 
         <form asp-action="Create" asp-antiforgery="true">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -24,7 +34,8 @@
                 <div class="form-outline mb-4">
                     <i class="fa-solid fa-user fa-sm"></i>
                     <label class="form-label fw-bolder">Nome do Cliente</label>
-                    <input class="form-control form-control-lg" asp-for="Name" />
+                    <input class="form-control form-control-lg" asp-for="Name"
+                        placeholder="Nome do Cliente (ou Apelido)" />
                     <span class="text-danger fw-bolder sm" asp-validation-for="Name"></span>
                 </div>
 
@@ -32,7 +43,7 @@
                     <i class="fa-solid fa-phone fa-sm"></i>
                     <label class="form-label fw-bolder">Telefone do Cliente (Não Obrigatório)</label>
                     <input id="customerPhoneInput" type="text" class="form-control form-control-lg" asp-for="Phone"
-                        maxlength="16" />
+                        maxlength="16" placeholder="Telefone do Cliente" />
                     <span class="text-danger fw-bolder sm" asp-validation-for="Phone"></span>
                 </div>
 

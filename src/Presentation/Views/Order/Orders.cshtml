@@ -12,11 +12,11 @@
 <script src="~/js/orders/actions/detailOrderAction.js"></script>
 <script src="~/js/utils/pagination.js"></script>
 
-<section class="container">
+<section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
 
     <div class="custom-card page-title text-center">
         <div class="mb-1">
-            <i class="fa-solid fa-clipboard-list fa-lg"></i>
+
         </div>
         <h3>Pedidos</h3>
         <span id="current-date"></span>
@@ -79,7 +79,7 @@
             <div class="col-md-8 row justify-content-end">
                 <div class="col-md-4">
                     <label for="search-order-filter" class="form-label fw-thin">
-                        <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                        <i class="fa-solid fa-magnifying-glass fa-sm"></i>
                         BUSCAR:
                     </label>
                     <input id="search-order-filter" class="form-control" placeholder="Busque cliente ou sabor" />
@@ -87,11 +87,10 @@
 
                 <div class="col-md-4">
                     <label for="payment-filter" class="form-label fw-thin">
-                        <i class="fa-solid fa-money-bill fa-sm" style="padding-right: 5px;"></i>
+                        <i class="fa-solid fa-money-bill fa-sm"></i>
                         STATUS:
                     </label>
-                    <select id="payment-filter" name="payment-filter" class="form-select form-control"
-                        style="width: 250px;">
+                    <select id="payment-filter" name="payment-filter" class="form-select form-control">
                         <option value="all">Todos</option>
                         <option value="paid">Pagos</option>
                         <option value="unpaid">Pendentes</option>
@@ -101,7 +100,7 @@
                 <div class="col-md-4">
                     <form id="filterByDate-form" asp-controller="Order" asp-action="Orders" method="GET">
                         <label for="createdAt" class="form-label fw-thin">
-                            <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA:
+                            <i class="fa-regular fa-calendar fa-sm"></i> DATA:
                         </label>
                         <input id="createdAt" name="createdAt" type="date" class="form-control"
                             style="max-width: 300px;">

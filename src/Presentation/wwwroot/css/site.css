@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #dfe9f5;
+    background-color: #fafafa;
 }
 
 p {
@@ -24,6 +24,10 @@ i {
 }
 
 /* Some Elements */
+
+.container-fluid {
+    background-color: #fafafa;
+}
 
 .link {
     color: #4D59CB;

@@ -18,43 +18,58 @@
 
 <section class="container-fluid custom-card" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
 
-    <div class="home-title row mb-4">
-        <div class="col-md-6">
-            <h2>@Model.CompanyName</h2>
-            <span id="current-date"></span>
-        </div>
-    </div>
 
-    <div class="filter-display row mb-3 justify-content-end">
-        <div class="col-md-4">
-            <label for="dateRangeSelected" class="form-label fw-thin">
-                <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i>
-                DATA:
-            </label>
-            <select id="dateRangeSelected" name="dateRangeSelected" class="form-select  form-control">
-                <option value="today">Hoje</option>
-                <option value="lastWeek" selected>Últimos 7 Dias</option>
-                <option value="last15Days">Últimos 15 Dias</option>
-                <option value="lastMonth">Últimos 30 Dias</option>
-            </select>
-        </div>
-
-        @* <div class="col-md-3">
-        <label for="initialDate" class="form-label fw-thin">
-        <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA INICIAL:
-        </label>
-        <input id="initialDate" name="initialDate" type="date" class="form-control">
-        </div>
-
-        <div class="col-md-3">
-        <label for="finalDate" class="form-label fw-thin">
-        <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA FINAL:
-        </label>
-        <input id="finalDate" name="finalDate" type="date" class="form-control">
-        </div> *@
+    <div class="dashboard-title">
+        <h1 class="text-center">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+            Dashboard de Pedidos
+        </h1>
     </div>
 
     <div class="custom-card">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="home-title">
+                    <h2>@Model.CompanyName</h2>
+                    <span id="current-date"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="filter-display row mb-3 justify-content-end">
+                    <div class="col-md-6">
+                        <label for="dateRangeSelected" class="form-label fw-thin">
+                            <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i>
+                            DATA:
+                        </label>
+                        <select id="dateRangeSelected" name="dateRangeSelected" class="form-select  form-control">
+                            <option value="today">Hoje</option>
+                            <option value="lastWeek" selected>Últimos 7 Dias</option>
+                            <option value="last15Days">Últimos 15 Dias</option>
+                            <option value="lastMonth">Últimos 30 Dias</option>
+                        </select>
+                    </div>
+
+                    @* <div class="col-md-3">
+                    <label for="initialDate" class="form-label fw-thin">
+                    <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA INICIAL:
+                    </label>
+                    <input id="initialDate" name="initialDate" type="date" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                    <label for="finalDate" class="form-label fw-thin">
+                    <i class="fa-regular fa-calendar fa-sm" style="padding-right: 5px;"></i> DATA FINAL:
+                    </label>
+                    <input id="finalDate" name="finalDate" type="date" class="form-control">
+                    </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="custom-card">
+
         <div class="box-orders-section row">
             <div class="col-md-2">
                 <div class="box-orders">
@@ -153,6 +168,13 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <div id="no-orders-found" class="no-orders-found hidden">
+                        <img src="~/img/nao-encontrado.png">
+                        <h4>Nenhum pedido encontrado. <a asp-controller="Order" asp-action="Create">Clique aqui</a>
+                            para cadastrar um novo pedido.</h4>
+                    </div>
+
                     <p class="text-end">
                         <a class="link" asp-controller="Order" asp-action="Orders">>> Ver mais Pedidos</a>
                     </p>
@@ -184,7 +206,7 @@
                     <hr>
                     <canvas id="customersChart" class="chart-display"></canvas>
                     <p class="text-end mt-4">
-                        <a class="link" asp-controller="Meal" asp-action="Meals">>> Ver mais Clientes</a>
+                        <a class="link" asp-controller="Customer" asp-action="Customers">>> Ver mais Clientes</a>
                     </p>
                 </div>
             </div>
@@ -213,4 +235,5 @@
                 </div>
             </div>
         </div>
+    </section>
 </section>

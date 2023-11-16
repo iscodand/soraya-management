@@ -9,12 +9,21 @@
 
 <link rel="stylesheet" href="~/css/create/create.css" asp-append-version="true" />
 
-<section class="container">
+<section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
 
     <section class="create-form container">
 
         <div class="custom-card create-page-title">
-            <h4>Adicione um novo Sabor</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Cadastre um novo Sabor</h4>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4>
+                        <i class="fa-solid fa-utensils fa-lg"></i>
+                    </h4>
+                </div>
+            </div>
         </div>
 
         <form asp-action="Create" asp-antiforgery="true">

@@ -8,12 +8,22 @@
 @await Component.InvokeAsync("Menu")
 
 <link rel="stylesheet" href="~/css/create/create.css" asp-append-version="true" />
+<script src="~/js/customers/actions/getCustomers.js"></script>
 
-<section class="container">
+<section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
     <section class="create-form container">
 
         <div class="custom-card create-page-title">
-            <h4>Cadastre um novo Pedido</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Cadastre um novo Pedido</h4>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4>
+                        <i class="fa-solid fa-clipboard-list fa-lg"></i>
+                    </h4>
+                </div>
+            </div>
         </div>
 
         <form asp-action="Create" asp-antiforgery="true">
@@ -39,6 +49,21 @@
                                      SelectList(Model.CreateOrderDropdown.Customers, "Id",
                                      "Name")
                                      , new { @class = "form-control form-control-lg" })
+                        </div>
+                        <div class="col-md-2" style="padding-top: 2.3em">
+                            <a class="btn btn-primary-custom" asp-controller="Customer" asp-action="Create">+ Adicionar
+                                Cliente</a>
+                        </div>
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        <div class="col-md-10">
+                            <i class="fa-solid fa-user fa-sm"></i>
+                            <label class="form-label fw-bolder">Cliente</label>
+                            <input type="text" class="form-control" id="userSearch" asp-for="CustomerId"
+                                placeholder="Enter user name">
+                            <div id="userDropdown" class="dropdown-menu" aria-labelledby="userSearch"
+                                style="width:100%;"></div>
                         </div>
                         <div class="col-md-2" style="padding-top: 2.3em">
                             <a class="btn btn-primary-custom" asp-controller="Customer" asp-action="Create">+ Adicionar

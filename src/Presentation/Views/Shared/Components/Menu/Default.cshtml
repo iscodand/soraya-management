@@ -2,67 +2,6 @@
 
 <link rel="stylesheet" href="~/css/navbar/navbar.css" asp-append-version="true" />
 
-@* <nav class="navbar navbar-expand-lg sticky-top mb-5">
-<div class="container-fluid">
-
-<button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample"
-aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
-<i class="fas fa-bars"></i>
-</button>
-
-<div class="collapse navbar-collapse justify-content-center" id="navbarButtonsExample">
-<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-<li class="nav-item">
-<a class="nav-link" asp-controller="Home" asp-action="Home">
-<i class="fa-solid fa-house fa-sm"></i>
-Home
-</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" asp-controller="Order" asp-action="Orders">
-<i class="fa-solid fa-clipboard-list fa-sm"></i>
-Pedidos
-</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" asp-controller="Meal" asp-action="Meals">
-<i class="fa-solid fa-utensils fa-sm"></i>
-Sabores
-</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" asp-controller="Customer" asp-action="Customers">
-<i class="fa-solid fa-users fa-sm"></i>
-Clientes
-</a>
-</li>
-@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-{
-<li class="nav-item">
-<a class="nav-link" asp-controller="Company" asp-action="MyCompany">
-<i class="fa-solid fa-building fa-sm"></i> Minha Empresa
-</a>
-</li>
-}
-</ul>
-
-<div class="d-flex align-items-center">
-<b id="authenticated-user-name" class="px-3 me-2 border-0 bg-transparent"
-style="color: #ffffff; padding-left: 3px">
-<i class="fa-solid fa-user fa-sm" style="color: #ffffff; padding-right: 10px"></i>
-@Model.Name | @Model.CompanyName
-</b>
-<form asp-controller="Authentication" asp-action="Logout">
-<button class="btn btn-danger btn-sm me-3" type="submit">
-Sair
-<i class="fa-solid fa-right-from-bracket fa-sm" style="color: #ffffff; padding-left: 3px"></i>
-</button>
-</form>
-</div>
-</div>
-</div>
-</nav> *@
-
 <!--Main Navigation-->
 <header>
     <!-- Sidebar -->
@@ -101,7 +40,7 @@ Sair
     <!-- Navbar -->
     <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <!-- Container wrapper -->
-        <div class="container-fluid">
+        <div class="container-fluid" style="background-color: #ffffff;">
             <!-- Toggle button -->
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#sidebarMenu"
                 aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
