@@ -1,1 +1,26 @@
 version: '3.9'
+
+services:
+  soraya-management:
+    container_name: soraya-management
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    depends_on:
+      - mssql-server-db
+
+  mssql-server-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    container_name: mssql-server-db
+    volumes:
+      - dev-db-data:/var/opt/mssql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Testing123!
+    ports:
+      - "1433:1433"
+
+volumes:
+  dev-db-data:

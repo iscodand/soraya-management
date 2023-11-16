@@ -113,7 +113,9 @@ namespace Presentation.Controllers
                 }
             }
 
-            return View();
+            BaseResponse<GetRolesDto> roles = await _userService.GetRolesAsync();
+            registerUserViewModel.RolesDropdown = roles.DataCollection;
+            return View(registerUserViewModel);
         }
 
         [HttpGet]
@@ -133,7 +135,8 @@ namespace Presentation.Controllers
                         Name = result.Data.Name,
                         Email = result.Data.Email,
                         Username = result.Data.Username,
-                        IsActive = result.Data.IsActive
+                        IsActive = result.Data.IsActive,
+                        UserRole = result.Data.UserRole
                     };
 
                     return View(detailUserViewModel);
@@ -143,8 +146,8 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Employees));
         }
 
-        [HttpPost]
-        [Route("funcionarios/{employeeUsername}/ativar")]
+        [HttpPatch]
+        [Route("funcionarios/ativar/{employeeUsername}")]
         public async Task<IActionResult> ActivateEmployee(string employeeUsername)
         {
             if (ModelState.IsValid)
@@ -164,8 +167,8 @@ namespace Presentation.Controllers
             return Json(new { success = false, message = "Falha ao ativar funcionário." });
         }
 
-        [HttpPost]
-        [Route("funcionarios/{employeeUsername}/desativar")]
+        [HttpPatch]
+        [Route("funcionarios/desativar/{employeeUsername}")]
         public async Task<IActionResult> DeactivateEmployee(string employeeUsername)
         {
             if (ModelState.IsValid)
@@ -183,6 +186,27 @@ namespace Presentation.Controllers
             }
 
             return Json(new { success = false, message = "Falha ao desativar funcionário." });
+        }
+
+        [HttpDelete]
+        [Route("deletar/{employeeUsername}")]
+        public async Task<IActionResult> DeleteEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
+                                                                                     authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao deletar funcionário." });
         }
     }
 }

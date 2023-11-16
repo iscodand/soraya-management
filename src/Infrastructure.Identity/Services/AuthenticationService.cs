@@ -40,14 +40,23 @@ namespace Infrastructure.Identity.Services
             // Add user to specified Role
             await _userManager.AddToRoleAsync(user, registerUserDto.Role);
 
+            // Verify duplicate e-mail and username
+            Dictionary<string, string> identityErrorMapping = new()
+            {
+                { "DuplicateUserName", "Esse nome de usuário já está em uso." },
+                { "DuplicateEmail", "Esse e-mail já está em uso." }
+            };
+
             if (!result.Succeeded)
             {
-                return new BaseResponse()
+                if (identityErrorMapping.TryGetValue(result.Errors.FirstOrDefault().Code, out string errorDescription))
                 {
-                    Message = "Ops. Um erro ocorreu no cadastro do usuário, verifique e tente novamente.",
-                    Errors = result.Errors.Select(e => e.Description),
-                    IsSuccess = false
-                };
+                    return new BaseResponse()
+                    {
+                        Message = errorDescription,
+                        IsSuccess = false
+                    };
+                }
             }
 
             return new BaseResponse()

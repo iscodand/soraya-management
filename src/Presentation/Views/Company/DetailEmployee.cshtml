@@ -8,8 +8,9 @@
 @await Component.InvokeAsync("Menu")
 
 <link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
+<script type="module" src="~/js/employees/employeesActionsImport.js"></script>
 
-<section class="container">
+<section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
 
     <div class="details-page-title">
         <h2>Perfil do Funcionário - <b>@Model.Name</b></h2>
@@ -21,6 +22,8 @@
             <p><span class="vertical-bar">|</span> Nome: <b>@Model.Name</b></p>
             <p><span class="vertical-bar">|</span> Usuário: <b>@Model.Username</b></p>
             <p><span class="vertical-bar">|</span> E-mail: <b>@Model.Email</b></p>
+            <p><span class="vertical-bar">|</span> Cargo: <b>@Model.UserRole</b></p>
+            <p><span class="vertical-bar">|</span> Ativo: <b>@Model.IsActive</b></p>
         </div>
     </div>
 
@@ -28,6 +31,20 @@
         <a class="btn btn-primary" asp-action="Update" asp-controller="User">
             <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Atualizar Dados</b>
         </a>
+        @if (Model.IsActive)
+        {
+            <button id="deactivate-employee-button" class="btn btn-warning" data-employee-username="@Model.Username">
+                <i class="fa-solid fa-ban" style="color: #ffffff; padding-right: 4px;"></i>
+                Desativar Funcionário
+            </button>
+        }
+        else
+        {
+            <button id="activate-employee-button" class="btn btn-success" data-employee-username="@Model.Username">
+                <i class="fa-solid fa-check" style="color: #ffffff; padding-right: 4px;"></i>
+                Ativar Funcionário
+            </button>
+        }
     </div>
 
 </section>

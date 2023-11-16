@@ -18,7 +18,7 @@ export function createOrUpdateBarChart(ctx, chart, datasetLabel, labels, data, t
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
                 }
             },
             plugins: {

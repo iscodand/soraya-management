@@ -22,7 +22,12 @@ export function createOrUpdateLineChart(ctx, chart, datasetLabel, labels, data, 
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function (value) {
+                            return `R$ ${value}.00`
+                        }
+                    }
                 }
             },
             plugins: {
