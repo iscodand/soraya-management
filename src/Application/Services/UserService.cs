@@ -94,8 +94,8 @@ namespace Application.Services
                 };
             }
 
-            // IdentityUserRole<string> userRole = await _userRoleRepository.GetUserRoleAsync(user.Id);
-            // Role role = await _roleRepository.GetRoleByIdAsync(userRole.RoleId);
+            IdentityUserRole<string> userRole = await _userRoleRepository.GetUserRoleAsync(user.Id);
+            Role role = await _roleRepository.GetRoleByIdAsync(userRole.RoleId);
 
             DetailUserDto detailUserDto = new()
             {
@@ -103,7 +103,7 @@ namespace Application.Services
                 Username = user.UserName,
                 Email = user.Email,
                 IsActive = user.IsActive,
-                UserRole = "role.Description"
+                UserRole = role.Description
             };
 
             return new BaseResponse<DetailUserDto>()
@@ -253,6 +253,11 @@ namespace Application.Services
                 Message = "Usuário foi desativado com sucesso.",
                 IsSuccess = true
             };
+        }
+
+        public async Task<BaseResponse<GetUserDto>> DeleteUserAsync(string username, int companyId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
