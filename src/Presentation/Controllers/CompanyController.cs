@@ -187,5 +187,26 @@ namespace Presentation.Controllers
 
             return Json(new { success = false, message = "Falha ao desativar funcionário." });
         }
+
+        [HttpDelete]
+        [Route("deletar/{employeeUsername}")]
+        public async Task<IActionResult> DeleteEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                BaseResponse<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
+                                                                                     authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao deletar funcionário." });
+        }
     }
 }
