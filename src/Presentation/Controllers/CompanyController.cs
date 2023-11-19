@@ -171,6 +171,7 @@ namespace Presentation.Controllers
         [Route("funcionarios/desativar/{employeeUsername}")]
         public async Task<IActionResult> DeactivateEmployee(string employeeUsername)
         {
+
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
