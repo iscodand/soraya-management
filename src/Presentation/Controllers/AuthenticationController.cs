@@ -3,22 +3,20 @@ using Infrastructure.Identity.Contracts;
 using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
 using Presentation.ViewModels.Authentication;
+using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers
 {
     [Route("auth/")]
-    public class AuthenticationController : Controller
+    public class AuthenticationController : BaseController
     {
         private readonly IAuthenticationService _authenticationService;
-        private readonly ISessionService _sessionService;
 
-        public AuthenticationController(IAuthenticationService authenticationService, ISessionService sessionService)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
-            _sessionService = sessionService;
         }
 
-        // auth/login
         [HttpGet]
         [Route("login/")]
         public IActionResult Login()
@@ -26,7 +24,6 @@ namespace Presentation.Controllers
             return View();
         }
 
-        // auth/login
         [HttpPost]
         [Route("login/")]
         public async Task<IActionResult> Login(LoginUserViewModel loginUserViewModel)
@@ -57,7 +54,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authenticationService.LogoutAsync();
-            _sessionService.RemoveUserSession();
+            SessionService.RemoveUserSession();
             return RedirectToAction("Login");
         }
     }

@@ -3,31 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos.Order;
 using Application.Responses;
-using Infrastructure.Identity.Contracts;
 using Presentation.ViewModels.Order;
 using Application.Dtos.User;
+using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers
 {
     [Authorize]
     [Route("pedidos/")]
-    public class OrderController : Controller
+    public class OrderController : BaseController
     {
         private readonly IOrderService _orderService;
-        private readonly ISessionService _sessionService;
 
-        public OrderController(IOrderService orderService,
-                               ISessionService sessionService)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            _sessionService = sessionService;
         }
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Orders()
         {
-            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
             // Getting today orders
             BaseResponse<GetOrderDto> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
@@ -59,7 +56,7 @@ namespace Presentation.Controllers
         [Route("buscar/")]
         public async Task<IActionResult> FilteringOrders(DateTime? createdAt)
         {
-            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
             // Filter by date has been applied on OrderService
             BaseResponse<GetOrderDto> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, createdAt);
@@ -91,7 +88,7 @@ namespace Presentation.Controllers
         [Route("novo/")]
         public async Task<IActionResult> Create()
         {
-            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
             BaseResponse<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
 
@@ -118,7 +115,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 CreateOrderDto createOrderDto = new()
                 {
@@ -150,7 +147,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<UpdateOrderDto> result = await _orderService.MakeOrderPaymentAsync(orderId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -170,7 +167,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -202,7 +199,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<GetOrderDto> result = await _orderService.DeleteOrderAsync(orderId, authenticatedUser.CompanyId);
                 ViewData["Message"] = result.Message;
 
@@ -224,7 +221,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -270,7 +267,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 UpdateOrderDto updateOrderDto = new()
                 {

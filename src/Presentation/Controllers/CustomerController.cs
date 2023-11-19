@@ -3,33 +3,30 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos.Customer;
 using Application.Responses;
-using Infrastructure.Identity.Contracts;
 using Presentation.ViewModels.Customer;
 using Presentation.ViewModels.Order;
 using Application.Dtos.Order;
 using Application.Dtos.User;
+using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers
 {
     [Authorize]
-    [Route("clientes")]
-    public class CustomerController : Controller
+    [Route("clientes/")]
+    public class CustomerController : BaseController
     {
         private readonly ICustomerService _customerService;
-        private readonly ISessionService _sessionService;
 
-        public CustomerController(ICustomerService customerService,
-                                  ISessionService sessionService)
+        public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
-            _sessionService = sessionService;
         }
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Customers()
         {
-            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
             BaseResponse<GetCustomerDto> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetCustomerViewModel> getCustomerDtoCollection = new();
@@ -55,7 +52,7 @@ namespace Presentation.Controllers
         [Route("listar-clientes/")]
         public async Task<IActionResult> ListCustomers()
         {
-            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
             BaseResponse<GetCustomerDto> result = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetCustomerViewModel> getCustomerDtoCollection = new();
@@ -91,7 +88,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 CreateCustomerDto createCustomerDto = new()
                 {
@@ -120,7 +117,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<DetailCustomerDto> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -168,7 +165,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<GetCustomerDto> result = await _customerService.GetCustomerByIdAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -194,7 +191,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 UpdateCustomerDto updateCustomerDto = new()
                 {
@@ -224,7 +221,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<UpdateCustomerDto> result = await _customerService.ActivateCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -245,7 +242,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<UpdateCustomerDto> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -266,7 +263,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<GetCustomerDto> result = await _customerService.DeleteCustomerAsync(customerId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)

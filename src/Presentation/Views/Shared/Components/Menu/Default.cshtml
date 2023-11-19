@@ -22,11 +22,11 @@
 
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
-                    <a asp-controller="Company" asp-action="Employees"
+                    <a asp-controller="Employee" asp-action="Employees"
                         class="list-group-item list-group-item-action py-2 ripple">
                         <i class="fas fa-user-group fa-fw me-3"></i>
                         <span>Meus Funcionários</span></a>
-                    <a asp-controller="Company" asp-action="MyCompany"
+                    <a asp-controller="Employee" asp-action="MyCompany"
                         class="list-group-item list-group-item-action py-2 ripple">
                         <i class="fas fa-building fa-fw me-3"></i>
                         <span>Minha Empresa</span>
