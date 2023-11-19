@@ -58,21 +58,6 @@
 
                     <div class="form-outline mb-4 row">
                         <div class="col-md-10">
-                            <i class="fa-solid fa-user fa-sm"></i>
-                            <label class="form-label fw-bolder">Cliente</label>
-                            <input type="text" class="form-control" id="userSearch" asp-for="CustomerId"
-                                placeholder="Enter user name">
-                            <div id="userDropdown" class="dropdown-menu" aria-labelledby="userSearch"
-                                style="width:100%;"></div>
-                        </div>
-                        <div class="col-md-2" style="padding-top: 2.3em">
-                            <a class="btn btn-primary-custom" asp-controller="Customer" asp-action="Create">+ Adicionar
-                                Cliente</a>
-                        </div>
-                    </div>
-
-                    <div class="form-outline mb-4 row">
-                        <div class="col-md-10">
                             <i class="fa-solid fa-utensils fa-sm"></i>
                             <label class="form-label fw-bolder">Sabor da Quentinha</label>
                             @Html.DropDownListFor(model => model.MealId, new

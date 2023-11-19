@@ -12,6 +12,7 @@ let ordersProfitChartElement = document.getElementById('ordersProfitChart').getC
 
 // Elements for Boxes
 let newOrdersCount = document.getElementById("home-new-orders-count");
+let totalOrdersSum = document.getElementById("home-total-orders-sum");
 let paidOrdersSum = document.getElementById("home-paid-orders-sum");
 let unpaidOrdersSum = document.getElementById("home-unpaid-orders-sum");
 let paidOrdersCount = document.getElementById("home-paid-orders-count");
@@ -126,13 +127,14 @@ export function createChart(selectedValue, initialDate, finalDate) {
             orders = data['orders'];
 
             // Fill recent orders table
+            const ordersTable = document.getElementById("orders-table");
+            const noOrdersFound = document.getElementById("no-orders-found");
 
             if (orders.length > 0) {
                 fillOrdersTable(orders);
+                noOrdersFound.classList.add("hidden");
+                ordersTable.classList.remove("hidden");
             } else {
-                const ordersTable = document.getElementById("orders-table");
-                const noOrdersFound = document.getElementById("no-orders-found");
-
                 ordersTable.classList.add("hidden");
                 noOrdersFound.classList.remove("hidden");
             }
@@ -182,6 +184,7 @@ export function createChart(selectedValue, initialDate, finalDate) {
 
             // Define value of boxes data
             newOrdersCount.textContent = calculateSum(mealsOrdersCount);
+            totalOrdersSum.textContent = `R$ ${(paidOrdersSumValue + unpaidOrdersSumValue).toFixed(2)}`;
             paidOrdersSum.textContent = `R$ ${paidOrdersSumValue.toFixed(2)}`;
             unpaidOrdersSum.textContent = `R$ ${unpaidOrdersSumValue.toFixed(2)}`;
             paidOrdersCount.textContent = paidOrdersCountValue;
