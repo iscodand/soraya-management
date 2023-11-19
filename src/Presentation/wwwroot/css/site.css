@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #dfe9f5;
+    background-color: #fafafa;
 }
 
 p {
@@ -24,6 +24,22 @@ i {
 }
 
 /* Some Elements */
+
+.container-fluid {
+    background-color: #fafafa;
+}
+
+.link {
+    color: #4D59CB;
+    font-weight: bolder;
+    transition: transform 0.3s ease;
+}
+
+.link:hover {
+    color: #37419c;
+    text-decoration: underline;
+    transform: scale(1.05);
+}
 
 .custom-card {
     background-color: #fafafa;

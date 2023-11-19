@@ -44,7 +44,7 @@ namespace Presentation.Controllers
                 viewModelCollection.Add(viewModel);
             }
 
-            return View(viewModelCollection);
+            return View(viewModelCollection.OrderByDescending(x => x.OrdersCount).ToList());
         }
 
         [HttpGet]
@@ -86,7 +86,7 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("detalhes/{mealId}")]
-        public async Task<IActionResult> Details(int mealId)
+        public async Task<IActionResult> Detail(int mealId)
         {
             if (ModelState.IsValid)
             {

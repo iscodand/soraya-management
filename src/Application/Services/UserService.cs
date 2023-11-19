@@ -3,6 +3,7 @@ using Application.Dtos.User;
 using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Data.Contracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services
 {
@@ -10,11 +11,15 @@ namespace Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository)
+        public UserService(IUserRepository userRepository,
+                           IRoleRepository roleRepository,
+                           IUserRoleRepository userRoleRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _userRoleRepository = userRoleRepository;
         }
 
         public async Task<BaseResponse<GetUserDto>> GetUsersByCompanyAsync(int companyId)
@@ -51,6 +56,7 @@ namespace Application.Services
             {
                 GetRolesDto getRolesDto = new()
                 {
+                    Id = role.Id,
                     Name = role.Name,
                     Description = role.Description
                 };
@@ -88,12 +94,16 @@ namespace Application.Services
                 };
             }
 
+            IdentityUserRole<string> userRole = await _userRoleRepository.GetUserRoleAsync(user.Id);
+            Role role = await _roleRepository.GetRoleByIdAsync(userRole.RoleId);
+
             DetailUserDto detailUserDto = new()
             {
                 Name = user.Name,
                 Username = user.UserName,
                 Email = user.Email,
-                IsActive = user.IsActive
+                IsActive = user.IsActive,
+                UserRole = role.Description
             };
 
             return new BaseResponse<DetailUserDto>()
@@ -154,7 +164,7 @@ namespace Application.Services
             }
 
             user.Update(updateUserDto.Name, updateUserDto.NewEmail, updateUserDto.NewUsername);
-            await _userRepository.SaveAsync();
+            await _userRepository.UpdateAsync(user);
 
             return new BaseResponse<UpdateUserDto>()
             {
@@ -195,6 +205,7 @@ namespace Application.Services
             }
 
             user.Activate();
+            await _userRepository.UpdateAsync(user);
 
             return new BaseResponse<GetUserDto>()
             {
@@ -235,12 +246,18 @@ namespace Application.Services
             }
 
             user.Deactivate();
+            await _userRepository.UpdateAsync(user);
 
             return new BaseResponse<GetUserDto>()
             {
                 Message = "Usuário foi desativado com sucesso.",
                 IsSuccess = true
             };
+        }
+
+        public async Task<BaseResponse<GetUserDto>> DeleteUserAsync(string username, int companyId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

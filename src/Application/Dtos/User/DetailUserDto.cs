@@ -6,6 +6,7 @@ namespace Application.Dtos.User
         public string Username { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
+        public string UserRole { get; set; }
 
         public ICollection<Domain.Entities.Order> Orders { get; set; }
         public ICollection<Domain.Entities.Customer> Customers { get; set; }

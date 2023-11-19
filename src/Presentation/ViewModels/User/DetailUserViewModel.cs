@@ -6,5 +6,6 @@ namespace Presentation.ViewModels.User
         public string Username { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
+        public string UserRole { get; set; }
     }
 }

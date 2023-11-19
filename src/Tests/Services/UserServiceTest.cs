@@ -12,12 +12,14 @@ namespace Tests.Services
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
 
         public UserServiceTest()
         {
             _userRepository = A.Fake<IUserRepository>();
             _roleRepository = A.Fake<IRoleRepository>();
-            _userService = new UserService(_userRepository, _roleRepository);
+            _userRoleRepository = A.Fake<IUserRoleRepository>();
+            _userService = new UserService(_userRepository, _roleRepository, _userRoleRepository);
         }
 
         // Scenarios - Update User
