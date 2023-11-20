@@ -2,31 +2,29 @@ using Application.Contracts;
 using Application.Dtos.Meal;
 using Application.Dtos.User;
 using Application.Responses;
-using Infrastructure.Identity.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Controllers.Common;
 using Presentation.ViewModels.Meal;
 
 namespace Presentation.Controllers
 {
     [Route("sabores/")]
     [Authorize]
-    public class MealController : Controller
+    public class MealController : BaseController
     {
         private readonly IMealService _mealService;
-        private readonly ISessionService _sessionService;
 
-        public MealController(IMealService mealService, ISessionService sessionService)
+        public MealController(IMealService mealService)
         {
             _mealService = mealService;
-            _sessionService = sessionService;
         }
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Meals()
         {
-            GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
             BaseResponse<GetMealDto> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetMealViewModel> viewModelCollection = new();
@@ -61,7 +59,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 CreateMealDto createMealDto = new()
                 {
@@ -90,7 +88,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -117,7 +115,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 BaseResponse<GetMealDto> result = await _mealService.GetMealByIdAsync(mealId, authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
@@ -143,7 +141,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 UpdateMealDto updateMealDto = new()
                 {
@@ -170,7 +168,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 DeleteMealDto deleteMealDto = new()
                 {

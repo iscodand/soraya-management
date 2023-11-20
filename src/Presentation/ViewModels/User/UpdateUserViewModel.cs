@@ -1,7 +1,8 @@
-namespace Application.Dtos.User
+namespace Presentation.ViewModels.User
 {
-    public class UpdateUserDto
+    public class UpdateUserViewModel
     {
+        public string Id { get; set; }
         public string Username { get; set; }
         public string NewUsername { get; set; }
         public string NewEmail { get; set; }
