@@ -3,6 +3,8 @@ using Domain.Entities;
 using Infrastructure.Identity.Contracts;
 using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
+using System.Text;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Infrastructure.Identity.Services
 {
@@ -102,6 +104,45 @@ namespace Infrastructure.Identity.Services
             return new BaseResponse()
             {
                 Message = "Login realizado com sucesso",
+                IsSuccess = true
+            };
+        }
+
+        public async Task<BaseResponse> ForgotPasswordAsync(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user is null)
+            {
+                return new BaseResponse()
+                {
+                    Message = "Usuário não encontrado.",
+                    IsSuccess = false
+                };
+            }
+            // Isco 24/11/2023
+            // Gerando token para recuperação de senha (após gerar o token com o Identity, ele é criptografado para aumentar a segurança)
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            byte[] encodingToken = Encoding.UTF8.GetBytes(token);
+            string validToken = WebEncoders.Base64UrlEncode(encodingToken);
+
+            // string url = $"{origin}/auth/nova-senha?email={user.Email}&token={validToken}";
+
+            // SendMailRequest sendMailRequest = new()
+            // {
+            //     To = user.Email,
+            //     Subject = "Recuperar Senha - Seletivo ABREM",
+            //     TemplatePath = "ForgotPasswordTemplate.html",
+            //     Parameters = {
+            //         { "user.FullName", user.Candidate.FullName },
+            //         { "url", url }
+            //     }
+            // };
+
+            // await _emailService.SendEmailAsync(sendMailRequest);
+
+            return new BaseResponse()
+            {
+                Message = "Foi enviado um link de recuperação para o seu e-mail.",
                 IsSuccess = true
             };
         }

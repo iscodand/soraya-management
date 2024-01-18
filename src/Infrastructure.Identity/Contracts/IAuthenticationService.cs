@@ -8,6 +8,7 @@ namespace Infrastructure.Identity.Contracts
     {
         public Task<BaseResponse> RegisterAsync(RegisterUserDto registerUserDto);
         public Task<BaseResponse> LoginAsync(LoginUserDto loginUserDto);
+        public Task<BaseResponse> ForgotPasswordAsync(string email);
         public Task<BaseResponse> LogoutAsync();
     }
 }

@@ -48,14 +48,36 @@ namespace Presentation.Controllers
             return View();
         }
 
-        // auth/logout
+        [HttpGet("recuperar-senha")]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost("recuperar-senha")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                BaseResponse result = await _authenticationService.ForgotPasswordAsync(viewModel.Email);
+                ViewData["Message"] = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Login));
+                }
+            }
+
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _authenticationService.LogoutAsync();
             SessionService.RemoveUserSession();
-            return RedirectToAction("Login");
+            return RedirectToAction(nameof(Login));
         }
     }
 }
