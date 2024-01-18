@@ -137,6 +137,62 @@ namespace Presentation.Controllers
             return RedirectToAction(nameof(Employees));
         }
 
+        [HttpGet]
+        [Route("editar/{employeeUsername}")]
+        public async Task<IActionResult> UpdateEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                BaseResponse<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    UpdateUserViewModel updateUserViewModel = new()
+                    {
+                        Username = employeeUsername,
+                        NewUsername = result.Data.Username,
+                        Name = result.Data.Name,
+                        NewEmail = result.Data.Email,
+                    };
+
+                    return View(updateUserViewModel);
+                }
+            }
+
+            return View(nameof(Employees));
+        }
+
+        [HttpPost]
+        [Route("editar/{employeeUsername}")]
+        public async Task<IActionResult> UpdateEmployee(string employeeUsername, UpdateUserViewModel updateUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+
+                UpdateUserDto updateUserDto = new()
+                {
+                    Name = updateUserViewModel.Name,
+                    Username = employeeUsername,
+                    NewUsername = updateUserViewModel.NewUsername,
+                    NewEmail = updateUserViewModel.NewEmail,
+                    CompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<UpdateUserDto> result = await _userService.UpdateUserAsync(updateUserDto);
+                ViewData["Message"] = result.Message;
+                ViewData["IsSuccess"] = result.IsSuccess;
+
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Employees));
+                }
+            }
+
+            return View(updateUserViewModel);
+        }
+
         [HttpPatch]
         [Route("ativar/{employeeUsername}")]
         public async Task<IActionResult> ActivateEmployee(string employeeUsername)
