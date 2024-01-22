@@ -1,6 +1,6 @@
-using Application.Dtos.User;
+using Application.DTOs.Authentication;
 
-namespace Infrastructure.Identity.Contracts
+namespace Application.Contracts
 {
     public interface IAuthenticatedUserService
     {

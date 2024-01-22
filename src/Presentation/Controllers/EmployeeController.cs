@@ -1,8 +1,7 @@
 using Application.Contracts;
 using Application.Dtos.User;
+using Application.DTOs.Authentication;
 using Application.Responses;
-using Infrastructure.Identity.Contracts;
-using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -94,7 +93,7 @@ namespace Presentation.Controllers
                     CompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse result = await _authenticationService.RegisterAsync(registerUserDto);
+                BaseResponse<string> result = await _authenticationService.RegisterAsync(registerUserDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)

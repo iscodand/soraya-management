@@ -1,7 +1,7 @@
 using Application.Dtos.User;
-using Domain.Entities;
+using Application.DTOs.Authentication;
 
-namespace Infrastructure.Identity.Contracts
+namespace Application.Contracts
 {
     public interface ISessionService
     {

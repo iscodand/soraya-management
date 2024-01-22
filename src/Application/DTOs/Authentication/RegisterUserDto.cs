@@ -1,4 +1,4 @@
-namespace Infrastructure.Identity.Dtos
+namespace Application.DTOs.Authentication
 {
     public class RegisterUserDto
     {

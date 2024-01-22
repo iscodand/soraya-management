@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Identity.Contracts;
-using Infrastructure.Identity.Dtos;
-using Infrastructure.Identity.Responses;
 using Presentation.ViewModels.Authentication;
 using Presentation.Controllers.Common;
+using Application.Contracts;
+using Application.DTOs.Authentication;
+using Application.Responses;
 
 namespace Presentation.Controllers
 {
@@ -36,7 +36,7 @@ namespace Presentation.Controllers
                     Password = loginUserViewModel.Password
                 };
 
-                BaseResponse result = await _authenticationService.LoginAsync(loginUserDto);
+                BaseResponse<string> result = await _authenticationService.LoginAsync(loginUserDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)
@@ -59,7 +59,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                BaseResponse result = await _authenticationService.ForgotPasswordAsync(viewModel.Email);
+                BaseResponse<string> result = await _authenticationService.ForgotPasswordAsync(viewModel.Email, Request.Headers.Origin.ToString());
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)

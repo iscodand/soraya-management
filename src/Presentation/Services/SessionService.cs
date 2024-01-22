@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
-using Domain.Entities;
-using Infrastructure.Identity.Contracts;
-using Application.Dtos.User;
+using Application.DTOs.Authentication;
+using Application.Contracts;
 
 namespace Presentation.Services
 {

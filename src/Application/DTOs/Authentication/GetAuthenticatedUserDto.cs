@@ -1,4 +1,4 @@
-namespace Application.Dtos.User
+namespace Application.DTOs.Authentication
 {
     public class GetAuthenticatedUserDto
     {

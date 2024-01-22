@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Identity;
+using Application.Contracts;
+using Application.DTOs.Authentication;
+using Application.Responses;
 using Domain.Entities;
-using Infrastructure.Identity.Contracts;
-using Infrastructure.Identity.Dtos;
 using Infrastructure.Identity.Responses;
-using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace Infrastructure.Identity.Services
 {
@@ -19,11 +20,11 @@ namespace Infrastructure.Identity.Services
             _signInManager = signInManager;
         }
 
-        public async Task<BaseResponse> RegisterAsync(RegisterUserDto registerUserDto)
+        public async Task<BaseResponse<string>> RegisterAsync(RegisterUserDto registerUserDto)
         {
             if (registerUserDto == null)
             {
-                return new BaseResponse()
+                return new BaseResponse<string>()
                 {
                     Message = "Usuário não pode ser nulo.",
                     IsSuccess = false
@@ -53,7 +54,7 @@ namespace Infrastructure.Identity.Services
             {
                 if (identityErrorMapping.TryGetValue(result.Errors.FirstOrDefault().Code, out string errorDescription))
                 {
-                    return new BaseResponse()
+                    return new BaseResponse<string>()
                     {
                         Message = errorDescription,
                         IsSuccess = false
@@ -61,20 +62,20 @@ namespace Infrastructure.Identity.Services
                 }
             }
 
-            return new BaseResponse()
+            return new BaseResponse<string>()
             {
                 Message = "Usuário cadastrado com sucesso",
                 IsSuccess = true
             };
         }
 
-        public async Task<BaseResponse> LoginAsync(LoginUserDto loginUserDto)
+        public async Task<BaseResponse<string>> LoginAsync(LoginUserDto loginUserDto)
         {
             User user = await _userManager.FindByNameAsync(loginUserDto.UserName);
 
             if (user == null)
             {
-                return new BaseResponse()
+                return new BaseResponse<string>()
                 {
                     Message = "Usuário não encontrado. Verifique e tente novamente",
                     IsSuccess = false
@@ -83,7 +84,7 @@ namespace Infrastructure.Identity.Services
 
             if (!user.IsActive)
             {
-                return new BaseResponse()
+                return new BaseResponse<string>()
                 {
                     Message = "Usuário está inativo no sistema. Consulte seu gestor e tente novamente.",
                     IsSuccess = false
@@ -94,26 +95,26 @@ namespace Infrastructure.Identity.Services
                                                                            isPersistent: false, lockoutOnFailure: false);
             if (!signIn.Succeeded)
             {
-                return new BaseResponse()
+                return new BaseResponse<string>()
                 {
                     Message = "Senha inválida. Verifique e tente novamente.",
                     IsSuccess = false
                 };
             }
 
-            return new BaseResponse()
+            return new BaseResponse<string>()
             {
                 Message = "Login realizado com sucesso",
                 IsSuccess = true
             };
         }
 
-        public async Task<BaseResponse> ForgotPasswordAsync(string email)
+        public async Task<BaseResponse<string>> ForgotPasswordAsync(string email, string origin)
         {
             User user = await _userManager.FindByEmailAsync(email);
             if (user is null)
             {
-                return new BaseResponse()
+                return new BaseResponse<string>()
                 {
                     Message = "Usuário não encontrado.",
                     IsSuccess = false
@@ -125,7 +126,7 @@ namespace Infrastructure.Identity.Services
             byte[] encodingToken = Encoding.UTF8.GetBytes(token);
             string validToken = WebEncoders.Base64UrlEncode(encodingToken);
 
-            // string url = $"{origin}/auth/nova-senha?email={user.Email}&token={validToken}";
+            string url = $"{origin}/auth/nova-senha?email={user.Email}&token={validToken}";
 
             // SendMailRequest sendMailRequest = new()
             // {
@@ -133,25 +134,25 @@ namespace Infrastructure.Identity.Services
             //     Subject = "Recuperar Senha - Seletivo ABREM",
             //     TemplatePath = "ForgotPasswordTemplate.html",
             //     Parameters = {
-            //         { "user.FullName", user.Candidate.FullName },
+            //         { "user.FullName", user.Name },
             //         { "url", url }
             //     }
             // };
 
             // await _emailService.SendEmailAsync(sendMailRequest);
 
-            return new BaseResponse()
+            return new BaseResponse<string>()
             {
                 Message = "Foi enviado um link de recuperação para o seu e-mail.",
                 IsSuccess = true
             };
         }
 
-        public async Task<BaseResponse> LogoutAsync()
+        public async Task<BaseResponse<string>> LogoutAsync()
         {
             await _signInManager.SignOutAsync();
 
-            return new BaseResponse()
+            return new BaseResponse<string>()
             {
                 Message = "Logout realizado com sucesso.",
                 IsSuccess = true

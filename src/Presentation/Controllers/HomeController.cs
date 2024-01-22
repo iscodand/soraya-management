@@ -1,10 +1,9 @@
+using Application.Contracts;
+using Application.Dtos.Data;
+using Application.DTOs.Authentication;
+using Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Identity.Contracts;
-using Application.Dtos.User;
-using Application.Contracts;
-using Application.Responses;
-using Application.Dtos.Data;
 using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers

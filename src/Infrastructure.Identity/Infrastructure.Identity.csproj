@@ -9,6 +9,6 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.10" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.Data\Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 </Project>

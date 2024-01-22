@@ -1,7 +1,7 @@
 using Application;
+using Application.Contracts;
 using Infrastructure.Data;
 using Infrastructure.Identity;
-using Infrastructure.Identity.Contracts;
 using Newtonsoft.Json;
 using Presentation.Services;
 

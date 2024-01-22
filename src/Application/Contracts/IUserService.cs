@@ -11,6 +11,5 @@ namespace Application.Contracts
         public Task<BaseResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto);
         public Task<BaseResponse<GetUserDto>> ActivateUserAsync(string username, int companyId);
         public Task<BaseResponse<GetUserDto>> DeactivateUserAsync(string username, int companyId);
-        public Task<BaseResponse<GetUserDto>> DeleteUserAsync(string username, int companyId);
     }
 }
