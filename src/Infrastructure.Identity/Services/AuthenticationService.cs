@@ -115,7 +115,7 @@ namespace Infrastructure.Identity.Services
             {
                 return new BaseResponse<string>()
                 {
-                    Message = "Usuário não encontrado.",
+                    Message = "Esse e-mail não está cadastrado. Verifique e tente novamente.",
                     IsSuccess = false
                 };
             }
