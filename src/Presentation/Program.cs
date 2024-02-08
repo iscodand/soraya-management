@@ -2,9 +2,12 @@ using Application;
 using Application.Contracts.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Shared;
 using Newtonsoft.Json;
-using Presentation.Extension;
+using Presentation.Extensions;
 using Presentation.Services;
+
+DotEnv.Load();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,9 @@ builder.Services.AddIdentitySetup();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add shared services
+builder.Services.AddSharedServices();
 
 // Add session settings
 builder.Services.AddSession(options =>

@@ -7,5 +7,7 @@ namespace Application.DTOs.Email
         public string Body { get; set; }
         public string TemplatePath { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
+
+        public SendMailRequest() { }
     }
 }

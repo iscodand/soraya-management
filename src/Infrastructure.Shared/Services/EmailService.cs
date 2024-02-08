@@ -22,6 +22,11 @@ namespace Infrastructure.Shared.Services
             _ = int.TryParse(Environment.GetEnvironmentVariable("EMAIL_PORT"),
                              out int port);
 
+            Console.WriteLine(password);
+            Console.WriteLine(email);
+            Console.WriteLine(host);
+            Console.WriteLine(port);
+
             // SMTP Settings
             smtp.UseDefaultCredentials = false;
             smtp.Credentials = new NetworkCredential(email, password);

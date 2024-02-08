@@ -1,5 +1,6 @@
 using Application.Contracts.Services;
 using Application.DTOs.Authentication;
+using Application.DTOs.Email;
 using Application.Responses;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -12,11 +13,15 @@ namespace Infrastructure.Identity.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IEmailService _emailService;
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthenticationService(UserManager<User> userManager,
+                                     SignInManager<User> signInManager,
+                                     IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailService = emailService;
         }
 
         public async Task<BaseResponse<string>> RegisterAsync(RegisterUserDto registerUserDto)
@@ -128,18 +133,19 @@ namespace Infrastructure.Identity.Services
 
             string url = $"{origin}/auth/nova-senha?email={user.Email}&token={validToken}";
 
-            // SendMailRequest sendMailRequest = new()
-            // {
-            //     To = user.Email,
-            //     Subject = "Recuperar Senha - Seletivo ABREM",
-            //     TemplatePath = "ForgotPasswordTemplate.html",
-            //     Parameters = {
-            //         { "user.FullName", user.Name },
-            //         { "url", url }
-            //     }
-            // };
+            SendMailRequest sendMailRequest = new()
+            {
+                To = user.Email,
+                Subject = "Recuperar Senha",
+                Body = "teste"
+                // TemplatePath = "ForgotPasswordTemplate.html",
+                // Parameters = {
+                //     { "user.FullName", user.Name },
+                //     { "url", url }
+                // }
+            };
 
-            // await _emailService.SendEmailAsync(sendMailRequest);
+            await _emailService.SendMailAsync(sendMailRequest);
 
             return new BaseResponse<string>()
             {
