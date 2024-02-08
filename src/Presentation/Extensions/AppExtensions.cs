@@ -4,7 +4,7 @@ using Infrastructure.Data.DataContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Presentation.Extension
+namespace Presentation.Extensions
 {
     public static class AppExtensions
     {

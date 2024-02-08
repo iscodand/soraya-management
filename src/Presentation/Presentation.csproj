@@ -6,10 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="NewFolder\**" />
-	  <Content Remove="NewFolder\**" />
-	  <EmbeddedResource Remove="NewFolder\**" />
-	  <None Remove="NewFolder\**" />
+		<Compile Remove="NewFolder\**" />
+		<Content Remove="NewFolder\**" />
+		<EmbeddedResource Remove="NewFolder\**" />
+		<None Remove="NewFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -29,4 +29,7 @@
 		<Folder Include="Views\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include=".env" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
 </Project>
