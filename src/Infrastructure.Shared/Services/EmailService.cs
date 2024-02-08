@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Mail;
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.DTOs.Email;
 
 namespace Infrastructure.Shared.Services
