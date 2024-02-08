@@ -1,8 +1,7 @@
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.DTOs.Authentication;
 using Application.Responses;
 using Domain.Entities;
-using Infrastructure.Identity.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -120,6 +119,7 @@ namespace Infrastructure.Identity.Services
                     IsSuccess = false
                 };
             }
+
             // Isco 24/11/2023
             // Gerando token para recuperação de senha (após gerar o token com o Identity, ele é criptografado para aumentar a segurança)
             string token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -146,6 +146,11 @@ namespace Infrastructure.Identity.Services
                 Message = "Foi enviado um link de recuperação para o seu e-mail.",
                 IsSuccess = true
             };
+        }
+
+        public Task<BaseResponse<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<BaseResponse<string>> LogoutAsync()
