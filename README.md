@@ -2,6 +2,8 @@
 
 > Sistema de Gerenciamento para pequenas empresas de vendas de marmita.
 
+https://github.com/iscodand/soraya-management/assets/81825284/348dbdbb-4116-41d1-bd1e-63b4246808b1
+
 ## Tech Stack
 
 > Desenvolvimento (Back-End)
