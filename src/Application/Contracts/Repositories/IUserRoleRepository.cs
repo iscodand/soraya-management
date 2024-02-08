@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Data.Contracts
+namespace Application.Contracts.Repositories
 {
     public interface IUserRoleRepository
     {

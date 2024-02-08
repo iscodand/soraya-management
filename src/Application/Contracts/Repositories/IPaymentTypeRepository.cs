@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Infrastructure.Data.Contracts
+namespace Application.Contracts.Repositories
 {
     public interface IPaymentTypeRepository : IGenericRepository<PaymentType>
     {

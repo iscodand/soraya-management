@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.Menu;
-using Application.Contracts;
 using Application.DTOs.Authentication;
+using Application.Contracts.Services;
 
 namespace Presentation.ViewComponents
 {

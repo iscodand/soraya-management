@@ -1,9 +1,9 @@
-using Application.Contracts;
 using Application.Dtos.User;
 using Application.Responses;
 using Domain.Entities;
-using Infrastructure.Data.Contracts;
+using Application.Contracts.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Application.Contracts.Services;
 
 namespace Application.Services
 {

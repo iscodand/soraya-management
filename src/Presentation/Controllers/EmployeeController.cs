@@ -1,8 +1,7 @@
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.Dtos.User;
 using Application.DTOs.Authentication;
 using Application.Responses;
-using Infrastructure.Identity.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Controllers.Common;

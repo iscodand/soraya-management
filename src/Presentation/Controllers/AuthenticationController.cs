@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.Authentication;
 using Presentation.Controllers.Common;
-using Application.Contracts;
 using Application.DTOs.Authentication;
 using Application.Responses;
+using Application.Contracts.Services;
 
 namespace Presentation.Controllers
 {
@@ -64,10 +64,16 @@ namespace Presentation.Controllers
 
                 if (result.IsSuccess)
                 {
-                    return RedirectToAction(nameof(Login));
+                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
                 }
             }
 
+            return View();
+        }
+
+        [HttpGet("recuperar-senha/confirm")]
+        public IActionResult ForgotPasswordConfirmation()
+        {
             return View();
         }
 

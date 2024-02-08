@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 using Application.DTOs.Authentication;
-using Application.Contracts;
+using Application.Contracts.Services;
 
 namespace Presentation.Services
 {

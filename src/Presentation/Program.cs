@@ -1,8 +1,9 @@
 using Application;
-using Application.Contracts;
+using Application.Contracts.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Newtonsoft.Json;
+using Presentation.Extension;
 using Presentation.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,16 @@ builder.Services.AddSession(options =>
 });
 
 WebApplication app = builder.Build();
+
+try
+{
+    app.ApplyMigrations();
+    await app.SeedDatabaseAsync();
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

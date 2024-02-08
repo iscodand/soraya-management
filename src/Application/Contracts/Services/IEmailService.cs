@@ -1,6 +1,6 @@
 using Application.DTOs.Email;
 
-namespace Application.Contracts
+namespace Application.Contracts.Services
 {
     public interface IEmailService
     {

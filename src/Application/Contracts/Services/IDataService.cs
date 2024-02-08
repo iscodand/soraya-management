@@ -1,7 +1,7 @@
 using Application.Dtos.Data;
 using Application.Responses;
 
-namespace Application.Contracts
+namespace Application.Contracts.Services
 {
     public interface IDataService
     {

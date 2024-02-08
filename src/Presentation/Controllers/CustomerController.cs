@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Contracts;
 using Application.Dtos.Customer;
 using Application.Responses;
 using Presentation.ViewModels.Customer;
 using Presentation.ViewModels.Order;
 using Application.Dtos.Order;
-using Application.Dtos.User;
 using Presentation.Controllers.Common;
 using Application.DTOs.Authentication;
+using Application.Contracts.Services;
 
 namespace Presentation.Controllers
 {

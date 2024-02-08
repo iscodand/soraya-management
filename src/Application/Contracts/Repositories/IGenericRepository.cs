@@ -1,6 +1,6 @@
 using Domain.Entities.Common;
 
-namespace Infrastructure.Data.Contracts
+namespace Application.Contracts.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {

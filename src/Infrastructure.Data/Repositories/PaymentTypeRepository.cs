@@ -1,5 +1,5 @@
 using Domain.Entities;
-using Infrastructure.Data.Contracts;
+using Application.Contracts.Repositories;
 using Infrastructure.Data.DataContext;
 
 namespace Infrastructure.Data.Repositories

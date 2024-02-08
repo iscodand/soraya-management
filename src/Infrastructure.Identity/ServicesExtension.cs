@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Domain.Entities;
 using Infrastructure.Identity.Services;
-using Application.Contracts;
+using Application.Contracts.Services;
 using Infrastructure.Data.DataContext;
 
 namespace Infrastructure.Identity

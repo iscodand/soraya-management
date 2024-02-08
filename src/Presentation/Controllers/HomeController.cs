@@ -1,4 +1,4 @@
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.Dtos.Data;
 using Application.DTOs.Authentication;
 using Application.Responses;
@@ -47,7 +47,7 @@ namespace Presentation.Controllers
                     { "today", 0 },
                     { "lastWeek", -7 },
                     { "last15Days", -15 },
-                    { "lastMonth", -30 }
+                    { "lastMonth", -365 }
                 };
 
                 if (dateMappings.TryGetValue(selectedDate, out int daysToSubtract))
