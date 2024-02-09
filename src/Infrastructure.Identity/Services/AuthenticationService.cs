@@ -131,13 +131,13 @@ namespace Infrastructure.Identity.Services
             byte[] encodingToken = Encoding.UTF8.GetBytes(token);
             string validToken = WebEncoders.Base64UrlEncode(encodingToken);
 
-            string url = $"{origin}/auth/nova-senha?email={user.Email}&token={validToken}";
+            string url = $"{origin}/nova-senha?email={user.Email}&token={validToken}";
 
             SendMailRequest sendMailRequest = new()
             {
                 To = user.Email,
                 Subject = "Recuperar Senha",
-                Body = "teste"
+                Body = url
                 // TemplatePath = "ForgotPasswordTemplate.html",
                 // Parameters = {
                 //     { "user.FullName", user.Name },
@@ -154,9 +154,43 @@ namespace Infrastructure.Identity.Services
             };
         }
 
-        public Task<BaseResponse<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        public async Task<BaseResponse<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
-            throw new NotImplementedException();
+            User user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
+            if (user is null)
+            {
+                return new BaseResponse<string>()
+                {
+                    Message = "Esse e-mail não está cadastrado. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            bool passwordAlreadyRegistered = await _userManager.CheckPasswordAsync(user, resetPasswordDto.NewPassword);
+            if (passwordAlreadyRegistered)
+            {
+                return new BaseResponse<string>()
+                {
+                    Message = "Sua nova senha não deve ser igual à anterior.",
+                    IsSuccess = false
+                };
+            }
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.NewPassword);
+            if (result.Succeeded == false)
+            {
+                return new BaseResponse<string>()
+                {
+                    Message = result.Errors.FirstOrDefault().Description,
+                    IsSuccess = false
+                };
+            }
+
+            return new BaseResponse<string>()
+            {
+                Message = "Sua senha foi resetada com sucesso.",
+                IsSuccess = true
+            };
         }
 
         public async Task<BaseResponse<string>> LogoutAsync()
