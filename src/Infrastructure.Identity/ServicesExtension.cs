@@ -35,7 +35,7 @@ namespace Infrastructure.Identity
                 {
                     options.Cookie.HttpOnly = true;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                    options.LoginPath = new PathString("/auth/login");
+                    options.LoginPath = new PathString("/login");
                     // options.AccessDeniedPath = new PathString(""); => create a custom page for this
                     options.SlidingExpiration = true;
                 });
