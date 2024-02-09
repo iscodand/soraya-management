@@ -18,14 +18,8 @@ namespace Infrastructure.Shared.Services
             string email = Environment.GetEnvironmentVariable("EMAIL_ADDRESS");
             string password = Environment.GetEnvironmentVariable("EMAIL_KEY");
             string host = Environment.GetEnvironmentVariable("EMAIL_HOST");
-
             _ = int.TryParse(Environment.GetEnvironmentVariable("EMAIL_PORT"),
                              out int port);
-
-            Console.WriteLine(password);
-            Console.WriteLine(email);
-            Console.WriteLine(host);
-            Console.WriteLine(port);
 
             // SMTP Settings
             smtp.UseDefaultCredentials = false;
