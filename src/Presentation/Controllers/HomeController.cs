@@ -1,10 +1,9 @@
+using Application.Contracts.Services;
+using Application.Dtos.Data;
+using Application.DTOs.Authentication;
+using Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Identity.Contracts;
-using Application.Dtos.User;
-using Application.Contracts;
-using Application.Responses;
-using Application.Dtos.Data;
 using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers
@@ -48,7 +47,7 @@ namespace Presentation.Controllers
                     { "today", 0 },
                     { "lastWeek", -7 },
                     { "last15Days", -15 },
-                    { "lastMonth", -30 }
+                    { "lastMonth", -365 }
                 };
 
                 if (dateMappings.TryGetValue(selectedDate, out int daysToSubtract))

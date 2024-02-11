@@ -1,9 +1,7 @@
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.Dtos.User;
+using Application.DTOs.Authentication;
 using Application.Responses;
-using Infrastructure.Identity.Contracts;
-using Infrastructure.Identity.Dtos;
-using Infrastructure.Identity.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Controllers.Common;
@@ -94,7 +92,7 @@ namespace Presentation.Controllers
                     CompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse result = await _authenticationService.RegisterAsync(registerUserDto);
+                BaseResponse<string> result = await _authenticationService.RegisterAsync(registerUserDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.IsSuccess)
@@ -135,6 +133,62 @@ namespace Presentation.Controllers
             }
 
             return RedirectToAction(nameof(Employees));
+        }
+
+        [HttpGet]
+        [Route("editar/{employeeUsername}")]
+        public async Task<IActionResult> UpdateEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                BaseResponse<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername, authenticatedUser.CompanyId);
+
+                if (result.IsSuccess)
+                {
+                    UpdateUserViewModel updateUserViewModel = new()
+                    {
+                        Username = employeeUsername,
+                        NewUsername = result.Data.Username,
+                        Name = result.Data.Name,
+                        NewEmail = result.Data.Email,
+                    };
+
+                    return View(updateUserViewModel);
+                }
+            }
+
+            return View(nameof(Employees));
+        }
+
+        [HttpPost]
+        [Route("editar/{employeeUsername}")]
+        public async Task<IActionResult> UpdateEmployee(string employeeUsername, UpdateUserViewModel updateUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+
+                UpdateUserDto updateUserDto = new()
+                {
+                    Name = updateUserViewModel.Name,
+                    Username = employeeUsername,
+                    NewUsername = updateUserViewModel.NewUsername,
+                    NewEmail = updateUserViewModel.NewEmail,
+                    CompanyId = authenticatedUser.CompanyId
+                };
+
+                BaseResponse<UpdateUserDto> result = await _userService.UpdateUserAsync(updateUserDto);
+                ViewData["Message"] = result.Message;
+                ViewData["IsSuccess"] = result.IsSuccess;
+
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Employees));
+                }
+            }
+
+            return View(updateUserViewModel);
         }
 
         [HttpPatch]

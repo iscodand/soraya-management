@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Contracts;
-using Infrastructure.Identity.Contracts;
 using Presentation.Controllers.Common;
+using Application.Contracts.Services;
 
 namespace Presentation.Controllers
 {

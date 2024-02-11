@@ -1,10 +1,10 @@
-using Application.Contracts;
 using Application.Services;
 using Application.Responses;
 using Domain.Entities;
 using Infrastructure.Data.Repositories;
 using Application.Dtos.Meal;
 using Application.Dtos.Order;
+using Application.Contracts.Services;
 
 namespace Tests.Services
 {

@@ -28,7 +28,8 @@
     </div>
 
     <div class="custom-card">
-        <a class="btn btn-primary" asp-controller="Employee" asp-action="Update">
+        <a class="btn btn-primary" asp-controller="Employee" asp-action="UpdateEmployee"
+            asp-route-employeeUsername="@Model.Username">
             <i class="fa-solid fa-pen" style="color: #ffffff; padding-right: 4px;"></i> <b>Atualizar Dados</b>
         </a>
         @if (Model.IsActive)

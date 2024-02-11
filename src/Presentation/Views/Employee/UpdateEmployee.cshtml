@@ -1,0 +1,50 @@
+@model Presentation.ViewModels.User.UpdateUserViewModel;
+
+@{
+    ViewData["Title"] = "Atualizar Funcionário - " + @Model.Name;
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
+<script type="module" src="~/js/employees/employeesActionsImport.js"></script>
+
+<section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
+
+    <div class="details-page-title">
+        <h2>Perfil do Funcionário - <b>@Model.Name</b></h2>
+    </div>
+
+    <div class="custom-card">
+        <form asp-action="UpdateEmployee" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Nome Completo</label>
+                <input class="form-control" asp-for="Name" />
+                <span class="text-danger fw-bolder sm" asp-validation-for="Name"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nome de Usuário</label>
+                <input class="form-control" asp-for="NewUsername" />
+                <span class="text-danger fw-bolder sm" asp-validation-for="NewUsername"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input class="form-control" asp-for="NewEmail" type="email" />
+                <span class="text-danger fw-bolder sm" asp-validation-for="NewEmail"></span>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">
+                    Salvar
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</section>

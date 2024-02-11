@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using Application.Contracts.Repositories;
 using Domain.Entities;
-using Infrastructure.Data.Contracts;
 using Infrastructure.Data.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Repositories
 {

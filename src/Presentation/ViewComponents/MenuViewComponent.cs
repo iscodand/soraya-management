@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Domain.Entities;
-using Infrastructure.Identity.Contracts;
 using Presentation.ViewModels.Menu;
-using Application.Dtos.User;
+using Application.DTOs.Authentication;
+using Application.Contracts.Services;
 
 namespace Presentation.ViewComponents
 {

@@ -1,9 +1,9 @@
-using Application.Contracts;
 using Application.Dtos.Order;
 using Application.Responses;
 using Domain.Entities;
-using Infrastructure.Data.Contracts;
+using Application.Contracts.Repositories;
 using Infrastructure.Data.Repositories;
+using Application.Contracts.Services;
 
 namespace Application.Services
 {

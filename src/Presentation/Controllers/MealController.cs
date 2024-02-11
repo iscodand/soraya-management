@@ -1,6 +1,6 @@
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.Dtos.Meal;
-using Application.Dtos.User;
+using Application.DTOs.Authentication;
 using Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

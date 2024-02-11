@@ -1,9 +1,9 @@
-using Application.Contracts;
 using Application.Dtos.User;
 using Application.Responses;
 using Domain.Entities;
-using Infrastructure.Data.Contracts;
+using Application.Contracts.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Application.Contracts.Services;
 
 namespace Application.Services
 {
@@ -217,7 +217,6 @@ namespace Application.Services
         public async Task<BaseResponse<GetUserDto>> DeactivateUserAsync(string username, int companyId)
         {
             User user = await _userRepository.GetUserByUsernameAsync(username);
-
             if (user == null)
             {
                 return new BaseResponse<GetUserDto>()
@@ -253,11 +252,6 @@ namespace Application.Services
                 Message = "Usuário foi desativado com sucesso.",
                 IsSuccess = true
             };
-        }
-
-        public async Task<BaseResponse<GetUserDto>> DeleteUserAsync(string username, int companyId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

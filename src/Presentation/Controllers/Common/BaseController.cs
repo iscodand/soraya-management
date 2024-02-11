@@ -1,4 +1,4 @@
-using Infrastructure.Identity.Contracts;
+using Application.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers.Common

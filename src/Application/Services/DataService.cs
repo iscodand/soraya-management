@@ -1,4 +1,4 @@
-using Application.Contracts;
+using Application.Contracts.Services;
 using Application.Dtos.Customer;
 using Application.Dtos.Data;
 using Application.Dtos.Meal;
