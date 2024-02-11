@@ -176,14 +176,28 @@ namespace Infrastructure.Identity.Services
                 };
             }
 
-            IdentityResult result = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.NewPassword);
-            if (result.Succeeded == false)
+            // Descriptografando o token para conseguir usá-lo na recuperação de senha
+            byte[] decodedToken = WebEncoders.Base64UrlDecode(resetPasswordDto.Token);
+            string normalToken = Encoding.UTF8.GetString(decodedToken);
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, normalToken, resetPasswordDto.NewPassword);
+
+            // Verify duplicate e-mail and username
+            Dictionary<string, string> identityErrorMapping = new()
             {
-                return new BaseResponse<string>()
+                { "InvalidToken", "Esse link não é mais válido. Solicite outra alteração ou entre em contato com o suporte." },
+            };
+
+            if (!result.Succeeded)
+            {
+                if (identityErrorMapping.TryGetValue(result.Errors.FirstOrDefault().Code, out string errorDescription))
                 {
-                    Message = result.Errors.FirstOrDefault().Description,
-                    IsSuccess = false
-                };
+                    return new BaseResponse<string>()
+                    {
+                        Message = errorDescription,
+                        IsSuccess = false
+                    };
+                }
             }
 
             return new BaseResponse<string>()
