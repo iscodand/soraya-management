@@ -111,7 +111,6 @@ namespace Presentation.Controllers
                     Response.Cookies.Delete("ResetPasswordToken");
                     Response.Cookies.Delete("ResetPasswordEmail");
 
-
                     return RedirectToAction(nameof(Login));
                 }
 
