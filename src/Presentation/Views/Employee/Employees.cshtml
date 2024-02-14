@@ -1,0 +1,70 @@
+@model List<Presentation.ViewModels.User.GetUserViewModel>;
+
+@{
+    ViewData["Title"] = "Funcionários";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<script src="~/js/employees/filters/searchByEmployee.js"></script>
+
+<section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
+    <div class="custom-card">
+        <div class="page-title text-center">
+            <div class="mb-1">
+                <i class="fa-solid fa-user-group fa-lg"></i>
+            </div>
+            <h3>Funcionários</h3>
+        </div>
+    </div>
+
+    <div class="custom-card">
+        <div class="row mb-4 mt-4">
+            <div class="col-md-4" style="padding-top: 20px">
+                <a class="btn btn-primary-custom btn-lg" asp-controller="Employee" asp-action="RegisterEmployee">
+                    + Novo Funcionário
+                </a>
+            </div>
+
+            <div class="col-md-8 row justify-content-end">
+                <div class="col-md-6">
+                    <label for="search-employee-filter" class="form-label fw-thin">
+                        <i class="fa-solid fa-magnifying-glass fa-sm" style="padding-right: 5px;"></i>
+                        BUSCAR:
+                    </label>
+                    <input id="search-employee-filter" class="form-control" placeholder="Busque pelo nome" />
+                </div>
+            </div>
+        </div>
+
+        <table class="table styled-table">
+            <caption>Total de funcionários encontrados: <b>@Model.Count</b></caption>
+            <thead>
+                <tr>
+                    <th>Detalhes</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Nome de Usuário</th>
+                </tr>
+            </thead>
+            <tbody id="employees-tableBody">
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td style="max-width: 50px;">
+                            <a type="button" asp-controller="Employee" asp-action="DetailEmployee"
+                                asp-route-employeeUsername="@user.Username">
+                                <i class="fa-solid fa-circle-info fa-lg"></i>
+                            </a>
+                        </td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.Username</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</section>

@@ -1,4 +1,4 @@
-using Infrastructure.Data.Contracts;
+using Application.Contracts.Repositories;
 using Infrastructure.Data.DataContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -49,8 +49,11 @@
                                         <span class="text-danger fw-bolder sm" asp-validation-for="Password"></span>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <a class="small text-muted" href="#">Esqueceu sua senha?</a>
+                                    <div class="mb-4 mt-4">
+                                        <a class="small text-muted" asp-controller="Authentication"
+                                            asp-action="ForgotPassword">
+                                            Esqueceu sua senha?
+                                        </a>
                                     </div>
 
                                     <partial name="../Shared/Partials/_Messages.cshtml" />

@@ -1,27 +1,24 @@
+using Application.Contracts.Services;
+using Application.Dtos.Data;
+using Application.DTOs.Authentication;
+using Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Identity.Contracts;
-using Application.Dtos.User;
-using Application.Contracts;
-using Application.Responses;
-using Application.Dtos.Data;
+using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers
 {
     [Route("/")]
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IAuthenticatedUserService _authenticatedUserService;
-        private readonly ISessionService _sessionService;
         private readonly IDataService _dataService;
 
         public HomeController(IAuthenticatedUserService authenticatedUserService,
-                              ISessionService sessionService,
                               IDataService dataService)
         {
             _authenticatedUserService = authenticatedUserService;
-            _sessionService = sessionService;
             _dataService = dataService;
         }
 
@@ -30,7 +27,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Home()
         {
             GetAuthenticatedUserDto authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
-            _sessionService.AddUserSession(authenticatedUser);
+            SessionService.AddUserSession(authenticatedUser);
             return View(authenticatedUser);
         }
 
@@ -41,7 +38,7 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = _sessionService.RetrieveUserSession();
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
                 DateTime today = DateTime.Today.Date;
 
@@ -50,7 +47,7 @@ namespace Presentation.Controllers
                     { "today", 0 },
                     { "lastWeek", -7 },
                     { "last15Days", -15 },
-                    { "lastMonth", -30 }
+                    { "lastMonth", -365 }
                 };
 
                 if (dateMappings.TryGetValue(selectedDate, out int daysToSubtract))

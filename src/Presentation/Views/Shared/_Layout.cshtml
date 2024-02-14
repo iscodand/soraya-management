@@ -33,6 +33,7 @@
 </head>
 
 <body>
+
     <link rel="stylesheet" href="~/css/preloader/preloader.css" asp-append-version="true" />
     <script type="module" src="~/js/utils/preloader.js"></script>
     <div class="preloader">
@@ -44,6 +45,7 @@
         @RenderBody()
     </main>
 
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Data.Contracts;
 using Infrastructure.Data.DataContext;
+using Application.Contracts.Repositories;
 
 namespace Infrastructure.Data.Repositories
 {

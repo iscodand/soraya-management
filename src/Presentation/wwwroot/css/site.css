@@ -23,8 +23,13 @@ i {
     color: #4D59CB;
 }
 
-/* Some Elements */
+svg {
+    fill: #37419c;
+    height: 1rem;
+    margin-bottom: 4px;
+}
 
+/* Some Elements */
 .container-fluid {
     background-color: #fafafa;
 }

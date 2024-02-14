@@ -10,6 +10,7 @@ namespace Domain.Entities
         public string NormalizedName { get; set; }
         public bool IsActive { get; set; }
 
+        [ForeignKey(nameof(CompanyId))]
         public Company UserCompany { get; set; }
         public int CompanyId { get; set; }
 

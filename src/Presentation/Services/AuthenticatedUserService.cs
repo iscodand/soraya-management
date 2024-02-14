@@ -1,7 +1,7 @@
-using Application.Dtos.User;
+using Application.DTOs.Authentication;
 using Domain.Entities;
-using Infrastructure.Data.Contracts;
-using Infrastructure.Identity.Contracts;
+using Application.Contracts.Repositories;
+using Application.Contracts.Services;
 
 namespace Presentation.Services
 {

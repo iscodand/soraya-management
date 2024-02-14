@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Data.Contracts;
+using Application.Contracts.Repositories;
 using Infrastructure.Data.DataContext;
 using Infrastructure.Data.Repositories;
 
@@ -26,6 +26,7 @@ namespace Infrastructure.Data
             services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
 
             return services;
         }
