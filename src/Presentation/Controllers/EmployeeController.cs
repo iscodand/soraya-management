@@ -9,7 +9,7 @@ using Presentation.ViewModels.User;
 
 namespace Presentation.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     [Route("minha-empresa/funcionarios/")]
     public class EmployeeController : BaseController
     {

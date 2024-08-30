@@ -20,7 +20,7 @@
                     class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-utensils fa-fw me-3"></i><span>Sabores</span></a>
 
-                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("SuperAdmin"))
                 {
                     <a asp-controller="Employee" asp-action="Employees"
                         class="list-group-item list-group-item-action py-2 ripple">
