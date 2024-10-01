@@ -13,13 +13,13 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-.details-page-title h2 {
-    letter-spacing: 1px;
-}
+    .details-page-title h2 {
+        letter-spacing: 1px;
+    }
 
-.details-page-title b {
-    color: #37419c;
-}
+    .details-page-title b {
+        color: #37419c;
+    }
 
 /* Main Details Section */
 
@@ -76,14 +76,14 @@
     text-align: center;
 }
 
-.details-title h3 {
-    font-weight: bold;
-    color: #37419c;
-    text-align: center;
-}
+    .details-title h3 {
+        font-weight: bold;
+        color: #37419c;
+        text-align: center;
+    }
 
-.details-title span {
-    font-style: italic;
-    color: grey;
-    font-size: 15px;
-}
+    .details-title span {
+        font-style: italic;
+        color: grey;
+        font-size: 15px;
+    }

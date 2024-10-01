@@ -1,4 +1,4 @@
-@model List<Presentation.ViewModels.User.GetUserViewModel>;
+@model IEnumerable<Application.Dtos.User.GetUserDto>;
 
 @{
     ViewData["Title"] = "Funcionários";
@@ -39,7 +39,7 @@
         </div>
 
         <table class="table styled-table">
-            <caption>Total de funcionários encontrados: <b>@Model.Count</b></caption>
+            <caption>Total de funcionários encontrados: <b>@Model.Count()</b></caption>
             <thead>
                 <tr>
                     <th>Detalhes</th>

@@ -14,10 +14,19 @@ namespace Infrastructure.Data.Repositories
             _users = context.Set<User>();
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _users.AsNoTracking()
+                               .Include(x => x.UserCompany)
+                               .Where(x => x.NormalizedEmail == email.ToUpper().Trim())
+                               .FirstOrDefaultAsync()
+                               .ConfigureAwait(false);
+        }
+
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             return await _users.AsNoTracking()
-                               .Include(x => x.UserCompany).AsNoTracking()
+                               .Include(x => x.UserCompany)
                                .FirstOrDefaultAsync(x => x.NormalizedUserName == username.Trim().ToUpper())
                                .ConfigureAwait(false);
         }
@@ -25,22 +34,37 @@ namespace Infrastructure.Data.Repositories
         public async Task<ICollection<User>> GetUsersByCompanyAsync(int companyId)
         {
             return await _users.AsNoTracking()
-                               .Where(x => x.CompanyId == companyId).AsNoTracking()
+                               .Where(x => x.CompanyId == companyId)
                                .ToListAsync()
                                .ConfigureAwait(false);
         }
 
-        public async Task<bool> UserExistsByEmailAsync(string email)
+        public async Task<User> GetWithOrdersAsync(string username)
         {
             return await _users.AsNoTracking()
-                               .AnyAsync(x => x.NormalizedEmail == email.Trim().ToUpper())
+                   .Include(x => x.UserCompany)
+                   .Include(x => x.Orders).ThenInclude(x => x.PaymentType)
+                   .Include(x => x.Orders).ThenInclude(x => x.Customer)
+                   .Include(x => x.Orders).ThenInclude(x => x.Meal)
+                   .FirstOrDefaultAsync(x => x.NormalizedUserName == username.Trim().ToUpper())
+                   .ConfigureAwait(false);
+        }
+
+        public async Task<bool> UserExistsByEmailAsync(string email, string userId = "")
+        {
+            return await _users.AsNoTracking()
+                               .Where(x => x.NormalizedEmail == email.Trim().ToUpper())
+                               .Where(x => x.Id != userId)
+                               .AnyAsync()
                                .ConfigureAwait(false);
         }
 
-        public async Task<bool> UserExistsByUsernameAsync(string username)
+        public async Task<bool> UserExistsByUsernameAsync(string username, string userId = "")
         {
             return await _users.AsNoTracking()
-                               .AnyAsync(x => x.NormalizedUserName == username.Trim().ToUpper())
+                               .Where(x => x.NormalizedUserName == username.Trim().ToUpper())
+                               .Where(x => x.Id != userId)
+                               .AnyAsync()
                                .ConfigureAwait(false);
         }
     }
