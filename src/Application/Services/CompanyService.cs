@@ -1,6 +1,7 @@
 using Application.Contracts.Repositories;
 using Application.Contracts.Services;
 using Application.DTOs.Company.Requests;
+using Application.DTOs.Company.Response;
 using Application.Responses;
 using Domain.Entities;
 
@@ -42,6 +43,19 @@ namespace Application.Services
                 IsSuccess = true,
                 Message = "Empresa cadastrada com sucesso.",
                 Data = null
+            };
+        }
+
+        public async Task<BaseResponse<IEnumerable<CompanyDTO>>> GetCompaniesAsync()
+        {
+            IEnumerable<Company> companies = await _companyRepository.GetAllAsync();
+            IEnumerable<CompanyDTO> companyDTO = CompanyDTO.Map(companies);
+
+            return new BaseResponse<IEnumerable<CompanyDTO>>()
+            {
+                IsSuccess = true,
+                Message = "Empresas recuperadas com sucesso.",
+                Data = companyDTO
             };
         }
     }

@@ -1,0 +1,65 @@
+﻿@model Application.DTOs.Company.Requests.CreateCompanyRequest;
+
+@{
+    ViewData["Title"] = "Nova empresa";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("Menu")
+
+<link rel="stylesheet" href="~/css/create/create.css" asp-append-version="true" />
+<script src="~/js/utils/formatCnpj.js"></script>
+
+<section class="container">
+    <section class="create-form container">
+        <div class="custom-card create-page-title">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Cadastrar nova empresa</h4>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4>
+                        <i class="fa-solid fa-building fa-lg"></i>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="Create" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <section class="custom-card">
+
+                <div class="form-outline mb-4">
+                    <i class="fa-solid fa-file-pen"></i>
+                    <label class="form-label fw-bolder">Nome da Empresa</label>
+                    <input class="form-control form-control-lg" asp-for="Name" />
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Name"></span>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <i class="fa-solid fa-file-pen"></i>
+                    <label class="form-label fw-bolder">CNPJ</label>
+                    <input class="form-control form-control-lg" asp-for="CNPJ" oninput="formatCNPJ(this)" maxlength="18" />
+                    <span class="text-danger fw-bolder sm" asp-validation-for="CNPJ"></span>
+                </div>
+
+                <partial name="../Shared/Partials/_Messages.cshtml" />
+
+                <div class="pt-1">
+                    <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
+                        <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Salvar
+                    </button>
+                </div>
+
+            </section>
+
+            <div class="pt-1">
+                <a asp-controller="Employee" asp-action="Employees" class="btn btn-warning pt-1">
+                    <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+                    <b>Voltar</b>
+                </a>
+            </div>
+        </form>
+    </section>
+</section>

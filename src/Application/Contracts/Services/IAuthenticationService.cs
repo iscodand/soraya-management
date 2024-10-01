@@ -9,6 +9,7 @@ namespace Application.Contracts.Services
         public Task<BaseResponse<string>> LoginAsync(LoginUserDto loginUserDto);
         public Task<BaseResponse<string>> ForgotPasswordAsync(string email, string origin);
         public Task<BaseResponse<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto);
+        public Task<BaseResponse<string>> ChangePasswordAsync(string username, ChangePasswordDto changePasswordDto);
         public Task<BaseResponse<string>> LogoutAsync();
     }
 }

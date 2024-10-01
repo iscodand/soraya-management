@@ -1,11 +1,13 @@
-@model IEnumerable<Application.Dtos.User.GetUserDto>;
+@model List<Application.DTOs.Company.Response.CompanyDTO>;
 
 @{
-    ViewData["Title"] = "Funcionários";
+    ViewData["Title"] = "Empresas";
     Layout = "_Layout";
+    var companies = Model;
 }
 
 @await Component.InvokeAsync("Menu")
+
 
 <script src="~/js/employees/filters/searchByEmployee.js"></script>
 
@@ -15,15 +17,15 @@
             <div class="mb-1">
                 <i class="fa-solid fa-user-group fa-lg"></i>
             </div>
-            <h3>Funcionários</h3>
+            <h3>Empresas</h3>
         </div>
     </div>
 
     <div class="custom-card">
         <div class="row mb-4 mt-4">
             <div class="col-md-4" style="padding-top: 20px">
-                <a class="btn btn-primary-custom btn-lg" asp-controller="Employee" asp-action="RegisterEmployee">
-                    + Novo Funcionário
+                <a class="btn btn-primary-custom btn-lg" asp-controller="Company" asp-action="Create">
+                    + Adicionar Empresa
                 </a>
             </div>
 
@@ -39,28 +41,27 @@
         </div>
 
         <table class="table styled-table">
-            <caption>Total de funcionários encontrados: <b>@Model.Count()</b></caption>
+            <caption>Total de funcionários encontrados: <b>@companies.Count</b></caption>
             <thead>
                 <tr>
-                    <th>Detalhes</th>
                     <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>Nome de Usuário</th>
+                    <th>Descrição</th>
+                    <th>CNPJ</th>
                 </tr>
             </thead>
             <tbody id="employees-tableBody">
-                @foreach (var user in Model)
+                @foreach (var company in companies)
                 {
                     <tr>
                         <td style="max-width: 50px;">
-                            <a type="button" asp-controller="Employee" asp-action="DetailEmployee"
-                                asp-route-employeeUsername="@user.Username">
+                            <a type="button" asp-controller="Employee" asp-action="DetailCompany"
+                                asp-route-employeeUsername="@company.Id">
                                 <i class="fa-solid fa-circle-info fa-lg"></i>
                             </a>
                         </td>
-                        <td>@user.Name</td>
-                        <td>@user.Email</td>
-                        <td>@user.Username</td>
+                        <td>@company.Name</td>
+                        @* <td>@company.Description</td> *@
+                        <td>@company.CNPJ</td>
                     </tr>
                 }
             </tbody>

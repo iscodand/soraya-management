@@ -4,6 +4,7 @@ using Application.DTOs.Authentication;
 using Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using Presentation.Controllers.Common;
 using Presentation.ViewModels.User;
 
@@ -30,26 +31,12 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetUserDto> result = await _userService.GetUsersByCompanyAsync(authenticatedUser.CompanyId);
+                var authenticatedUser = SessionService.RetrieveUserSession();
+                var result = await _userService.GetUsersByCompanyAsync(authenticatedUser.CompanyId);
 
                 if (result.IsSuccess)
                 {
-                    List<GetUserViewModel> getUserViewModelCollection = new();
-
-                    foreach (GetUserDto getUserDto in result.DataCollection)
-                    {
-                        GetUserViewModel getUserViewModel = new()
-                        {
-                            Name = getUserDto.Name,
-                            Username = getUserDto.Username,
-                            Email = getUserDto.Email
-                        };
-
-                        getUserViewModelCollection.Add(getUserViewModel);
-                    }
-
-                    return View(getUserViewModelCollection);
+                    return View(result.Data);
                 }
             }
 
@@ -119,16 +106,7 @@ namespace Presentation.Controllers
 
                 if (result.IsSuccess)
                 {
-                    DetailUserViewModel detailUserViewModel = new()
-                    {
-                        Name = result.Data.Name,
-                        Email = result.Data.Email,
-                        Username = result.Data.Username,
-                        IsActive = result.Data.IsActive,
-                        UserRole = result.Data.UserRole
-                    };
-
-                    return View(detailUserViewModel);
+                    return View(result.Data);
                 }
             }
 
@@ -148,10 +126,10 @@ namespace Presentation.Controllers
                 {
                     UpdateUserViewModel updateUserViewModel = new()
                     {
+                        Id = result.Data.Id,
                         Username = employeeUsername,
-                        NewUsername = result.Data.Username,
                         Name = result.Data.Name,
-                        NewEmail = result.Data.Email,
+                        Email = result.Data.Email,
                     };
 
                     return View(updateUserViewModel);
@@ -173,12 +151,12 @@ namespace Presentation.Controllers
                 {
                     Name = updateUserViewModel.Name,
                     Username = employeeUsername,
-                    NewUsername = updateUserViewModel.NewUsername,
-                    NewEmail = updateUserViewModel.NewEmail,
+                    Email = updateUserViewModel.Email,
                     CompanyId = authenticatedUser.CompanyId
                 };
 
                 BaseResponse<UpdateUserDto> result = await _userService.UpdateUserAsync(updateUserDto);
+
                 ViewData["Message"] = result.Message;
                 ViewData["IsSuccess"] = result.IsSuccess;
 
@@ -234,6 +212,47 @@ namespace Presentation.Controllers
             return Json(new { success = false, message = "Falha ao desativar funcionário." });
         }
 
+        [HttpGet]
+        [Route("{employeeUsername}/alterar-senha")]
+        public async Task<IActionResult> ChangePasswordAsync(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.GetUserByUsernameAsync(employeeUsername);
+                if (result.IsSuccess)
+                {
+                    ChangePasswordDto request = new()
+                    {
+                        Username = result.Data.Username,
+                        OldPassword = "",
+                        NewPassword = "",
+                        ConfirmNewPassword = ""
+                    };
+
+                    return View(request);
+                }
+            }
+
+            return RedirectToAction(nameof(Employees));
+        }
+
+
+        [HttpPost]
+        [Route("{employeeUsername}/alterar-senha")]
+        public async Task<IActionResult> ChangePasswordAsync(string employeeUsername, ChangePasswordDto request)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _authenticationService.ChangePasswordAsync(employeeUsername, request);
+
+                ViewData["Message"] = result.Message;
+                ViewData["IsSuccess"] = result.IsSuccess;
+            }
+
+            request.Username = employeeUsername;
+            return View(request);
+        }
+
         [HttpDelete]
         [Route("deletar/{employeeUsername}")]
         public async Task<IActionResult> DeleteEmployee(string employeeUsername)
@@ -254,6 +273,5 @@ namespace Presentation.Controllers
 
             return Json(new { success = false, message = "Falha ao deletar funcionário." });
         }
-
     }
 }
