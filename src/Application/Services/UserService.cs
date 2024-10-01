@@ -4,6 +4,7 @@ using Domain.Entities;
 using Application.Contracts.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Application.Contracts.Services;
+using Application.Dtos.Order;
 
 namespace Application.Services
 {
@@ -12,38 +13,52 @@ namespace Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRoleRepository _userRoleRepository;
+        private readonly UserManager<User> _userManager;
 
         public UserService(IUserRepository userRepository,
                            IRoleRepository roleRepository,
-                           IUserRoleRepository userRoleRepository)
+                           IUserRoleRepository userRoleRepository,
+                           UserManager<User> userManager)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
+            _userManager = userManager;
         }
 
-        public async Task<BaseResponse<GetUserDto>> GetUsersByCompanyAsync(int companyId)
+        public async Task<BaseResponse<IEnumerable<GetUserDto>>> GetUsersByCompanyAsync(int companyId)
         {
             ICollection<User> users = await _userRepository.GetUsersByCompanyAsync(companyId);
+            var mappedUsers = GetUserDto.Map(users);
 
-            List<GetUserDto> getUserDtoCollection = new();
-            foreach (User user in users)
-            {
-                GetUserDto getUserDto = new()
-                {
-                    Name = user.Name,
-                    Username = user.UserName,
-                    Email = user.Email
-                };
-
-                getUserDtoCollection.Add(getUserDto);
-            }
-
-            return new BaseResponse<GetUserDto>()
+            return new()
             {
                 Message = "Usuários encontrados com sucesso.",
                 IsSuccess = true,
-                DataCollection = getUserDtoCollection
+                Data = mappedUsers
+            };
+        }
+
+        public async Task<BaseResponse<GetUserDto>> GetUserByUsernameAsync(string username)
+        {
+            User user = await _userRepository.GetUserByUsernameAsync(username);
+            if (user is null)
+            {
+                return new()
+                {
+                    Message = "Usuário não encontrado.",
+                    IsSuccess = false
+                };
+            }
+
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+            GetUserDto getUserDto = GetUserDto.Map(user, roles);
+
+            return new()
+            {
+                Data = getUserDto,
+                Message = "Usuário recuperado com sucesso.",
+                IsSuccess = true
             };
         }
 
@@ -74,8 +89,8 @@ namespace Application.Services
 
         public async Task<BaseResponse<DetailUserDto>> DetailUserAsync(string username, int companyId)
         {
-            User user = await _userRepository.GetUserByUsernameAsync(username);
-
+            // TODO => implementar paginação
+            User user = await _userRepository.GetWithOrdersAsync(username);
             if (user == null)
             {
                 return new BaseResponse<DetailUserDto>()
@@ -97,14 +112,7 @@ namespace Application.Services
             IdentityUserRole<string> userRole = await _userRoleRepository.GetUserRoleAsync(user.Id);
             Role role = await _roleRepository.GetRoleByIdAsync(userRole.RoleId);
 
-            DetailUserDto detailUserDto = new()
-            {
-                Name = user.Name,
-                Username = user.UserName,
-                Email = user.Email,
-                IsActive = user.IsActive,
-                UserRole = role.Description
-            };
+            DetailUserDto detailUserDto = DetailUserDto.Map(user, role.Description);
 
             return new BaseResponse<DetailUserDto>()
             {
@@ -114,20 +122,10 @@ namespace Application.Services
             };
         }
 
-        public async Task<BaseResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
+        public async Task<BaseResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto request)
         {
-            if (updateUserDto == null)
-            {
-                return new BaseResponse<UpdateUserDto>()
-                {
-                    Message = "Usuário não pode ser nulo. Verifique e tente novamente.",
-                    IsSuccess = false
-                };
-            }
-
-            User user = await _userRepository.GetUserByUsernameAsync(updateUserDto.Username);
-
-            if (user == null)
+            User user = await _userRepository.GetUserByUsernameAsync(request.Username);
+            if (user is null)
             {
                 return new BaseResponse<UpdateUserDto>()
                 {
@@ -136,7 +134,7 @@ namespace Application.Services
                 };
             }
 
-            if (user.CompanyId != updateUserDto.CompanyId)
+            if (user.CompanyId != request.CompanyId)
             {
                 return new BaseResponse<UpdateUserDto>()
                 {
@@ -145,7 +143,8 @@ namespace Application.Services
                 };
             }
 
-            if (await _userRepository.UserExistsByUsernameAsync(updateUserDto.NewUsername))
+            bool usernameAlreadyInUse = await _userRepository.UserExistsByUsernameAsync(request.Username, user.Id);
+            if (usernameAlreadyInUse)
             {
                 return new BaseResponse<UpdateUserDto>()
                 {
@@ -154,7 +153,8 @@ namespace Application.Services
                 };
             }
 
-            if (await _userRepository.UserExistsByEmailAsync(updateUserDto.NewEmail))
+            bool emailAlreadyInUse = await _userRepository.UserExistsByEmailAsync(request.Email, user.Id);
+            if (emailAlreadyInUse)
             {
                 return new BaseResponse<UpdateUserDto>()
                 {
@@ -162,11 +162,11 @@ namespace Application.Services
                     IsSuccess = false
                 };
             }
-
-            user.Update(updateUserDto.Name, updateUserDto.NewEmail, updateUserDto.NewUsername);
+;
+            user = UpdateUserDto.Map(user, request);
             await _userRepository.UpdateAsync(user);
 
-            return new BaseResponse<UpdateUserDto>()
+            return new()
             {
                 Message = "Usuário atualizado com sucesso",
                 IsSuccess = true

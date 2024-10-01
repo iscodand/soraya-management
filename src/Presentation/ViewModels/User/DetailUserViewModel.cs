@@ -1,3 +1,5 @@
+using Application.Dtos.Order;
+
 namespace Presentation.ViewModels.User
 {
     public class DetailUserViewModel
@@ -7,5 +9,7 @@ namespace Presentation.ViewModels.User
         public string Email { get; set; }
         public bool IsActive { get; set; }
         public string UserRole { get; set; }
+
+        public ICollection<GetOrderDto> Orders { get; set; } = new List<GetOrderDto>();
     }
 }

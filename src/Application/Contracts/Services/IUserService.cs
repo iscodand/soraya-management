@@ -5,7 +5,8 @@ namespace Application.Contracts.Services
 {
     public interface IUserService
     {
-        public Task<BaseResponse<GetUserDto>> GetUsersByCompanyAsync(int companyId);
+        public Task<BaseResponse<IEnumerable<GetUserDto>>> GetUsersByCompanyAsync(int companyId);
+        public Task<BaseResponse<GetUserDto>> GetUserByUsernameAsync(string username);
         public Task<BaseResponse<DetailUserDto>> DetailUserAsync(string username, int companyId);
         public Task<BaseResponse<GetRolesDto>> GetRolesAsync();
         public Task<BaseResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto);

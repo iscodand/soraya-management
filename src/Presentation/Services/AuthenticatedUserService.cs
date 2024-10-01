@@ -21,6 +21,11 @@ namespace Presentation.Services
             string username = _httpContextAccessor.HttpContext.User.Identity.Name;
             User authenticatedUser = await _userRepository.GetUserByUsernameAsync(username);
 
+            if (authenticatedUser is null)
+            {
+                return null;
+            }
+
             GetAuthenticatedUserDto getUserDto = new()
             {
                 Id = authenticatedUser.Id,

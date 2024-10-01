@@ -7,44 +7,61 @@
 
 @await Component.InvokeAsync("Menu")
 
+
 <link rel="stylesheet" href="~/css/details/details.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/create/create.css" asp-append-version="true" />
 <script type="module" src="~/js/employees/employeesActionsImport.js"></script>
 
 <section class="container-fluid" style="margin-top: -1.9rem; margin-bottom: -2rem; padding: 4rem;">
 
-    <div class="details-page-title">
-        <h2>Perfil do Funcionário - <b>@Model.Name</b></h2>
-    </div>
+    <section class="create-form container">
 
-    <div class="custom-card">
+        <div class="custom-card create-page-title">
+            <h4>Gerenciar Funcionário - @Model.Name</h4>
+        </div>
+
         <form asp-action="UpdateEmployee" asp-antiforgery="true">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="mb-3">
-                <label class="form-label">Nome Completo</label>
-                <input class="form-control" asp-for="Name" />
-                <span class="text-danger fw-bolder sm" asp-validation-for="Name"></span>
-            </div>
+            <section class="custom-card">
 
-            <div class="mb-3">
-                <label class="form-label">Nome de Usuário</label>
-                <input class="form-control" asp-for="NewUsername" />
-                <span class="text-danger fw-bolder sm" asp-validation-for="NewUsername"></span>
-            </div>
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Nome</label>
+                    <input class="form-control form-control-lg" asp-for="Name" />
+                    <span class="custom-alert" asp-validation-for="Name"></span>
+                </div>
 
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input class="form-control" asp-for="NewEmail" type="email" />
-                <span class="text-danger fw-bolder sm" asp-validation-for="NewEmail"></span>
-            </div>
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Nome de Usuário</label>
+                    <input type="text" class="form-control form-control-lg" asp-for="Username" />
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Username"></span>
+                </div>
 
-            <div>
-                <button type="submit" class="btn btn-primary">
-                    Salvar
-                </button>
+                <div class="form-outline mb-4">
+                    <label class="form-label fw-bolder">Email</label>
+                    <input type="text" class="form-control form-control-lg" asp-for="Email" />
+                    <span class="text-danger fw-bolder sm" asp-validation-for="Email"></span>
+                </div>
+
+                <partial name="../Shared/Partials/_Messages.cshtml" />
+
+                <div class="pt-1">
+                    <button class="btn btn-primary-custom" type="submit" style="margin-right: 20px;">
+                        <i class="fa-solid fa-check fa-lg" style="color: #ffffff; padding-right: 4px;"></i> Salvar
+                    </button>
+                </div>
+
+            </section>
+
+            <div class="pt-1">
+                <a asp-controller="Employee" asp-action="DetailEmployee" asp-route-employeeUsername="@Model.Username" class="btn btn-warning pt-1">
+                    <i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff; padding-right: 4px;"></i>
+                    <b>Voltar</b>
+                </a>
             </div>
 
         </form>
-    </div>
+
+    </section>
 
 </section>

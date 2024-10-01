@@ -12,5 +12,22 @@ namespace Application.Dtos.Order
         public string Customer { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public static IEnumerable<GetOrderDto> Map(IEnumerable<Domain.Entities.Order> orders)
+        {
+            return orders.Select(x => new GetOrderDto
+            {
+                Id = x.Id,
+                Description = x.Description,
+                Price = x.Price,
+                IsPaid = x.IsPaid,
+                PaidAt = x.PaidAt,
+                PaymentType = x.PaymentType.Description,
+                Meal = x.Meal.Description,
+                Customer = x.Customer.Name,
+                CreatedBy = "",
+                CreatedAt = x.CreatedAt,
+            });
+        }
     }
 }

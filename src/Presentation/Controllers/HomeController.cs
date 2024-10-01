@@ -12,13 +12,10 @@ namespace Presentation.Controllers
     [Authorize]
     public class HomeController : BaseController
     {
-        private readonly IAuthenticatedUserService _authenticatedUserService;
         private readonly IDataService _dataService;
 
-        public HomeController(IAuthenticatedUserService authenticatedUserService,
-                              IDataService dataService)
+        public HomeController(IDataService dataService)
         {
-            _authenticatedUserService = authenticatedUserService;
             _dataService = dataService;
         }
 
@@ -26,9 +23,15 @@ namespace Presentation.Controllers
         [Route("/")]
         public async Task<IActionResult> Home()
         {
-            GetAuthenticatedUserDto authenticatedUser = await _authenticatedUserService.GetAuthenticatedUserAsync();
+            GetAuthenticatedUserDto authenticatedUser = await AuthenticatedUser.GetAuthenticatedUserAsync();
             SessionService.AddUserSession(authenticatedUser);
-            return View(authenticatedUser);
+
+            if (authenticatedUser is not null)
+            {
+                return View(authenticatedUser);
+            }
+
+            return RedirectToAction("Login", "Authentication");
         }
 
         // TODO => get a better name for controller and route

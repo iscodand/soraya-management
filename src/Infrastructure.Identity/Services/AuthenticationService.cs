@@ -28,7 +28,7 @@ namespace Infrastructure.Identity.Services
         {
             if (registerUserDto == null)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Usuário não pode ser nulo.",
                     IsSuccess = false
@@ -58,7 +58,7 @@ namespace Infrastructure.Identity.Services
             {
                 if (identityErrorMapping.TryGetValue(result.Errors.FirstOrDefault().Code, out string errorDescription))
                 {
-                    return new BaseResponse<string>()
+                    return new()
                     {
                         Message = errorDescription,
                         IsSuccess = false
@@ -66,7 +66,7 @@ namespace Infrastructure.Identity.Services
                 }
             }
 
-            return new BaseResponse<string>()
+            return new()
             {
                 Message = "Usuário cadastrado com sucesso",
                 IsSuccess = true
@@ -79,7 +79,7 @@ namespace Infrastructure.Identity.Services
 
             if (user == null)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Usuário não encontrado. Verifique e tente novamente",
                     IsSuccess = false
@@ -88,7 +88,7 @@ namespace Infrastructure.Identity.Services
 
             if (!user.IsActive)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Usuário está inativo no sistema. Consulte seu gestor e tente novamente.",
                     IsSuccess = false
@@ -99,14 +99,14 @@ namespace Infrastructure.Identity.Services
                                                                            isPersistent: false, lockoutOnFailure: false);
             if (!signIn.Succeeded)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Senha inválida. Verifique e tente novamente.",
                     IsSuccess = false
                 };
             }
 
-            return new BaseResponse<string>()
+            return new()
             {
                 Message = "Login realizado com sucesso",
                 IsSuccess = true
@@ -118,7 +118,7 @@ namespace Infrastructure.Identity.Services
             User user = await _userManager.FindByEmailAsync(email);
             if (user is null)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Esse e-mail não está cadastrado. Verifique e tente novamente.",
                     IsSuccess = false
@@ -147,7 +147,7 @@ namespace Infrastructure.Identity.Services
 
             await _emailService.SendMailAsync(sendMailRequest);
 
-            return new BaseResponse<string>()
+            return new()
             {
                 Message = "Foi enviado um link de recuperação para o seu e-mail.",
                 IsSuccess = true
@@ -159,7 +159,7 @@ namespace Infrastructure.Identity.Services
             User user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
             if (user is null)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Esse e-mail não está cadastrado. Verifique e tente novamente.",
                     IsSuccess = false
@@ -169,7 +169,7 @@ namespace Infrastructure.Identity.Services
             bool passwordAlreadyRegistered = await _userManager.CheckPasswordAsync(user, resetPasswordDto.NewPassword);
             if (passwordAlreadyRegistered)
             {
-                return new BaseResponse<string>()
+                return new()
                 {
                     Message = "Sua nova senha não deve ser igual à anterior.",
                     IsSuccess = false
@@ -192,7 +192,7 @@ namespace Infrastructure.Identity.Services
             {
                 if (identityErrorMapping.TryGetValue(result.Errors.FirstOrDefault().Code, out string errorDescription))
                 {
-                    return new BaseResponse<string>()
+                    return new()
                     {
                         Message = errorDescription,
                         IsSuccess = false
@@ -200,9 +200,58 @@ namespace Infrastructure.Identity.Services
                 }
             }
 
-            return new BaseResponse<string>()
+            return new()
             {
                 Message = "Sua senha foi resetada com sucesso.",
+                IsSuccess = true
+            };
+        }
+
+        public async Task<BaseResponse<string>> ChangePasswordAsync(string username, ChangePasswordDto changePasswordDto)
+        {
+            User user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+            {
+                return new()
+                {
+                    Message = "Usuário não encontrado. Verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            bool checkOldPassword = await _userManager.CheckPasswordAsync(user, changePasswordDto.OldPassword);
+            if (checkOldPassword == false)
+            {
+                return new()
+                {
+                    Message = "Sua senha antiga está incorreta.",
+                    IsSuccess = false
+                };
+            }
+
+            //bool passwordAlreadyInUse = await _userManager.CheckPasswordAsync(user, changePasswordDto.NewPassword);
+            //if (passwordAlreadyInUse)
+            //{
+            //    return new()
+            //    {
+            //        Message = "Sua nova senha não pode ser igual à anterior.",
+            //        IsSuccess = false
+            //    };
+            //}
+
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+            if (!result.Succeeded)
+            {
+                return new()
+                {
+                    Message = "Ops. Ocorreu um erro ao alterar sua senha, verifique e tente novamente.",
+                    IsSuccess = false
+                };
+            }
+
+            return new()
+            {
+                Message = "Senha alterada com sucesso.",
                 IsSuccess = true
             };
         }
@@ -211,7 +260,7 @@ namespace Infrastructure.Identity.Services
         {
             await _signInManager.SignOutAsync();
 
-            return new BaseResponse<string>()
+            return new()
             {
                 Message = "Logout realizado com sucesso.",
                 IsSuccess = true
