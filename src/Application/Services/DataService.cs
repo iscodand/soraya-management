@@ -3,7 +3,7 @@ using Application.Dtos.Customer;
 using Application.Dtos.Data;
 using Application.Dtos.Meal;
 using Application.Dtos.Order;
-using Application.Responses;
+using Application.Wrappers;
 
 namespace Application.Services
 {
@@ -22,25 +22,25 @@ namespace Application.Services
             _customerService = customerService;
         }
 
-        public async Task<BaseResponse<GetDataDto>> GetDataAsync(int companyId, DateTime initialDate, DateTime finalDate)
+        public async Task<Response<GetDataDto>> GetDataAsync(int companyId, DateTime initialDate, DateTime finalDate)
         {
-            BaseResponse<GetOrderDto> orders = await _orderService.GetOrdersByDateRangeAsync(companyId, initialDate, finalDate);
+            Response<IEnumerable<GetOrderDto>> orders = await _orderService.GetOrdersByDateRangeAsync(companyId, initialDate, finalDate);
 
             // todo => select just the last 6 meals/customers with the higher num of orders at range of initial and final date
-            BaseResponse<GetMealDto> meals = await _mealService.GetMealsByDateRangeAsync(companyId, initialDate, finalDate);
-            BaseResponse<GetCustomerDto> customers = await _customerService.GetCustomersByDateRangeAsync(companyId, initialDate, finalDate);
+            Response<IEnumerable<GetMealDto>> meals = await _mealService.GetMealsByDateRangeAsync(companyId, initialDate, finalDate);
+            Response<IEnumerable<GetCustomerDto>> customers = await _customerService.GetCustomersByDateRangeAsync(companyId, initialDate, finalDate);
 
             GetDataDto getDataDto = new()
             {
-                Orders = orders.DataCollection,
-                Meals = meals.DataCollection,
-                Customers = customers.DataCollection
+                Orders = orders.Data,
+                Meals = meals.Data,
+                Customers = customers.Data
             };
 
-            return new BaseResponse<GetDataDto>()
+            return new()
             {
                 Message = "Dados recuperados com sucesso",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = getDataDto
             };
         }

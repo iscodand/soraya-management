@@ -1,5 +1,5 @@
 using Application.Services;
-using Application.Responses;
+using Application.Wrappers;
 using Domain.Entities;
 using Infrastructure.Data.Repositories;
 using Application.Dtos.Meal;
@@ -49,16 +49,16 @@ namespace Tests.Services
 
             var result = await _mealService.UpdateMealAsync(updateMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor atualizado com sucesso",
-                IsSuccess = true
+                Succeeded = true
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -81,16 +81,16 @@ namespace Tests.Services
 
             var result = await _mealService.UpdateMealAsync(updateMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Esse sabor não pertence a sua empresa",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -112,16 +112,16 @@ namespace Tests.Services
 
             var result = await _mealService.UpdateMealAsync(updateMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor não encontrado",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -133,16 +133,16 @@ namespace Tests.Services
             // Act
             var result = await _mealService.UpdateMealAsync(updateMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor não pode ser nulo",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -165,16 +165,16 @@ namespace Tests.Services
 
             var result = await _mealService.UpdateMealAsync(updateMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Um sabor já foi cadastrado com essa Descrição. Verifique e tente novamente",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         // Scenarios - Get Meal By Id
@@ -198,10 +198,10 @@ namespace Tests.Services
                 CreatedBy = meal.UserId
             };
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor encontrado com sucesso",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = getMealDto
             };
 
@@ -213,7 +213,7 @@ namespace Tests.Services
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
             result.Data.Should().BeEquivalentTo(response.Data);
         }
 
@@ -224,10 +224,10 @@ namespace Tests.Services
             Meal meal = A.Fake<Meal>();
             meal.CompanyId = 1;
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Esse sabor não pertence a sua empresa",
-                IsSuccess = false,
+                Succeeded = false,
             };
 
             // Act
@@ -238,7 +238,7 @@ namespace Tests.Services
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
             result.Data.Should().Be(response.Data);
         }
 
@@ -248,10 +248,10 @@ namespace Tests.Services
             // Arrange
             Meal? meal = null;
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor não encontrado",
-                IsSuccess = false,
+                Succeeded = false,
             };
 
             // Act
@@ -262,7 +262,7 @@ namespace Tests.Services
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
             result.Data.Should().Be(response.Data);
         }
 
@@ -292,10 +292,10 @@ namespace Tests.Services
                 CreatedBy = meal.User.Name,
             };
 
-            BaseResponse<DetailMealDto> response = new()
+            Response<DetailMealDto> response = new()
             {
                 Message = "Sabor encontrado com sucesso",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = detailMealDto
             };
 
@@ -307,7 +307,7 @@ namespace Tests.Services
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
             result.Data.Should().BeEquivalentTo(response.Data);
         }
 
@@ -332,10 +332,10 @@ namespace Tests.Services
                 CreatedBy = meal.User.Name,
             };
 
-            BaseResponse<DetailMealDto> response = new()
+            Response<DetailMealDto> response = new()
             {
                 Message = "Esse sabor não pertence a sua empresa",
-                IsSuccess = false,
+                Succeeded = false,
             };
 
             // Act
@@ -346,7 +346,7 @@ namespace Tests.Services
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
             result.Data.Should().Be(response.Data);
         }
 
@@ -356,10 +356,10 @@ namespace Tests.Services
             // Arrange
             Meal? meal = null;
 
-            BaseResponse<DetailMealDto> response = new()
+            Response<DetailMealDto> response = new()
             {
                 Message = "Sabor não encontrado",
-                IsSuccess = false,
+                Succeeded = false,
             };
 
             // Act
@@ -370,7 +370,7 @@ namespace Tests.Services
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
             result.Data.Should().Be(response.Data);
         }
 
@@ -400,16 +400,16 @@ namespace Tests.Services
 
             var result = await _mealService.DeleteMealAsync(deleteMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor deletado com sucesso",
-                IsSuccess = true
+                Succeeded = true
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -430,16 +430,16 @@ namespace Tests.Services
 
             var result = await _mealService.DeleteMealAsync(deleteMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Esse sabor não pertence a sua empresa",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -465,16 +465,16 @@ namespace Tests.Services
 
             var result = await _mealService.DeleteMealAsync(deleteMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = $"Você não pode deletar esse sabor, pois ele está vinculado a {orders.Count} pedido(s)",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -493,16 +493,16 @@ namespace Tests.Services
             A.CallTo(() => _mealRepository.DetailMealAsync(deleteMealDto.Id)).Returns(meal);
             var result = await _mealService.DeleteMealAsync(deleteMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor não encontrado",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
 
         [Fact]
@@ -514,16 +514,16 @@ namespace Tests.Services
             // Act
             var result = await _mealService.DeleteMealAsync(deleteMealDto);
 
-            BaseResponse<GetMealDto> response = new()
+            Response<GetMealDto> response = new()
             {
                 Message = "Sabor não pode ser nulo",
-                IsSuccess = false
+                Succeeded = false
             };
 
             // Assert
             result.Should().BeEquivalentTo(response);
             result.Message.Should().Be(response.Message);
-            result.IsSuccess.Should().Be(response.IsSuccess);
+            result.Succeeded.Should().Be(response.Succeeded);
         }
     }
 }

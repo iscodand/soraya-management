@@ -1,6 +1,6 @@
 using Application.Contracts.Services;
 using Application.DTOs.Authentication;
-using Application.Responses;
+using Application.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Controllers.Common;
 using Presentation.ViewModels.Authentication;
@@ -35,10 +35,10 @@ namespace Presentation.Controllers
                     Password = loginUserViewModel.Password
                 };
 
-                BaseResponse<string> result = await _authenticationService.LoginAsync(loginUserDto);
+                Response<string> result = await _authenticationService.LoginAsync(loginUserDto);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("home", "Home");
                 }
@@ -58,10 +58,10 @@ namespace Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                BaseResponse<string> result = await _authenticationService.ForgotPasswordAsync(viewModel.Email, Request.Headers.Origin.ToString());
+                Response<string> result = await _authenticationService.ForgotPasswordAsync(viewModel.Email, Request.Headers.Origin.ToString());
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
                 }
@@ -102,10 +102,10 @@ namespace Presentation.Controllers
                 ResetPasswordDto dto = ResetPasswordViewModel.MapToDto(viewModel, token, email);
                 var result = await _authenticationService.ResetPasswordAsync(dto);
 
-                ViewData["IsSuccess"] = result.IsSuccess;
+                ViewData["Succeeded"] = result.Succeeded;
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     // remover os cookies após a requisição bem sucedida
                     Response.Cookies.Delete("ResetPasswordToken");

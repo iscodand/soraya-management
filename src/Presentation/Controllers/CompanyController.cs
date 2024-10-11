@@ -54,7 +54,7 @@ namespace Presentation.Controllers
 
                 var result = await _companyService.CreateCompanyAsync(request);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(GetCompanies));
                 }
