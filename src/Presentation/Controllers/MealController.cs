@@ -1,7 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.DTOs.Authentication;
-using Application.Responses;
+using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Controllers.Common;
@@ -25,10 +25,10 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Meals()
         {
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-            BaseResponse<GetMealDto> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
+            Response<IEnumerable<GetMealDto>> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetMealViewModel> viewModelCollection = new();
-            foreach (GetMealDto meal in meals.DataCollection)
+            foreach (GetMealDto meal in meals.Data)
             {
                 GetMealViewModel viewModel = new()
                 {
@@ -69,12 +69,12 @@ namespace Presentation.Controllers
                     UserId = authenticatedUser.Id
                 };
 
-                BaseResponse<CreateMealDto> result = await _mealService.CreateMealAsync(createMealDto);
+                Response<CreateMealDto> result = await _mealService.CreateMealAsync(createMealDto);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    ViewData["IsSuccess"] = true;
+                    ViewData["Succeeded"] = true;
                     return View();
                 }
             }
@@ -89,9 +89,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
+                Response<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     DetailMealViewModel detailMealViewModel = new()
                     {
@@ -116,9 +116,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetMealDto> result = await _mealService.GetMealByIdAsync(mealId, authenticatedUser.CompanyId);
+                Response<GetMealDto> result = await _mealService.GetMealByIdAsync(mealId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     UpdateMealViewModel updateMealViewModel = new()
                     {
@@ -151,9 +151,9 @@ namespace Presentation.Controllers
                     UserCompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<GetMealDto> result = await _mealService.UpdateMealAsync(updateMealDto);
+                Response<GetMealDto> result = await _mealService.UpdateMealAsync(updateMealDto);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Meals));
                 }
@@ -176,9 +176,9 @@ namespace Presentation.Controllers
                     UserCompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<GetMealDto> result = await _mealService.DeleteMealAsync(deleteMealDto);
+                Response<GetMealDto> result = await _mealService.DeleteMealAsync(deleteMealDto);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message });
                 }

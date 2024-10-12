@@ -1,7 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.User;
 using Application.DTOs.Authentication;
-using Application.Responses;
+using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
@@ -34,7 +34,7 @@ namespace Presentation.Controllers
                 var authenticatedUser = SessionService.RetrieveUserSession();
                 var result = await _userService.GetUsersByCompanyAsync(authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return View(result.Data);
                 }
@@ -48,11 +48,11 @@ namespace Presentation.Controllers
         [Route("novo/")]
         public async Task<IActionResult> RegisterEmployee()
         {
-            BaseResponse<GetRolesDto> roles = await _userService.GetRolesAsync();
+            Response<IEnumerable<GetRolesDto>> roles = await _userService.GetRolesAsync();
 
             RegisterUserViewModel registerUserViewModel = new()
             {
-                RolesDropdown = roles.DataCollection
+                RolesDropdown = roles.Data
             };
 
             return View(registerUserViewModel);
@@ -79,18 +79,18 @@ namespace Presentation.Controllers
                     CompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<string> result = await _authenticationService.RegisterAsync(registerUserDto);
+                Response<string> result = await _authenticationService.RegisterAsync(registerUserDto);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    ViewData["IsSuccess"] = true;
+                    ViewData["Succeeded"] = true;
                     return RedirectToAction(nameof(Employees));
                 }
             }
 
-            BaseResponse<GetRolesDto> roles = await _userService.GetRolesAsync();
-            registerUserViewModel.RolesDropdown = roles.DataCollection;
+            Response<IEnumerable<GetRolesDto>> roles = await _userService.GetRolesAsync();
+            registerUserViewModel.RolesDropdown = roles.Data;
             return View(registerUserViewModel);
         }
 
@@ -101,10 +101,10 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername,
+                Response<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername,
                                                                                      authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return View(result.Data);
                 }
@@ -120,9 +120,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername, authenticatedUser.CompanyId);
+                Response<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     UpdateUserViewModel updateUserViewModel = new()
                     {
@@ -155,12 +155,12 @@ namespace Presentation.Controllers
                     CompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<UpdateUserDto> result = await _userService.UpdateUserAsync(updateUserDto);
+                Response<UpdateUserDto> result = await _userService.UpdateUserAsync(updateUserDto);
 
                 ViewData["Message"] = result.Message;
-                ViewData["IsSuccess"] = result.IsSuccess;
+                ViewData["Succeeded"] = result.Succeeded;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Employees));
                 }
@@ -176,10 +176,10 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetUserDto> result = await _userService.ActivateUserAsync(employeeUsername,
+                Response<GetUserDto> result = await _userService.ActivateUserAsync(employeeUsername,
                                                                                      authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true });
                 }
@@ -198,10 +198,10 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
+                Response<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
                                                                                      authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true });
                 }
@@ -219,7 +219,7 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _userService.GetUserByUsernameAsync(employeeUsername);
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     ChangePasswordDto request = new()
                     {
@@ -246,7 +246,7 @@ namespace Presentation.Controllers
                 var result = await _authenticationService.ChangePasswordAsync(employeeUsername, request);
 
                 ViewData["Message"] = result.Message;
-                ViewData["IsSuccess"] = result.IsSuccess;
+                ViewData["Succeeded"] = result.Succeeded;
             }
 
             request.Username = employeeUsername;
@@ -260,10 +260,10 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
+                Response<GetUserDto> result = await _userService.DeactivateUserAsync(employeeUsername,
                                                                                      authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true });
                 }

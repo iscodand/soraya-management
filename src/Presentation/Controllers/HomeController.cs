@@ -1,7 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.Data;
 using Application.DTOs.Authentication;
-using Application.Responses;
+using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Controllers.Common;
@@ -58,9 +58,9 @@ namespace Presentation.Controllers
                     initialDate = today.AddDays(daysToSubtract);
                 }
 
-                BaseResponse<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
+                Response<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message, data = result.Data });
                 }

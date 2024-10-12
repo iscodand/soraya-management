@@ -1,5 +1,5 @@
 using Application.Dtos.User;
-using Application.Responses;
+using Application.Wrappers;
 using Domain.Entities;
 using Application.Contracts.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +26,7 @@ namespace Application.Services
             _userManager = userManager;
         }
 
-        public async Task<BaseResponse<IEnumerable<GetUserDto>>> GetUsersByCompanyAsync(int companyId)
+        public async Task<Response<IEnumerable<GetUserDto>>> GetUsersByCompanyAsync(int companyId)
         {
             ICollection<User> users = await _userRepository.GetUsersByCompanyAsync(companyId);
             var mappedUsers = GetUserDto.Map(users);
@@ -34,12 +34,12 @@ namespace Application.Services
             return new()
             {
                 Message = "Usuários encontrados com sucesso.",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = mappedUsers
             };
         }
 
-        public async Task<BaseResponse<GetUserDto>> GetUserByUsernameAsync(string username)
+        public async Task<Response<GetUserDto>> GetUserByUsernameAsync(string username)
         {
             User user = await _userRepository.GetUserByUsernameAsync(username);
             if (user is null)
@@ -47,7 +47,7 @@ namespace Application.Services
                 return new()
                 {
                     Message = "Usuário não encontrado.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -58,54 +58,42 @@ namespace Application.Services
             {
                 Data = getUserDto,
                 Message = "Usuário recuperado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetRolesDto>> GetRolesAsync()
+        public async Task<Response<IEnumerable<GetRolesDto>>> GetRolesAsync()
         {
-            ICollection<Role> roles = await _roleRepository.GetAllAsync();
+            IEnumerable<Role> roles = await _roleRepository.GetAllAsync();
+            IEnumerable<GetRolesDto> mappedRoles = GetRolesDto.Map(roles);
 
-            List<GetRolesDto> getRolesDtosCollection = new();
-            foreach (Role role in roles.Where(x => x.Name != "Admin"))
-            {
-                GetRolesDto getRolesDto = new()
-                {
-                    Id = role.Id,
-                    Name = role.Name,
-                    Description = role.Description
-                };
-
-                getRolesDtosCollection.Add(getRolesDto);
-            }
-
-            return new BaseResponse<GetRolesDto>()
+            return new()
             {
                 Message = "Cargos encontrados com sucesso",
-                IsSuccess = true,
-                DataCollection = getRolesDtosCollection
+                Succeeded = true,
+                Data = mappedRoles
             };
         }
 
-        public async Task<BaseResponse<DetailUserDto>> DetailUserAsync(string username, int companyId)
+        public async Task<Response<DetailUserDto>> DetailUserAsync(string username, int companyId)
         {
             // TODO => implementar paginação
             User user = await _userRepository.GetWithOrdersAsync(username);
             if (user == null)
             {
-                return new BaseResponse<DetailUserDto>()
+                return new Response<DetailUserDto>()
                 {
                     Message = "Usuário não encontrado.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (user.CompanyId != companyId)
             {
-                return new BaseResponse<DetailUserDto>()
+                return new Response<DetailUserDto>()
                 {
                     Message = "Esse usuário não faz parte da sua empresa.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -114,52 +102,52 @@ namespace Application.Services
 
             DetailUserDto detailUserDto = DetailUserDto.Map(user, role.Description);
 
-            return new BaseResponse<DetailUserDto>()
+            return new Response<DetailUserDto>()
             {
                 Message = "Usuário encontrado com sucesso.",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = detailUserDto
             };
         }
 
-        public async Task<BaseResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto request)
+        public async Task<Response<UpdateUserDto>> UpdateUserAsync(UpdateUserDto request)
         {
             User user = await _userRepository.GetUserByUsernameAsync(request.Username);
             if (user is null)
             {
-                return new BaseResponse<UpdateUserDto>()
+                return new Response<UpdateUserDto>()
                 {
                     Message = "Usuário não encontrado. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (user.CompanyId != request.CompanyId)
             {
-                return new BaseResponse<UpdateUserDto>()
+                return new Response<UpdateUserDto>()
                 {
                     Message = "Usuário não encontrado. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             bool usernameAlreadyInUse = await _userRepository.UserExistsByUsernameAsync(request.Username, user.Id);
             if (usernameAlreadyInUse)
             {
-                return new BaseResponse<UpdateUserDto>()
+                return new Response<UpdateUserDto>()
                 {
                     Message = "Esse nome de usuário já está sendo utilizado. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             bool emailAlreadyInUse = await _userRepository.UserExistsByEmailAsync(request.Email, user.Id);
             if (emailAlreadyInUse)
             {
-                return new BaseResponse<UpdateUserDto>()
+                return new Response<UpdateUserDto>()
                 {
                     Message = "Esse e-mail já está sendo utilizado. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 ;
@@ -169,88 +157,88 @@ namespace Application.Services
             return new()
             {
                 Message = "Usuário atualizado com sucesso",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetUserDto>> ActivateUserAsync(string username, int companyId)
+        public async Task<Response<GetUserDto>> ActivateUserAsync(string username, int companyId)
         {
             User user = await _userRepository.GetUserByUsernameAsync(username);
 
             if (user == null)
             {
-                return new BaseResponse<GetUserDto>()
+                return new Response<GetUserDto>()
                 {
                     Message = "Usuário não encontrado.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (user.CompanyId != companyId)
             {
-                return new BaseResponse<GetUserDto>()
+                return new Response<GetUserDto>()
                 {
                     Message = "Esse usuário não faz parte da sua empresa.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (user.IsActive)
             {
-                return new BaseResponse<GetUserDto>()
+                return new Response<GetUserDto>()
                 {
                     Message = "O usuário já está ativo.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             user.Activate();
             await _userRepository.UpdateAsync(user);
 
-            return new BaseResponse<GetUserDto>()
+            return new Response<GetUserDto>()
             {
                 Message = "Usuário foi ativo com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetUserDto>> DeactivateUserAsync(string username, int companyId)
+        public async Task<Response<GetUserDto>> DeactivateUserAsync(string username, int companyId)
         {
             User user = await _userRepository.GetUserByUsernameAsync(username);
             if (user == null)
             {
-                return new BaseResponse<GetUserDto>()
+                return new Response<GetUserDto>()
                 {
                     Message = "Usuário não encontrado.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (user.CompanyId != companyId)
             {
-                return new BaseResponse<GetUserDto>()
+                return new Response<GetUserDto>()
                 {
                     Message = "Esse usuário não faz parte da sua empresa.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (!user.IsActive)
             {
-                return new BaseResponse<GetUserDto>()
+                return new Response<GetUserDto>()
                 {
                     Message = "O usuário já está inativo.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             user.Deactivate();
             await _userRepository.UpdateAsync(user);
 
-            return new BaseResponse<GetUserDto>()
+            return new Response<GetUserDto>()
             {
                 Message = "Usuário foi desativado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
     }

@@ -28,6 +28,6 @@ namespace Presentation.ViewModels.User
 
         public string RoleId { get; set; }
 
-        public ICollection<GetRolesDto> RolesDropdown { get; set; }
+        public IEnumerable<GetRolesDto> RolesDropdown { get; set; }
     }
 }
