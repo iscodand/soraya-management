@@ -2,7 +2,7 @@ using Application.Contracts.Repositories;
 using Application.Contracts.Services;
 using Application.DTOs.Company.Requests;
 using Application.DTOs.Company.Response;
-using Application.Responses;
+using Application.Wrappers;
 using Domain.Entities;
 
 namespace Application.Services
@@ -17,14 +17,14 @@ namespace Application.Services
         }
 
         // todo => adicionar validação para criação de nova empresa
-        public async Task<BaseResponse<string>> CreateCompanyAsync(CreateCompanyRequest request)
+        public async Task<Response<string>> CreateCompanyAsync(CreateCompanyRequest request)
         {
             bool companyAlreadyRegistered = await _companyRepository.CompanyAlreadyRegisteredByCNPJAsync(request.CNPJ);
             if (companyAlreadyRegistered)
             {
-                return new BaseResponse<string>()
+                return new Response<string>()
                 {
-                    IsSuccess = false,
+                    Succeeded = false,
                     Message = "Uma empresa já está cadastrada com esse CNPJ.",
                     Data = null
                 };
@@ -38,22 +38,22 @@ namespace Application.Services
 
             await _companyRepository.CreateAsync(company);
 
-            return new BaseResponse<string>()
+            return new Response<string>()
             {
-                IsSuccess = true,
+                Succeeded = true,
                 Message = "Empresa cadastrada com sucesso.",
                 Data = null
             };
         }
 
-        public async Task<BaseResponse<IEnumerable<CompanyDTO>>> GetCompaniesAsync()
+        public async Task<Response<IEnumerable<CompanyDTO>>> GetCompaniesAsync()
         {
             IEnumerable<Company> companies = await _companyRepository.GetAllAsync();
             IEnumerable<CompanyDTO> companyDTO = CompanyDTO.Map(companies);
 
-            return new BaseResponse<IEnumerable<CompanyDTO>>()
+            return new Response<IEnumerable<CompanyDTO>>()
             {
-                IsSuccess = true,
+                Succeeded = true,
                 Message = "Empresas recuperadas com sucesso.",
                 Data = companyDTO
             };

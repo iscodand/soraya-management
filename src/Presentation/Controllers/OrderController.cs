@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Dtos.Order;
-using Application.Responses;
+using Application.Wrappers;
 using Presentation.ViewModels.Order;
 using Presentation.Controllers.Common;
 using Application.DTOs.Authentication;
@@ -27,10 +27,10 @@ namespace Presentation.Controllers
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
             // Getting today orders
-            BaseResponse<GetOrderDto> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
+            Response<IEnumerable<GetOrderDto>> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
 
             List<GetOrderViewModel> getOrderViewModelsCollection = new();
-            foreach (GetOrderDto order in orders.DataCollection)
+            foreach (GetOrderDto order in orders.Data)
             {
                 GetOrderViewModel getOrderViewModel = new()
                 {
@@ -59,10 +59,10 @@ namespace Presentation.Controllers
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
             // Filter by date has been applied on OrderService
-            BaseResponse<GetOrderDto> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, createdAt);
+            Response<IEnumerable<GetOrderDto>> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, createdAt);
 
             List<GetOrderViewModel> getOrderViewModelCollection = new();
-            foreach (GetOrderDto order in orders.DataCollection)
+            foreach (GetOrderDto order in orders.Data)
             {
                 GetOrderViewModel getOrderViewModel = new()
                 {
@@ -90,7 +90,7 @@ namespace Presentation.Controllers
         {
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
-            BaseResponse<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+            Response<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
 
             CreateOrderDropdown createOrderDropdown = new()
             {
@@ -128,12 +128,12 @@ namespace Presentation.Controllers
                     UserId = authenticatedUser.Id
                 };
 
-                BaseResponse<CreateOrderDto> result = await _orderService.CreateOrderAsync(createOrderDto);
+                Response<CreateOrderDto> result = await _orderService.CreateOrderAsync(createOrderDto);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    ViewData["IsSuccess"] = true;
+                    ViewData["Succeeded"] = true;
                     return RedirectToAction(nameof(Orders));
                 }
             }
@@ -148,9 +148,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<UpdateOrderDto> result = await _orderService.MakeOrderPaymentAsync(orderId, authenticatedUser.CompanyId);
+                Response<UpdateOrderDto> result = await _orderService.MakeOrderPaymentAsync(orderId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message });
                 }
@@ -168,9 +168,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
+                Response<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     GetOrderViewModel getOrderViewModel = new()
                     {
@@ -200,12 +200,12 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetOrderDto> result = await _orderService.DeleteOrderAsync(orderId, authenticatedUser.CompanyId);
+                Response<GetOrderDto> result = await _orderService.DeleteOrderAsync(orderId, authenticatedUser.CompanyId);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    ViewData["IsSuccess"] = result.IsSuccess;
+                    ViewData["Succeeded"] = result.Succeeded;
                     return Json(new { success = true });
                 }
 
@@ -222,11 +222,11 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
+                Response<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    BaseResponse<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+                    Response<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
 
                     CreateOrderDropdown updateOrderDropdown = new()
                     {
@@ -285,12 +285,12 @@ namespace Presentation.Controllers
                     UserId = authenticatedUser.Id
                 };
 
-                BaseResponse<UpdateOrderDto> result = await _orderService.UpdateOrderAsync(updateOrderDto);
+                Response<UpdateOrderDto> result = await _orderService.UpdateOrderAsync(updateOrderDto);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    ViewData["IsSuccess"] = result.IsSuccess;
+                    ViewData["Succeeded"] = result.Succeeded;
                     return RedirectToAction(nameof(Orders));
                 }
             }

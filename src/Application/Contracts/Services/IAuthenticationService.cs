@@ -1,15 +1,15 @@
 using Application.DTOs.Authentication;
-using Application.Responses;
+using Application.Wrappers;
 
 namespace Application.Contracts.Services
 {
     public interface IAuthenticationService
     {
-        public Task<BaseResponse<string>> RegisterAsync(RegisterUserDto registerUserDto);
-        public Task<BaseResponse<string>> LoginAsync(LoginUserDto loginUserDto);
-        public Task<BaseResponse<string>> ForgotPasswordAsync(string email, string origin);
-        public Task<BaseResponse<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto);
-        public Task<BaseResponse<string>> ChangePasswordAsync(string username, ChangePasswordDto changePasswordDto);
-        public Task<BaseResponse<string>> LogoutAsync();
+        public Task<Response<string>> RegisterAsync(RegisterUserDto registerUserDto);
+        public Task<Response<string>> LoginAsync(LoginUserDto loginUserDto);
+        public Task<Response<string>> ForgotPasswordAsync(string email, string origin);
+        public Task<Response<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto);
+        public Task<Response<string>> ChangePasswordAsync(string username, ChangePasswordDto changePasswordDto);
+        public Task<Response<string>> LogoutAsync();
     }
 }

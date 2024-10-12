@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Dtos.Customer;
-using Application.Responses;
+using Application.Wrappers;
 using Presentation.ViewModels.Customer;
 using Presentation.ViewModels.Order;
 using Application.Dtos.Order;
@@ -27,10 +27,10 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Customers()
         {
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-            BaseResponse<GetCustomerDto> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+            Response<IEnumerable<GetCustomerDto>> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetCustomerViewModel> getCustomerDtoCollection = new();
-            foreach (GetCustomerDto customer in customers.DataCollection)
+            foreach (GetCustomerDto customer in customers.Data)
             {
                 GetCustomerViewModel viewModel = new()
                 {
@@ -53,10 +53,10 @@ namespace Presentation.Controllers
         public async Task<IActionResult> ListCustomers()
         {
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-            BaseResponse<GetCustomerDto> result = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+            Response<IEnumerable<GetCustomerDto>> result = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetCustomerViewModel> getCustomerDtoCollection = new();
-            foreach (GetCustomerDto customer in result.DataCollection)
+            foreach (GetCustomerDto customer in result.Data)
             {
                 GetCustomerViewModel viewModel = new()
                 {
@@ -98,12 +98,12 @@ namespace Presentation.Controllers
                     CompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<CreateCustomerDto> response = await _customerService.CreateCustomerAsync(createCustomerDto);
+                Response<CreateCustomerDto> response = await _customerService.CreateCustomerAsync(createCustomerDto);
                 ViewData["Message"] = response.Message;
 
-                if (response.IsSuccess)
+                if (response.Succeeded)
                 {
-                    ViewData["IsSuccess"] = true;
+                    ViewData["Succeeded"] = true;
                     return RedirectToAction(nameof(Customers));
                 }
             }
@@ -118,9 +118,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<DetailCustomerDto> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
+                Response<DetailCustomerDto> result = await _customerService.DetailCustomerAsync(customerId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     List<GetOrderViewModel> getOrderViewModelCollection = new();
                     foreach (GetOrderDto order in result.Data.Orders)
@@ -166,9 +166,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetCustomerDto> result = await _customerService.GetCustomerByIdAsync(customerId, authenticatedUser.CompanyId);
+                Response<GetCustomerDto> result = await _customerService.GetCustomerByIdAsync(customerId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     UpdateCustomerViewModel updateCustomerViewModel = new()
                     {
@@ -201,12 +201,12 @@ namespace Presentation.Controllers
                     UserCompanyId = authenticatedUser.CompanyId
                 };
 
-                BaseResponse<UpdateCustomerDto> result = await _customerService.UpdateCustomerAsync(updateCustomerDto);
+                Response<UpdateCustomerDto> result = await _customerService.UpdateCustomerAsync(updateCustomerDto);
                 ViewData["Message"] = result.Message;
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
-                    ViewData["IsSuccess"] = result.IsSuccess;
+                    ViewData["Succeeded"] = result.Succeeded;
                     return RedirectToAction(nameof(Customers));
                 }
             }
@@ -222,9 +222,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<UpdateCustomerDto> result = await _customerService.ActivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+                Response<UpdateCustomerDto> result = await _customerService.ActivateCustomerAsync(customerId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message });
                 }
@@ -243,9 +243,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<UpdateCustomerDto> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
+                Response<UpdateCustomerDto> result = await _customerService.InactivateCustomerAsync(customerId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message });
                 }
@@ -264,9 +264,9 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                BaseResponse<GetCustomerDto> result = await _customerService.DeleteCustomerAsync(customerId, authenticatedUser.CompanyId);
+                Response<GetCustomerDto> result = await _customerService.DeleteCustomerAsync(customerId, authenticatedUser.CompanyId);
 
-                if (result.IsSuccess)
+                if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message });
                 }

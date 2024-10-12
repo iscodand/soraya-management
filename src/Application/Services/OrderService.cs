@@ -1,5 +1,5 @@
 using Application.Dtos.Order;
-using Application.Responses;
+using Application.Wrappers;
 using Domain.Entities;
 using Application.Contracts.Repositories;
 using Infrastructure.Data.Repositories;
@@ -25,14 +25,14 @@ namespace Application.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<BaseResponse<CreateOrderDto>> CreateOrderAsync(CreateOrderDto createOrderDto)
+        public async Task<Response<CreateOrderDto>> CreateOrderAsync(CreateOrderDto createOrderDto)
         {
             if (createOrderDto == null)
             {
-                return new BaseResponse<CreateOrderDto>()
+                return new Response<CreateOrderDto>()
                 {
                     Message = "O Pedido não pode ser nulo.",
-                    IsSuccess = false,
+                    Succeeded = false,
                 };
             }
 
@@ -48,21 +48,21 @@ namespace Application.Services
 
             await _orderRepository.CreateAsync(order);
 
-            return new BaseResponse<CreateOrderDto>()
+            return new Response<CreateOrderDto>()
             {
                 Message = "Pedido criado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<UpdateOrderDto>> UpdateOrderAsync(UpdateOrderDto updateOrderDto)
+        public async Task<Response<UpdateOrderDto>> UpdateOrderAsync(UpdateOrderDto updateOrderDto)
         {
             if (updateOrderDto == null)
             {
-                return new BaseResponse<UpdateOrderDto>()
+                return new Response<UpdateOrderDto>()
                 {
                     Message = "Pedido não pode ser nulo.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -70,10 +70,10 @@ namespace Application.Services
 
             if (order.CompanyId != updateOrderDto.CompanyId)
             {
-                return new BaseResponse<UpdateOrderDto>()
+                return new Response<UpdateOrderDto>()
                 {
                     Message = "Você não pode editar esse pedido. Ele não pertence a sua empresa.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -98,32 +98,32 @@ namespace Application.Services
 
             await _orderRepository.UpdateAsync(order);
 
-            return new BaseResponse<UpdateOrderDto>()
+            return new Response<UpdateOrderDto>()
             {
                 Message = $"Pedido N° {updateOrderDto.OrderId} atualizado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<DetailOrderDto>> GetOrderDetailsAsync(int orderId, int userCompanyId)
+        public async Task<Response<DetailOrderDto>> GetOrderDetailsAsync(int orderId, int userCompanyId)
         {
             Order order = await _orderRepository.GetOrderDetailsAsync(orderId);
 
             if (order == null)
             {
-                return new BaseResponse<DetailOrderDto>()
+                return new Response<DetailOrderDto>()
                 {
                     Message = "O pedido não foi encontrado.",
-                    IsSuccess = false,
+                    Succeeded = false,
                 };
             }
 
             if (order.CompanyId != userCompanyId)
             {
-                return new BaseResponse<DetailOrderDto>()
+                return new Response<DetailOrderDto>()
                 {
                     Message = "O pedido não foi encontrado.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -145,63 +145,44 @@ namespace Application.Services
                 UpdatedAt = order.UpdatedAt
             };
 
-            return new BaseResponse<DetailOrderDto>()
+            return new Response<DetailOrderDto>()
             {
                 Data = detailOrderDto,
                 Message = $"Pedido {detailOrderDto.Id} encontrado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetOrderDto>> GetOrdersByCompanyAsync(int companyId)
+        public async Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByCompanyAsync(int companyId)
         {
             if (companyId <= 0)
             {
-                return new BaseResponse<GetOrderDto>()
+                return new()
                 {
                     Message = "Empresa não encontrada. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
-            ICollection<Order> orders = await _orderRepository.GetOrdersByCompanyAsync(companyId);
+            IEnumerable<Order> orders = await _orderRepository.GetOrdersByCompanyAsync(companyId);
+            IEnumerable<GetOrderDto> mappedOrders = GetOrderDto.Map(orders);
 
-            List<GetOrderDto> getOrderDtoCollection = new();
-            foreach (Order order in orders)
+            return new()
             {
-                GetOrderDto getOrderDto = new()
-                {
-                    Id = order.Id,
-                    Description = order.Description,
-                    Price = order.Price,
-                    IsPaid = order.IsPaid,
-                    PaidAt = order.PaidAt,
-                    PaymentType = order.PaymentType.Description,
-                    Meal = order.Meal.Description,
-                    Customer = order.Customer.Name,
-                    CreatedBy = order.User.Name,
-                    CreatedAt = order.CreatedAt
-                };
-
-                getOrderDtoCollection.Add(getOrderDto);
-            }
-
-            return new BaseResponse<GetOrderDto>()
-            {
-                DataCollection = getOrderDtoCollection,
+                Data = mappedOrders,
                 Message = "Pedidos encontrados com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetOrderDto>> GetOrdersByDateAsync(int companyId, DateTime? date)
+        public async Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByDateAsync(int companyId, DateTime? date)
         {
             if (companyId <= 0)
             {
-                return new BaseResponse<GetOrderDto>()
+                return new()
                 {
                     Message = "Empresa não encontrada. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -211,120 +192,86 @@ namespace Application.Services
                 date = DateTime.Today.Date;
             }
 
-            ICollection<Order> orders = await _orderRepository.GetOrdersByDateAsync(companyId, date);
+            IEnumerable<Order> orders = await _orderRepository.GetOrdersByDateAsync(companyId, date);
+            IEnumerable<GetOrderDto> getOrderDtoCollection = GetOrderDto.Map(orders);
 
-            List<GetOrderDto> getOrderDtoCollection = new();
-            foreach (Order order in orders)
+            return new()
             {
-                GetOrderDto getOrderDto = new()
-                {
-                    Id = order.Id,
-                    Description = order.Description,
-                    Price = order.Price,
-                    IsPaid = order.IsPaid,
-                    PaidAt = order.PaidAt,
-                    PaymentType = order.PaymentType.Description,
-                    Meal = order.Meal.Description,
-                    Customer = order.Customer.Name,
-                    CreatedBy = order.User.Name,
-                    CreatedAt = order.CreatedAt
-                };
-
-                getOrderDtoCollection.Add(getOrderDto);
-            }
-
-            return new BaseResponse<GetOrderDto>()
-            {
-                DataCollection = getOrderDtoCollection,
+                Data = getOrderDtoCollection,
                 Message = "Pedidos encontrados com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetOrderDto>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
+        public async Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
         {
             ICollection<Order> orders = await _orderRepository.GetOrdersByDateRangeAsync(companyId, initialDate, finalDate);
 
             if (orders == null)
             {
-                return new BaseResponse<GetOrderDto>()
+                return new()
                 {
                     Message = "Pedidos não encontrados com o filtro atual.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
-            List<GetOrderDto> getOrderDtoCollection = new();
-            foreach (Order order in orders)
-            {
-                GetOrderDto getOrderDto = new()
-                {
-                    Id = order.Id,
-                    Customer = order.Customer.Name,
-                    Meal = order.Meal.Description,
-                    Price = order.Price,
-                    IsPaid = order.IsPaid,
-                    PaidAt = order.PaidAt,
-                    CreatedAt = order.CreatedAt
-                };
+            IEnumerable<GetOrderDto> getOrderDtoCollection = GetOrderDto.Map(orders);
 
-                getOrderDtoCollection.Add(getOrderDto);
-            }
-
-            return new BaseResponse<GetOrderDto>()
+            return new()
             {
                 Message = "Pedidos encontrados com sucesso",
-                IsSuccess = true,
-                DataCollection = getOrderDtoCollection
+                Succeeded = true,
+                Data = getOrderDtoCollection
             };
         }
 
-        public async Task<BaseResponse<UpdateOrderDto>> MakeOrderPaymentAsync(int orderId, int userCompanyId)
+        public async Task<Response<UpdateOrderDto>> MakeOrderPaymentAsync(int orderId, int userCompanyId)
         {
             Order order = await _orderRepository.GetOrderDetailsAsync(orderId);
 
             if (order.CompanyId != userCompanyId)
             {
-                return new BaseResponse<UpdateOrderDto>()
+                return new Response<UpdateOrderDto>()
                 {
                     Message = "Este pedido não pertence a sua empresa. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             order.MarkAsPaid(userCompanyId);
             await _orderRepository.UpdateAsync(order);
 
-            return new BaseResponse<UpdateOrderDto>()
+            return new Response<UpdateOrderDto>()
             {
                 Message = "Pedido atualizado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetOrderDto>> DeleteOrderAsync(int orderId, int userCompanyId)
+        public async Task<Response<GetOrderDto>> DeleteOrderAsync(int orderId, int userCompanyId)
         {
             Order order = await _orderRepository.GetByIdAsync(orderId);
 
             if (order.CompanyId != userCompanyId)
             {
-                return new BaseResponse<GetOrderDto>()
+                return new Response<GetOrderDto>()
                 {
                     Message = "Este pedido não pertence a sua empresa. Verifique e tente novamente.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             await _orderRepository.DeleteAsync(order);
 
-            return new BaseResponse<GetOrderDto>()
+            return new Response<GetOrderDto>()
             {
                 Message = "Pedido deletado com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetCreateOrderItemsDto>> GetCreateOrdersItemsAsync(int companyId)
+        public async Task<Response<GetCreateOrderItemsDto>> GetCreateOrdersItemsAsync(int companyId)
         {
             ICollection<Customer> customers = await _customerRepository.GetActiveCustomersByCompanyAsync(companyId);
             ICollection<Meal> meals = await _mealRepository.GetMealsByCompanyAsync(companyId);
@@ -337,10 +284,10 @@ namespace Application.Services
                 PaymentTypes = paymentTypes
             };
 
-            return new BaseResponse<GetCreateOrderItemsDto>()
+            return new Response<GetCreateOrderItemsDto>()
             {
                 Message = "Sucesso.",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = orderItemsDto
             };
         }

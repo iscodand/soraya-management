@@ -1,7 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.Dtos.Order;
-using Application.Responses;
+using Application.Wrappers;
 using Domain.Entities;
 using Infrastructure.Data.Repositories;
 
@@ -16,25 +16,25 @@ namespace Application.Services
             _mealRepository = mealRepository;
         }
 
-        public async Task<BaseResponse<GetMealDto>> GetMealByIdAsync(int mealId, int userCompanyId)
+        public async Task<Response<GetMealDto>> GetMealByIdAsync(int mealId, int userCompanyId)
         {
             Meal meal = await _mealRepository.GetByIdAsync(mealId);
 
             if (meal == null)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Sabor não encontrado",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (meal.CompanyId != userCompanyId)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Esse sabor não pertence a sua empresa",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -46,33 +46,33 @@ namespace Application.Services
                 CreatedBy = meal.UserId
             };
 
-            return new BaseResponse<GetMealDto>()
+            return new Response<GetMealDto>()
             {
                 Message = "Sabor encontrado com sucesso",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = getMealDto
             };
         }
 
-        public async Task<BaseResponse<DetailMealDto>> DetailMealAsync(int mealId, int userCompanyId)
+        public async Task<Response<DetailMealDto>> DetailMealAsync(int mealId, int userCompanyId)
         {
             Meal meal = await _mealRepository.DetailMealAsync(mealId);
 
             if (meal == null)
             {
-                return new BaseResponse<DetailMealDto>()
+                return new Response<DetailMealDto>()
                 {
                     Message = "Sabor não encontrado",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (meal.CompanyId != userCompanyId)
             {
-                return new BaseResponse<DetailMealDto>()
+                return new Response<DetailMealDto>()
                 {
                     Message = "Esse sabor não pertence a sua empresa",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -104,22 +104,22 @@ namespace Application.Services
                 CreatedBy = meal.User.Name
             };
 
-            return new BaseResponse<DetailMealDto>()
+            return new Response<DetailMealDto>()
             {
                 Message = "Sabor encontrado com sucesso",
-                IsSuccess = true,
+                Succeeded = true,
                 Data = detailMealDto
             };
         }
 
-        public async Task<BaseResponse<CreateMealDto>> CreateMealAsync(CreateMealDto createMealDto)
+        public async Task<Response<CreateMealDto>> CreateMealAsync(CreateMealDto createMealDto)
         {
             if (createMealDto == null)
             {
-                return new BaseResponse<CreateMealDto>()
+                return new Response<CreateMealDto>()
                 {
                     Message = "Cliente não pode ser nulo.",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -132,83 +132,56 @@ namespace Application.Services
 
             await _mealRepository.CreateAsync(meal);
 
-            return new BaseResponse<CreateMealDto>()
+            return new Response<CreateMealDto>()
             {
                 Message = "Sabor salvo com sucesso.",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetMealDto>> GetMealsByCompanyAsync(int companyId)
+        public async Task<Response<IEnumerable<GetMealDto>>> GetMealsByCompanyAsync(int companyId)
         {
             if (companyId <= 0)
             {
-                return new BaseResponse<GetMealDto>()
+                return new()
                 {
                     Message = "Empresa não encontrada. Verifique e tente novamente",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
-            ICollection<Meal> meals = await _mealRepository.GetMealsByCompanyAsync(companyId);
+            IEnumerable<Meal> meals = await _mealRepository.GetMealsByCompanyAsync(companyId);
+            IEnumerable<GetMealDto> getMealDtoCollection = GetMealDto.Map(meals);
 
-            List<GetMealDto> getMealDtoCollection = new();
-            foreach (Meal meal in meals)
-            {
-                GetMealDto getMealDto = new()
-                {
-                    Id = meal.Id,
-                    Description = meal.Description,
-                    Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.User.Name,
-                    OrdersCount = meal.Orders.Count
-                };
-
-                getMealDtoCollection.Add(getMealDto);
-            }
-
-            return new BaseResponse<GetMealDto>()
+            return new()
             {
                 Message = "Sabores encontrados com sucesso",
-                IsSuccess = true,
-                DataCollection = getMealDtoCollection
+                Succeeded = true,
+                Data = getMealDtoCollection
             };
         }
 
-        public async Task<BaseResponse<GetMealDto>> GetMealsByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate)
+        public async Task<Response<IEnumerable<GetMealDto>>> GetMealsByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate)
         {
             ICollection<Meal> meals = await _mealRepository.GetMealsByDateRangeAsync(userCompanyId, initialDate.Date, finalDate.Date);
+            IEnumerable<GetMealDto> getMealDtoCollection = GetMealDto.Map(meals);
 
-            List<GetMealDto> getMealDtoCollection = new();
-            foreach (Meal meal in meals)
-            {
-                GetMealDto getMealDto = new()
-                {
-                    Id = meal.Id,
-                    Description = meal.Description,
-                    Accompaniments = meal.Accompaniments,
-                    OrdersCount = meal.Orders.Count
-                };
-
-                getMealDtoCollection.Add(getMealDto);
-            }
-
-            return new BaseResponse<GetMealDto>()
+            return new()
             {
                 Message = "Sabores encontrados com sucesso",
-                IsSuccess = true,
-                DataCollection = getMealDtoCollection
+                Succeeded = true,
+                Data = getMealDtoCollection
             };
         }
 
-        public async Task<BaseResponse<GetMealDto>> UpdateMealAsync(UpdateMealDto updateMealDto)
+        public async Task<Response<GetMealDto>> UpdateMealAsync(UpdateMealDto updateMealDto)
         {
             if (updateMealDto == null)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Sabor não pode ser nulo",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -216,10 +189,10 @@ namespace Application.Services
 
             if (meal == null)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Sabor não encontrado",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -227,19 +200,19 @@ namespace Application.Services
 
             if (mealExists)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Um sabor já foi cadastrado com essa Descrição. Verifique e tente novamente",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (meal.CompanyId != updateMealDto.UserCompanyId)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Esse sabor não pertence a sua empresa",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -247,21 +220,21 @@ namespace Application.Services
 
             await _mealRepository.SaveAsync();
 
-            return new BaseResponse<GetMealDto>()
+            return new Response<GetMealDto>()
             {
                 Message = "Sabor atualizado com sucesso",
-                IsSuccess = true
+                Succeeded = true
             };
         }
 
-        public async Task<BaseResponse<GetMealDto>> DeleteMealAsync(DeleteMealDto deleteMealDto)
+        public async Task<Response<GetMealDto>> DeleteMealAsync(DeleteMealDto deleteMealDto)
         {
             if (deleteMealDto == null)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Sabor não pode ser nulo",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
@@ -269,37 +242,37 @@ namespace Application.Services
 
             if (meal == null)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Sabor não encontrado",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (meal.Orders.Count > 0)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = $"Você não pode deletar esse sabor, pois ele está vinculado a {meal.Orders.Count} pedido(s)",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             if (meal.CompanyId != deleteMealDto.UserCompanyId)
             {
-                return new BaseResponse<GetMealDto>()
+                return new Response<GetMealDto>()
                 {
                     Message = "Esse sabor não pertence a sua empresa",
-                    IsSuccess = false
+                    Succeeded = false
                 };
             }
 
             await _mealRepository.DeleteAsync(meal);
 
-            return new BaseResponse<GetMealDto>()
+            return new Response<GetMealDto>()
             {
                 Message = "Sabor deletado com sucesso",
-                IsSuccess = true
+                Succeeded = true
             };
         }
     }
