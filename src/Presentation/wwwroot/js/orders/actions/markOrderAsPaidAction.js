@@ -1,16 +1,16 @@
 $('#mark-as-paid-button').click(function () {
     var orderId = $(this).data('order-id');
     var pendingFlag = document.getElementsByClassName('pending');
+    var modal = document.getElementById('order-details-modal')
+    var modalBackdrop = document.getElementById('modal-backdrop');
 
     $.ajax({
         url: `/pedidos/marcar-como-pago/${orderId}`,
         type: 'PATCH',
         success: function (result) {
+            console.log()
             if (result.success) {
-                for (var i = 0; i < pendingFlag.length; i++) {
-                    pendingFlag[i].classList.remove('pending');
-                    pendingFlag[i].classList.add('paid');
-                }
+                location.reload();
             } else {
                 alert('Falha ao atualizar o pedido: ' + result.message);
             }
