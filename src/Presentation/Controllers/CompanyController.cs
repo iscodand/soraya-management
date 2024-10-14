@@ -31,11 +31,27 @@ namespace Presentation.Controllers
             return View();
         }
 
-        [HttpGet("empresas")]
+        [HttpGet("")]
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _companyService.GetCompaniesAsync();
             return View(companies.Data);
+        }
+
+        [HttpGet("{companyId}")]
+        public async Task<IActionResult> DetailCompany(int companyId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _companyService.GetCompanyByIdAsync(companyId);
+                
+                if (result.Succeeded)
+                {
+                    return View(result.Data);
+                }
+            }
+
+            return View(nameof(GetCompanies));
         }
 
         [HttpGet("empresas/cadastrar")]
