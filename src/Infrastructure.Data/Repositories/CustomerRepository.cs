@@ -36,17 +36,6 @@ namespace Infrastructure.Data.Repositories
                                    .ConfigureAwait(false);
         }
 
-        public async Task<ICollection<Customer>> GetCustomersByCompanyAsync(int companyId)
-        {
-            return await _customers.AsNoTracking()
-                                   .Include(x => x.User).AsNoTracking()
-                                   .Include(x => x.Company).AsNoTracking()
-                                   .Include(x => x.Orders).AsNoTracking()
-                                   .Where(x => x.CompanyId == companyId).AsNoTracking()
-                                   .ToListAsync()
-                                   .ConfigureAwait(false);
-        }
-
         public async Task<ICollection<Customer>> GetActiveCustomersByCompanyAsync(int companyId)
         {
             return await _customers.AsNoTracking()
@@ -83,6 +72,26 @@ namespace Infrastructure.Data.Repositories
                                    .Where(x => x.CompanyId == companyId)
                                    .ToListAsync()
                                    .ConfigureAwait(false);
+        }
+
+        public async Task<(ICollection<Customer> customers, int count)> GetByCompanyPagedAsync(int companyId, int pageNumber, int pageSize)
+        {
+            var customers = await _customers.AsNoTracking()
+                                .Include(x => x.User)
+                                .Include(x => x.Company)
+                                .Include(x => x.Orders)
+                                .Where(x => x.CompanyId == companyId)
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync()
+                                .ConfigureAwait(false);
+
+            int totalCustomers = await _customers.AsNoTracking()
+                                                .Where(x => x.CompanyId == companyId)
+                                                .CountAsync()
+                                                .ConfigureAwait(false);
+
+            return (customers, totalCustomers);
         }
     }
 }
