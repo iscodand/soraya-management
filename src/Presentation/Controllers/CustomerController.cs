@@ -8,6 +8,7 @@ using Application.Dtos.Order;
 using Presentation.Controllers.Common;
 using Application.DTOs.Authentication;
 using Application.Contracts.Services;
+using Application.Parameters;
 
 namespace Presentation.Controllers
 {
@@ -24,54 +25,22 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Customers()
+        public async Task<IActionResult> Customers(int pageNumber = 1)
         {
-            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-            Response<IEnumerable<GetCustomerDto>> customers = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
-
-            List<GetCustomerViewModel> getCustomerDtoCollection = new();
-            foreach (GetCustomerDto customer in customers.Data)
+            RequestParameter parameters = new()
             {
-                GetCustomerViewModel viewModel = new()
-                {
-                    Id = customer.Id,
-                    Name = customer.Name,
-                    Phone = customer.Phone,
-                    IsActive = customer.IsActive,
-                    CreatedBy = customer.CreatedBy,
-                    OrdersCount = customer.OrdersCount
-                };
+                PageNumber = pageNumber,
+                PageSize = 10,
+            };
 
-                getCustomerDtoCollection.Add(viewModel);
-            }
-
-            return View(getCustomerDtoCollection.OrderByDescending(x => x.OrdersCount).ToList());
-        }
-
-        [HttpGet]
-        [Route("listar-clientes/")]
-        public async Task<IActionResult> ListCustomers()
-        {
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-            Response<IEnumerable<GetCustomerDto>> result = await _customerService.GetCustomersByCompanyAsync(authenticatedUser.CompanyId);
+            
+            var result = await _customerService.GetCustomersByCompanyAsync(
+                authenticatedUser.CompanyId,
+                parameters
+            );
 
-            List<GetCustomerViewModel> getCustomerDtoCollection = new();
-            foreach (GetCustomerDto customer in result.Data)
-            {
-                GetCustomerViewModel viewModel = new()
-                {
-                    Id = customer.Id,
-                    Name = customer.Name,
-                    Phone = customer.Phone,
-                    IsActive = customer.IsActive,
-                    CreatedBy = customer.CreatedBy,
-                    OrdersCount = customer.OrdersCount
-                };
-
-                getCustomerDtoCollection.Add(viewModel);
-            }
-
-            return Json(new { success = true, message = result.Message, data = getCustomerDtoCollection });
+            return View(result);
         }
 
         [HttpGet]

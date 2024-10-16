@@ -6,6 +6,7 @@ using Presentation.ViewModels.Order;
 using Presentation.Controllers.Common;
 using Application.DTOs.Authentication;
 using Application.Contracts.Services;
+using Application.Parameters;
 
 namespace Presentation.Controllers
 {
@@ -22,34 +23,24 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Orders()
+        public async Task<IActionResult> Orders(int pageNumber = 1)
         {
+            RequestParameter parameters = new()
+            {
+                PageNumber = pageNumber,
+                PageSize = 10,
+                InitialDate = DateTime.Now,
+                FinalDate = DateTime.Now
+            };
+
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
-            // Getting today orders
-            Response<IEnumerable<GetOrderDto>> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
+            var result = await _orderService.GetOrdersByDateRangePagedAsync(
+                authenticatedUser.CompanyId,
+                parameters
+            );
 
-            List<GetOrderViewModel> getOrderViewModelsCollection = new();
-            foreach (GetOrderDto order in orders.Data)
-            {
-                GetOrderViewModel getOrderViewModel = new()
-                {
-                    Id = order.Id,
-                    Description = order.Description,
-                    Price = order.Price,
-                    IsPaid = order.IsPaid,
-                    PaidAt = order.PaidAt,
-                    PaymentType = order.PaymentType,
-                    Meal = order.Meal,
-                    Customer = order.Customer,
-                    CreatedBy = order.CreatedBy,
-                    CreatedAt = order.CreatedAt
-                };
-
-                getOrderViewModelsCollection.Add(getOrderViewModel);
-            }
-
-            return View(getOrderViewModelsCollection);
+            return View(result);
         }
 
         [HttpGet]
@@ -141,8 +132,8 @@ namespace Presentation.Controllers
             return View();
         }
 
-        [HttpPatch]
-        [Route("marcar-como-pago/{orderId}")]
+        [HttpPost]
+        [Route("{orderId}/marcar-como-pago")]
         public async Task<IActionResult> MarkOrderAsPaid(int orderId)
         {
             if (ModelState.IsValid)

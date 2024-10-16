@@ -55,31 +55,31 @@ namespace Presentation.Controllers
         [HttpPost]
         [Route("novo/")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateMealViewModel createMealViewModel)
+        public async Task<IActionResult> Create(CreateMealDto request)
         {
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
-                CreateMealDto createMealDto = new()
-                {
-                    Description = createMealViewModel.Description,
-                    Accompaniments = createMealViewModel.Accompaniments,
-                    CompanyId = authenticatedUser.CompanyId,
-                    UserId = authenticatedUser.Id
-                };
+                request.UserId = authenticatedUser.Id;
+                request.CompanyId = authenticatedUser.CompanyId;
+            
+                Response<CreateMealDto> result = await _mealService.CreateMealAsync(request);
 
-                Response<CreateMealDto> result = await _mealService.CreateMealAsync(createMealDto);
                 ViewData["Message"] = result.Message;
 
                 if (result.Succeeded)
                 {
                     ViewData["Succeeded"] = true;
+                    return RedirectToAction(nameof(Meals));
+                }
+                else
+                {
                     return View();
                 }
             }
 
-            return View();
+            return RedirectToAction(nameof(Meals));
         }
 
         [HttpGet]
