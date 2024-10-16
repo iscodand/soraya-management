@@ -1,4 +1,5 @@
 using Application.Dtos.Order;
+using Application.Parameters;
 using Application.Wrappers;
 
 namespace Application.Contracts.Services
@@ -6,7 +7,8 @@ namespace Application.Contracts.Services
     public interface IOrderService
     {
         public Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByCompanyAsync(int companyId);
-        public Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByDateAsync(int companyId, DateTime? date);
+        public Task<PagedResponse<IEnumerable<GetOrderDto>>> GetOrdersByDateAsync(int companyId, DateTime? date);
+        public Task<PagedResponse<IEnumerable<GetOrderDto>>> GetOrdersByDateRangePagedAsync(int companyId, RequestParameter parameter);
         public Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate);
         public Task<Response<DetailOrderDto>> GetOrderDetailsAsync(int orderId, int userCompanyId);
         public Task<Response<CreateOrderDto>> CreateOrderAsync(CreateOrderDto createOrderDto);

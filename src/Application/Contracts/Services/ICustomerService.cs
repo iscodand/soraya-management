@@ -1,11 +1,12 @@
 using Application.Dtos.Customer;
+using Application.Parameters;
 using Application.Wrappers;
 
 namespace Application.Contracts.Services
 {
     public interface ICustomerService
     {
-        public Task<Response<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int userCompanyId);
+        public Task<PagedResponse<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int companyId, RequestParameter parameter);
         public Task<Response<IEnumerable<GetCustomerDto>>> GetCustomersByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate);
         public Task<Response<GetCustomerDto>> GetCustomerByIdAsync(int customerId, int userCompanyId);
         public Task<Response<DetailCustomerDto>> DetailCustomerAsync(int customerId, int userCompanyId);

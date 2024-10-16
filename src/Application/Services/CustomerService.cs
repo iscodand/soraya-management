@@ -4,6 +4,7 @@ using Application.Wrappers;
 using Domain.Entities;
 using Application.Contracts.Repositories;
 using Application.Contracts.Services;
+using Application.Parameters;
 
 namespace Application.Services
 {
@@ -136,10 +137,10 @@ namespace Application.Services
             };
         }
 
-
-        public async Task<Response<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int userCompanyId)
+        public async Task<PagedResponse<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int companyId, RequestParameter parameter)
         {
-            if (userCompanyId <= 0)
+            // shit validation
+            if (companyId <= 0)
             {
                 return new()
                 {
@@ -148,15 +149,19 @@ namespace Application.Services
                 };
             }
 
-            IEnumerable<Customer> customers = await _customerRepository.GetCustomersByCompanyAsync(userCompanyId);
-            IEnumerable<GetCustomerDto> mappedCustomers = GetCustomerDto.Map(customers);
-
-            return new()
-            {
-                Message = "Clientes encontrados com sucesso.",
-                Succeeded = true,
-                Data = mappedCustomers
-            };
+            var customers = await _customerRepository.GetByCompanyPagedAsync(
+                companyId,
+                parameter.PageNumber,
+                parameter.PageSize
+            );
+            IEnumerable<GetCustomerDto> mappedCustomers = GetCustomerDto.Map(customers.customers);
+            
+            return new(
+                data: mappedCustomers,
+                pageNumber: parameter.PageNumber,
+                pageSize: parameter.PageSize,
+                totalItems: customers.count
+            );
         }
 
         public async Task<Response<IEnumerable<GetCustomerDto>>> GetCustomersByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate)
