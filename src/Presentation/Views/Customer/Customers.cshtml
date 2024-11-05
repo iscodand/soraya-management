@@ -60,37 +60,52 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var customer in customers)
-                        {
-                            <tr class="bg-white">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    @customer.Name
-                                </th>
-                                @if (customer.Phone is not null)
-                                {
-                                    <td class="px-6 py-4">
-                                        @customer.Phone
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="px-6 py-4">
-                                        Não informado
-                                    </td>
-                                }
-                                <td class="px-6 py-4">
-                                    @customer.OrdersCount pedido(s)
-                                </td>
-                                <td scope="row" class="px-6 py-4">
-                                    <a asp-controller="Customer" asp-action="Update" asp-route-customerId="@customer.Id"
-                                        class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                                        Detalhes
-                                    </a>
+                    @if (!customers.Any())
+                    {
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center p-6">
+                                    @* <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
+                                alt="Nenhum pedido" class="w-64 h-64 mx-auto"> *@
+                                    <p class="text-gray-500 text-lg mt-4">Nenhum cliente encontrado</p>
                                 </td>
                             </tr>
-                        }
-                    </tbody>
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                            @foreach (var customer in customers)
+                            {
+                                <tr class="bg-white">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        @customer.Name
+                                    </th>
+                                    @if (customer.Phone is not null)
+                                    {
+                                        <td class="px-6 py-4">
+                                            @customer.Phone
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="px-6 py-4">
+                                            Não informado
+                                        </td>
+                                    }
+                                    <td class="px-6 py-4">
+                                        @customer.OrdersCount pedido(s)
+                                    </td>
+                                    <td scope="row" class="px-6 py-4">
+                                        <a asp-controller="Customer" asp-action="Update" asp-route-customerId="@customer.Id"
+                                            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                                            Detalhes
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
                 </table>
             </div>
         </div>

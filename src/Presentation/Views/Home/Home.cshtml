@@ -132,31 +132,62 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var order in data.Orders)
-                        {
-                            <tr class="bg-white">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    @order.CreatedAt
-                                </th>
-                                <td class="px-6 py-4">
-                                    @order.Customer
-                                </td>
-                                <td class="px-6 py-4">
-                                    @order.Meal
-                                </td>
-                                <td class="px-6 py-4">
-                                    R$ @formatPrice(order.Price)
-                                </td>
-                                <td class="px-6 py-4">
-                                    @order.PaymentType
-                                </td>
-                                <td class="px-6 py-4">
-                                    @order.IsPaid
+
+                    @if (!Model.Orders.Any())
+                    {
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center p-6">
+                                    @* <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
+                                alt="Nenhum pedido" class="w-64 h-64 mx-auto"> *@
+                                    <p class="text-gray-500 text-lg mt-4">Nenhum pedido encontrado.</p>
                                 </td>
                             </tr>
+                        </tbody>
+                    }
+                    else
+                    {
+                        @foreach (var order in data.Orders)
+                        {
+                            <tbody>
+                                <tr class="bg-white">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        @order.CreatedAt
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        @order.Customer
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @order.Meal
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        R$ @formatPrice(order.Price)
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @order.PaymentType
+                                    </td>
+                                    @if (order.IsPaid)
+                                    {
+                                        <td class="px-6 py-4">
+                                            <span
+                                                class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">
+                                                Pago
+                                            </span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="px-6 py-4">
+                                            <span
+                                                class="bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">
+                                                Pendente
+                                            </span>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
                         }
-                    </tbody>
+                    }
                 </table>
             </div>
         </div>
