@@ -64,14 +64,14 @@ namespace Application.Services
                 };
             }
 
-            if (await _customerRepository.CustomerExistsByCompanyAsync(updateCustomerDto.Name, updateCustomerDto.UserCompanyId))
-            {
-                return new Response<UpdateCustomerDto>()
-                {
-                    Message = "Um cliente com esse nome já foi cadastrado. Verifique e tente novamente",
-                    Succeeded = false
-                };
-            }
+            //if (await _customerRepository.CustomerExistsByCompanyAsync(updateCustomerDto.Name, updateCustomerDto.UserCompanyId))
+            //{
+            //    return new Response<UpdateCustomerDto>()
+            //    {
+            //        Message = "Um cliente com esse nome já foi cadastrado. Verifique e tente novamente",
+            //        Succeeded = false
+            //    };
+            //}
 
             Customer customer = await _customerRepository.GetByIdAsync(updateCustomerDto.Id);
 
@@ -155,7 +155,7 @@ namespace Application.Services
                 parameter.PageSize
             );
             IEnumerable<GetCustomerDto> mappedCustomers = GetCustomerDto.Map(customers.customers);
-            
+
             return new(
                 data: mappedCustomers,
                 pageNumber: parameter.PageNumber,

@@ -1,6 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.Dtos.Order;
+using Application.Parameters;
 using Application.Wrappers;
 using Domain.Entities;
 using Infrastructure.Data.Repositories;
@@ -274,6 +275,19 @@ namespace Application.Services
                 Message = "Sabor deletado com sucesso",
                 Succeeded = true
             };
+        }
+
+        public async Task<PagedResponse<IEnumerable<GetMealDto>>> GetByCompanyPagedAsync(int companyId, RequestParameter parameter)
+        {
+            var meals = await _mealRepository.GetByCompanyPagedAsync(companyId, parameter.PageNumber, parameter.PageSize);
+            IEnumerable<GetMealDto> mappedMeals = GetMealDto.Map(meals.meals);
+
+            return new(
+                data: mappedMeals,
+                pageNumber: parameter.PageNumber,
+                pageSize: parameter.PageSize,
+                totalItems: meals.count
+            );
         }
     }
 }

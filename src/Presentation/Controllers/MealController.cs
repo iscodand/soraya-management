@@ -1,6 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.DTOs.Authentication;
+using Application.Parameters;
 using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,27 +23,21 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Meals()
+        public async Task<IActionResult> Meals(int pageNumber = 1)
         {
-            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-            Response<IEnumerable<GetMealDto>> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
-
-            List<GetMealViewModel> viewModelCollection = new();
-            foreach (GetMealDto meal in meals.Data)
+            RequestParameter parameters = new()
             {
-                GetMealViewModel viewModel = new()
-                {
-                    Id = meal.Id,
-                    Description = meal.Description,
-                    Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.CreatedBy,
-                    OrdersCount = meal.OrdersCount
-                };
+                PageNumber = pageNumber,
+                PageSize = 10,
+            };
 
-                viewModelCollection.Add(viewModel);
-            }
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+            var meals = await _mealService.GetByCompanyPagedAsync(
+                authenticatedUser.CompanyId,
+                parameters
+            );
 
-            return View(viewModelCollection.OrderByDescending(x => x.OrdersCount).ToList());
+            return View(meals);
         }
 
         [HttpGet]
@@ -63,7 +58,7 @@ namespace Presentation.Controllers
 
                 request.UserId = authenticatedUser.Id;
                 request.CompanyId = authenticatedUser.CompanyId;
-            
+
                 Response<CreateMealDto> result = await _mealService.CreateMealAsync(request);
 
                 ViewData["Message"] = result.Message;
@@ -83,34 +78,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("detalhes/{mealId}")]
-        public async Task<IActionResult> Detail(int mealId)
-        {
-            if (ModelState.IsValid)
-            {
-                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                Response<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
-
-                if (result.Succeeded)
-                {
-                    DetailMealViewModel detailMealViewModel = new()
-                    {
-                        Id = result.Data.Id,
-                        Description = result.Data.Description,
-                        Accompaniments = result.Data.Accompaniments,
-                        Orders = result.Data.Orders,
-                        CreatedBy = result.Data.CreatedBy
-                    };
-
-                    return View(detailMealViewModel);
-                }
-            }
-
-            return RedirectToAction(nameof(Meals));
-        }
-
-        [HttpGet]
-        [Route("editar/{mealId}")]
+        [Route("{mealId}")]
         public async Task<IActionResult> Update(int mealId)
         {
             if (ModelState.IsValid)
@@ -136,7 +104,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        [Route("editar/{mealId}")]
+        [Route("{mealId}")]
         public async Task<IActionResult> Update(int mealId, UpdateMealViewModel updateMealViewModel)
         {
             if (ModelState.IsValid)

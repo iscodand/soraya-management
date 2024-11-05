@@ -153,8 +153,8 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("detalhes/{orderId}")]
-        public async Task<IActionResult> Detail(int orderId)
+        [Route("{orderId}")]
+        public async Task<IActionResult> Update(int orderId)
         {
             if (ModelState.IsValid)
             {
@@ -163,25 +163,59 @@ namespace Presentation.Controllers
 
                 if (result.Succeeded)
                 {
-                    GetOrderViewModel getOrderViewModel = new()
+                    var dropdownResult = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+
+                    CreateOrderDropdown dropdownViewModel = new()
                     {
-                        Id = result.Data.Id,
-                        Description = result.Data.Description,
-                        Price = result.Data.Price,
-                        IsPaid = result.Data.IsPaid,
-                        PaidAt = result.Data.PaidAt,
-                        PaymentType = result.Data.PaymentType,
-                        Meal = result.Data.Meal,
-                        Customer = result.Data.Customer,
-                        CreatedBy = result.Data.CreatedBy,
-                        CreatedAt = result.Data.CreatedAt
+                        Customers = dropdownResult.Data.Customers,
+                        Meals = dropdownResult.Data.Meals,
+                        PaymentTypes = dropdownResult.Data.PaymentTypes
                     };
 
-                    return PartialView("_Detail", getOrderViewModel);
+                    UpdateOrderViewModel viewModel = UpdateOrderViewModel.Map(result.Data, dropdownViewModel);
+
+                    return View(viewModel);
                 }
             }
 
             return RedirectToAction(nameof(Orders));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{orderId}")]
+        public async Task<IActionResult> Update(int orderId, UpdateOrderViewModel updateOrderViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+
+                UpdateOrderDto updateOrderDto = new()
+                {
+                    Description = updateOrderViewModel.Description,
+                    CustomerId = updateOrderViewModel.CustomerId,
+                    MealId = updateOrderViewModel.MealId,
+                    PaymentTypeId = updateOrderViewModel.PaymentTypeId,
+                    Price = updateOrderViewModel.Price,
+                    IsPaid = updateOrderViewModel.IsPaid,
+                    PaidAt = updateOrderViewModel.PaidAt,
+                    OrderId = orderId,
+                    CompanyId = authenticatedUser.CompanyId,
+                    UserId = authenticatedUser.Id
+                };
+
+                Response<UpdateOrderDto> result = await _orderService.UpdateOrderAsync(updateOrderDto);
+
+                ViewData["Message"] = result.Message;
+                ViewData["Succeeded"] = result.Succeeded;
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Update), new { OrderId = orderId });
+                }
+            }
+
+            return RedirectToAction(nameof(Update), new { OrderId = orderId });
         }
 
         [HttpDelete]
@@ -204,89 +238,6 @@ namespace Presentation.Controllers
             }
 
             return Json(new { success = false, message = "Falha ao excluir o pedido." });
-        }
-
-        [HttpGet]
-        [Route("editar/{orderId}")]
-        public async Task<IActionResult> Update(int orderId)
-        {
-            if (ModelState.IsValid)
-            {
-                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-                Response<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
-
-                if (result.Succeeded)
-                {
-                    Response<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
-
-                    CreateOrderDropdown updateOrderDropdown = new()
-                    {
-                        PaymentTypes = orderItems.Data.PaymentTypes,
-                        Customers = orderItems.Data.Customers,
-                        Meals = orderItems.Data.Meals
-                    };
-
-                    UpdateOrderViewModel updateOrderViewModel = new()
-                    {
-                        Id = result.Data.Id,
-                        Description = result.Data.Description,
-                        Price = result.Data.Price,
-
-                        PaymentTypeId = result.Data.PaymentTypeId,
-                        MealId = result.Data.MealId,
-                        CustomerId = result.Data.CustomerId,
-
-                        IsPaid = result.Data.IsPaid,
-                        PaidAt = result.Data.PaidAt,
-                        CreatedAt = result.Data.CreatedAt,
-                        UpdatedAt = result.Data.UpdatedAt,
-
-                        CreateOrderDropdown = updateOrderDropdown,
-                    };
-
-                    return View(updateOrderViewModel);
-                }
-            }
-
-            return RedirectToAction(nameof(Orders));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("editar/{orderId}")]
-        public async Task<IActionResult> Update(int orderId, UpdateOrderViewModel updateOrderViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-
-                UpdateOrderDto updateOrderDto = new()
-                {
-                    Description = updateOrderViewModel.Description,
-                    CustomerId = updateOrderViewModel.CustomerId,
-                    MealId = updateOrderViewModel.MealId,
-                    PaymentTypeId = updateOrderViewModel.PaymentTypeId,
-                    Price = updateOrderViewModel.Price,
-
-                    IsPaid = updateOrderViewModel.IsPaid,
-                    PaidAt = updateOrderViewModel.PaidAt,
-
-                    OrderId = orderId,
-                    CompanyId = authenticatedUser.CompanyId,
-                    UserId = authenticatedUser.Id
-                };
-
-                Response<UpdateOrderDto> result = await _orderService.UpdateOrderAsync(updateOrderDto);
-                ViewData["Message"] = result.Message;
-
-                if (result.Succeeded)
-                {
-                    ViewData["Succeeded"] = result.Succeeded;
-                    return RedirectToAction(nameof(Orders));
-                }
-            }
-
-            return View();
         }
     }
 }
