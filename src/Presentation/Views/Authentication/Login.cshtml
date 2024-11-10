@@ -38,7 +38,7 @@
                                         <i class="fa-solid fa-user"></i>
                                         <label class="form-label fw-bolder">Nome de Usuário</label>
                                         <input class="form-control form-control-lg" asp-for="UserName" />
-                                        <span class="text-danger fw-bolder sm" asp-validation-for="UserName"></span>
+                                        <span class="font-semibold " asp-validation-for="UserName"></span>
                                     </div>
 
                                     <div class="form-outline">
@@ -46,7 +46,9 @@
                                         <label class="form-label fw-bolder">Senha</label>
                                         <input class="form-control form-control-lg" asp-for="Password"
                                             type="password" />
-                                        <span class="text-danger fw-bolder sm" asp-validation-for="Password"></span>
+                                        <div>
+                                            <span class="font-semibold mt-2" asp-validation-for="Password"></span>
+                                        </div>
                                     </div>
 
                                     <div class="mb-4 mt-4">

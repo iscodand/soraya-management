@@ -1,5 +1,6 @@
 using Application.Contracts.Repositories;
 using Application.Contracts.Services;
+using Application.Dtos.User;
 using Application.DTOs.Company.Requests;
 using Application.DTOs.Company.Response;
 using Application.Wrappers;
@@ -46,6 +47,34 @@ namespace Application.Services
             };
         }
 
+<<<<<<< HEAD
+=======
+
+        public async Task<Response<DetailCompanyDTO>> GetCompanyByIdAsync(int companyId)
+        {
+            // TODO => adicionar pedidos nos detalhes da empresa
+            Company company = await _companyRepository.DetailByIdAsync(companyId);
+            if (company is null)
+            {
+                return new()
+                {
+                    Message = "Empresa não encontrada.",
+                    Succeeded = false,
+                    Data = null
+                };
+            }
+
+            DetailCompanyDTO mappedCompany = DetailCompanyDTO.Map(company);
+
+            return new()
+            {
+                Message = "Empresa recuperada com sucesso.",
+                Succeeded = true,
+                Data = mappedCompany
+            };
+        }
+
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         public async Task<Response<IEnumerable<CompanyDTO>>> GetCompaniesAsync()
         {
             IEnumerable<Company> companies = await _companyRepository.GetAllAsync();

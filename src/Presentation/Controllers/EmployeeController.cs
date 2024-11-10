@@ -1,6 +1,10 @@
 using Application.Contracts.Services;
 using Application.Dtos.User;
 using Application.DTOs.Authentication;
+<<<<<<< HEAD
+=======
+using Application.Parameters;
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,17 +31,27 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Employees()
+        public async Task<IActionResult> Employees(int pageNumber = 1)
         {
-            if (ModelState.IsValid)
+            RequestParameter parameter = new()
             {
-                var authenticatedUser = SessionService.RetrieveUserSession();
-                var result = await _userService.GetUsersByCompanyAsync(authenticatedUser.CompanyId);
+                PageNumber = pageNumber,
+                PageSize = 10,
+            };
 
+<<<<<<< HEAD
                 if (result.Succeeded)
                 {
                     return View(result.Data);
                 }
+=======
+            var authenticatedUser = SessionService.RetrieveUserSession();
+            var result = await _userService.GetUsersByCompanyPagedAsync(authenticatedUser.CompanyId, parameter);
+
+            if (result.Succeeded)
+            {
+                return View(result);
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
             }
 
             return View("Home");
@@ -94,6 +108,7 @@ namespace Presentation.Controllers
             return View(registerUserViewModel);
         }
 
+<<<<<<< HEAD
         [HttpGet]
         [Route("{employeeUsername}/")]
         public async Task<IActionResult> DetailEmployee(string employeeUsername)
@@ -112,9 +127,11 @@ namespace Presentation.Controllers
 
             return RedirectToAction(nameof(Employees));
         }
+=======
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 
         [HttpGet]
-        [Route("editar/{employeeUsername}")]
+        [Route("{employeeUsername}")]
         public async Task<IActionResult> UpdateEmployee(string employeeUsername)
         {
             if (ModelState.IsValid)
@@ -140,7 +157,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        [Route("editar/{employeeUsername}")]
+        [Route("{employeeUsername}")]
         public async Task<IActionResult> UpdateEmployee(string employeeUsername, UpdateUserViewModel updateUserViewModel)
         {
             if (ModelState.IsValid)

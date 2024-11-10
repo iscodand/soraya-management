@@ -6,6 +6,7 @@ using Presentation.ViewModels.Order;
 using Presentation.Controllers.Common;
 using Application.DTOs.Authentication;
 using Application.Contracts.Services;
+using Application.Parameters;
 
 namespace Presentation.Controllers
 {
@@ -22,10 +23,19 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Orders()
+        public async Task<IActionResult> Orders(int pageNumber = 1)
         {
+            RequestParameter parameters = new()
+            {
+                PageNumber = pageNumber,
+                PageSize = 10,
+                InitialDate = DateTime.Now,
+                FinalDate = DateTime.Now
+            };
+
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
+<<<<<<< HEAD
             // Getting today orders
             Response<IEnumerable<GetOrderDto>> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
 
@@ -50,6 +60,14 @@ namespace Presentation.Controllers
             }
 
             return View(getOrderViewModelsCollection);
+=======
+            var result = await _orderService.GetOrdersByDateRangePagedAsync(
+                authenticatedUser.CompanyId,
+                parameters
+            );
+
+            return View(result);
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         }
 
         [HttpGet]
@@ -141,8 +159,8 @@ namespace Presentation.Controllers
             return View();
         }
 
-        [HttpPatch]
-        [Route("marcar-como-pago/{orderId}")]
+        [HttpPost]
+        [Route("{orderId}/marcar-como-pago")]
         public async Task<IActionResult> MarkOrderAsPaid(int orderId)
         {
             if (ModelState.IsValid)
@@ -162,6 +180,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+<<<<<<< HEAD
         [Route("detalhes/{orderId}")]
         public async Task<IActionResult> Detail(int orderId)
         {
@@ -217,6 +236,9 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("editar/{orderId}")]
+=======
+        [Route("{orderId}")]
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         public async Task<IActionResult> Update(int orderId)
         {
             if (ModelState.IsValid)
@@ -226,34 +248,22 @@ namespace Presentation.Controllers
 
                 if (result.Succeeded)
                 {
+<<<<<<< HEAD
                     Response<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+=======
+                    var dropdownResult = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 
-                    CreateOrderDropdown updateOrderDropdown = new()
+                    CreateOrderDropdown dropdownViewModel = new()
                     {
-                        PaymentTypes = orderItems.Data.PaymentTypes,
-                        Customers = orderItems.Data.Customers,
-                        Meals = orderItems.Data.Meals
+                        Customers = dropdownResult.Data.Customers,
+                        Meals = dropdownResult.Data.Meals,
+                        PaymentTypes = dropdownResult.Data.PaymentTypes
                     };
 
-                    UpdateOrderViewModel updateOrderViewModel = new()
-                    {
-                        Id = result.Data.Id,
-                        Description = result.Data.Description,
-                        Price = result.Data.Price,
+                    UpdateOrderViewModel viewModel = UpdateOrderViewModel.Map(result.Data, dropdownViewModel);
 
-                        PaymentTypeId = result.Data.PaymentTypeId,
-                        MealId = result.Data.MealId,
-                        CustomerId = result.Data.CustomerId,
-
-                        IsPaid = result.Data.IsPaid,
-                        PaidAt = result.Data.PaidAt,
-                        CreatedAt = result.Data.CreatedAt,
-                        UpdatedAt = result.Data.UpdatedAt,
-
-                        CreateOrderDropdown = updateOrderDropdown,
-                    };
-
-                    return View(updateOrderViewModel);
+                    return View(viewModel);
                 }
             }
 
@@ -262,7 +272,7 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("editar/{orderId}")]
+        [Route("{orderId}")]
         public async Task<IActionResult> Update(int orderId, UpdateOrderViewModel updateOrderViewModel)
         {
             if (ModelState.IsValid)
@@ -276,26 +286,56 @@ namespace Presentation.Controllers
                     MealId = updateOrderViewModel.MealId,
                     PaymentTypeId = updateOrderViewModel.PaymentTypeId,
                     Price = updateOrderViewModel.Price,
-
                     IsPaid = updateOrderViewModel.IsPaid,
                     PaidAt = updateOrderViewModel.PaidAt,
-
                     OrderId = orderId,
                     CompanyId = authenticatedUser.CompanyId,
                     UserId = authenticatedUser.Id
                 };
 
                 Response<UpdateOrderDto> result = await _orderService.UpdateOrderAsync(updateOrderDto);
+<<<<<<< HEAD
                 ViewData["Message"] = result.Message;
 
                 if (result.Succeeded)
                 {
                     ViewData["Succeeded"] = result.Succeeded;
                     return RedirectToAction(nameof(Orders));
+=======
+
+                ViewData["Message"] = result.Message;
+                ViewData["Succeeded"] = result.Succeeded;
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Update), new { OrderId = orderId });
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
                 }
             }
 
-            return View();
+            return RedirectToAction(nameof(Update), new { OrderId = orderId });
+        }
+
+        [HttpDelete]
+        [Route("deletar/{orderId}")]
+        public async Task<IActionResult> Delete(int orderId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                Response<GetOrderDto> result = await _orderService.DeleteOrderAsync(orderId, authenticatedUser.CompanyId);
+                ViewData["Message"] = result.Message;
+
+                if (result.Succeeded)
+                {
+                    ViewData["Succeeded"] = result.Succeeded;
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao excluir o pedido." });
         }
     }
 }

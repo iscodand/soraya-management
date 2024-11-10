@@ -11,6 +11,5 @@ namespace Presentation.ViewModels.Customer
 
         [StringLength(16, MinimumLength = 16, ErrorMessage = "O número de telefone precisa ter exatamente os 11 dígitos.")]
         public string Phone { get; set; }
-        public int UserCompanyId { get; set; }
     }
 }

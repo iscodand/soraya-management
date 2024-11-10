@@ -41,11 +41,11 @@
         </div>
 
         <table class="table styled-table">
-            <caption>Total de funcionários encontrados: <b>@companies.Count</b></caption>
+            <caption>Total de empresas encontradas: <b>@companies.Count</b></caption>
             <thead>
                 <tr>
+                    <th></th>
                     <th>Nome</th>
-                    <th>Descrição</th>
                     <th>CNPJ</th>
                 </tr>
             </thead>
@@ -54,8 +54,8 @@
                 {
                     <tr>
                         <td style="max-width: 50px;">
-                            <a type="button" asp-controller="Employee" asp-action="DetailCompany"
-                                asp-route-employeeUsername="@company.Id">
+                            <a type="button" asp-controller="Company" asp-action="DetailCompany"
+                                asp-route-companyId="@company.Id">
                                 <i class="fa-solid fa-circle-info fa-lg"></i>
                             </a>
                         </td>

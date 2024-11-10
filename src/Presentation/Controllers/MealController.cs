@@ -1,6 +1,10 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.DTOs.Authentication;
+<<<<<<< HEAD
+=======
+using Application.Parameters;
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,27 +26,29 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Meals()
+        public async Task<IActionResult> Meals(int pageNumber = 1)
         {
+<<<<<<< HEAD
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
             Response<IEnumerable<GetMealDto>> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
 
             List<GetMealViewModel> viewModelCollection = new();
             foreach (GetMealDto meal in meals.Data)
+=======
+            RequestParameter parameters = new()
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
             {
-                GetMealViewModel viewModel = new()
-                {
-                    Id = meal.Id,
-                    Description = meal.Description,
-                    Accompaniments = meal.Accompaniments,
-                    CreatedBy = meal.CreatedBy,
-                    OrdersCount = meal.OrdersCount
-                };
+                PageNumber = pageNumber,
+                PageSize = 10,
+            };
 
-                viewModelCollection.Add(viewModel);
-            }
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+            var meals = await _mealService.GetByCompanyPagedAsync(
+                authenticatedUser.CompanyId,
+                parameters
+            );
 
-            return View(viewModelCollection.OrderByDescending(x => x.OrdersCount).ToList());
+            return View(meals);
         }
 
         [HttpGet]
@@ -55,26 +61,27 @@ namespace Presentation.Controllers
         [HttpPost]
         [Route("novo/")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateMealViewModel createMealViewModel)
+        public async Task<IActionResult> Create(CreateMealDto request)
         {
             if (ModelState.IsValid)
             {
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
-                CreateMealDto createMealDto = new()
-                {
-                    Description = createMealViewModel.Description,
-                    Accompaniments = createMealViewModel.Accompaniments,
-                    CompanyId = authenticatedUser.CompanyId,
-                    UserId = authenticatedUser.Id
-                };
+                request.UserId = authenticatedUser.Id;
+                request.CompanyId = authenticatedUser.CompanyId;
 
+                Response<CreateMealDto> result = await _mealService.CreateMealAsync(request);
+
+<<<<<<< HEAD
                 Response<CreateMealDto> result = await _mealService.CreateMealAsync(createMealDto);
+=======
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
                 ViewData["Message"] = result.Message;
 
                 if (result.Succeeded)
                 {
                     ViewData["Succeeded"] = true;
+<<<<<<< HEAD
                     return View();
                 }
             }
@@ -92,17 +99,13 @@ namespace Presentation.Controllers
                 Response<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
 
                 if (result.Succeeded)
+=======
+                    return RedirectToAction(nameof(Meals));
+                }
+                else
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
                 {
-                    DetailMealViewModel detailMealViewModel = new()
-                    {
-                        Id = result.Data.Id,
-                        Description = result.Data.Description,
-                        Accompaniments = result.Data.Accompaniments,
-                        Orders = result.Data.Orders,
-                        CreatedBy = result.Data.CreatedBy
-                    };
-
-                    return View(detailMealViewModel);
+                    return View();
                 }
             }
 
@@ -110,7 +113,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("editar/{mealId}")]
+        [Route("{mealId}")]
         public async Task<IActionResult> Update(int mealId)
         {
             if (ModelState.IsValid)
@@ -136,7 +139,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        [Route("editar/{mealId}")]
+        [Route("{mealId}")]
         public async Task<IActionResult> Update(int mealId, UpdateMealViewModel updateMealViewModel)
         {
             if (ModelState.IsValid)

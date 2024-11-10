@@ -4,6 +4,7 @@ using Application.Wrappers;
 using Domain.Entities;
 using Application.Contracts.Repositories;
 using Application.Contracts.Services;
+using Application.Parameters;
 
 namespace Application.Services
 {
@@ -63,6 +64,7 @@ namespace Application.Services
                 };
             }
 
+<<<<<<< HEAD
             if (await _customerRepository.CustomerExistsByCompanyAsync(updateCustomerDto.Name, updateCustomerDto.UserCompanyId))
             {
                 return new Response<UpdateCustomerDto>()
@@ -71,6 +73,16 @@ namespace Application.Services
                     Succeeded = false
                 };
             }
+=======
+            //if (await _customerRepository.CustomerExistsByCompanyAsync(updateCustomerDto.Name, updateCustomerDto.UserCompanyId))
+            //{
+            //    return new Response<UpdateCustomerDto>()
+            //    {
+            //        Message = "Um cliente com esse nome já foi cadastrado. Verifique e tente novamente",
+            //        Succeeded = false
+            //    };
+            //}
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 
             Customer customer = await _customerRepository.GetByIdAsync(updateCustomerDto.Id);
 
@@ -136,10 +148,15 @@ namespace Application.Services
             };
         }
 
+<<<<<<< HEAD
 
         public async Task<Response<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int userCompanyId)
+=======
+        public async Task<PagedResponse<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int companyId, RequestParameter parameter)
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         {
-            if (userCompanyId <= 0)
+            // shit validation
+            if (companyId <= 0)
             {
                 return new()
                 {
@@ -148,6 +165,7 @@ namespace Application.Services
                 };
             }
 
+<<<<<<< HEAD
             IEnumerable<Customer> customers = await _customerRepository.GetCustomersByCompanyAsync(userCompanyId);
             IEnumerable<GetCustomerDto> mappedCustomers = GetCustomerDto.Map(customers);
 
@@ -157,6 +175,21 @@ namespace Application.Services
                 Succeeded = true,
                 Data = mappedCustomers
             };
+=======
+            var customers = await _customerRepository.GetByCompanyPagedAsync(
+                companyId,
+                parameter.PageNumber,
+                parameter.PageSize
+            );
+            IEnumerable<GetCustomerDto> mappedCustomers = GetCustomerDto.Map(customers.customers);
+
+            return new(
+                data: mappedCustomers,
+                pageNumber: parameter.PageNumber,
+                pageSize: parameter.PageSize,
+                totalItems: customers.count
+            );
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         }
 
         public async Task<Response<IEnumerable<GetCustomerDto>>> GetCustomersByDateRangeAsync(int userCompanyId, DateTime initialDate, DateTime finalDate)

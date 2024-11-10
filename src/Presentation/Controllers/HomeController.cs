@@ -28,7 +28,11 @@ namespace Presentation.Controllers
 
             if (authenticatedUser is not null)
             {
-                return View(authenticatedUser);
+                DateTime today = DateTime.Today.Date;
+
+                var result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, today, today);
+
+                return View(result.Data);
             }
 
             return RedirectToAction("Login", "Authentication");
@@ -39,34 +43,43 @@ namespace Presentation.Controllers
         [Route("data/")]
         public async Task<IActionResult> GetData(string selectedDate, DateTime initialDate)
         {
-            if (ModelState.IsValid)
-            {
-                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+            // if (ModelState.IsValid)
+            // {
+            //     GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
-                DateTime today = DateTime.Today.Date;
+            //     DateTime today = DateTime.Today.Date;
 
-                Dictionary<string, int> dateMappings = new()
-                {
-                    { "today", 0 },
-                    { "lastWeek", -7 },
-                    { "last15Days", -15 },
-                    { "lastMonth", -365 }
-                };
+            //     Dictionary<string, int> dateMappings = new()
+            //     {
+            //         { "today", 0 },
+            //         { "lastWeek", -7 },
+            //         { "last15Days", -15 },
+            //         { "lastMonth", -365 }
+            //     };
 
-                if (dateMappings.TryGetValue(selectedDate, out int daysToSubtract))
-                {
-                    initialDate = today.AddDays(daysToSubtract);
-                }
+            //     if (dateMappings.TryGetValue(selectedDate, out int daysToSubtract))
+            //     {
+            //         initialDate = today.AddDays(daysToSubtract);
+            //     }
 
+<<<<<<< HEAD
                 Response<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
 
                 if (result.Succeeded)
                 {
                     return Json(new { success = true, message = result.Message, data = result.Data });
                 }
+=======
+            //     Response<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
 
-                return Json(new { success = false, message = result.Message });
-            }
+            //     if (result.Succeeded)
+            //     {
+            //         return Json(new { success = true, message = result.Message, data = result.Data });
+            //     }
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
+
+            //     return Json(new { success = false, message = result.Message });
+            // }
 
             return Json(new { success = false, message = "Ocorreu um erro ao processar a solicitação" });
         }
