@@ -40,8 +40,6 @@ namespace Application.Services
             };
         }
 
-<<<<<<< HEAD
-=======
         public async Task<PagedResponse<IEnumerable<GetUserDto>>> GetUsersByCompanyPagedAsync(int companyId, RequestParameter parameter)
         {
             var users = await _userRepository.GetUsersByCompanyPagedAsync(companyId, parameter.PageNumber, parameter.PageSize);
@@ -49,7 +47,6 @@ namespace Application.Services
             return new(mappedUsers, parameter.PageNumber, parameter.PageSize, users.count);
         }
 
->>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         public async Task<Response<GetUserDto>> GetUserByUsernameAsync(string username)
         {
             User user = await _userRepository.GetUserByUsernameAsync(username);

@@ -62,21 +62,12 @@ namespace Presentation.Controllers
             //         initialDate = today.AddDays(daysToSubtract);
             //     }
 
-<<<<<<< HEAD
-                Response<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
-
-                if (result.Succeeded)
-                {
-                    return Json(new { success = true, message = result.Message, data = result.Data });
-                }
-=======
             //     Response<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
 
             //     if (result.Succeeded)
             //     {
             //         return Json(new { success = true, message = result.Message, data = result.Data });
             //     }
->>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 
             //     return Json(new { success = false, message = result.Message });
             // }

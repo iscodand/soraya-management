@@ -47,9 +47,6 @@ namespace Application.Services
             };
         }
 
-<<<<<<< HEAD
-=======
-
         public async Task<Response<DetailCompanyDTO>> GetCompanyByIdAsync(int companyId)
         {
             // TODO => adicionar pedidos nos detalhes da empresa
@@ -74,7 +71,6 @@ namespace Application.Services
             };
         }
 
->>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         public async Task<Response<IEnumerable<CompanyDTO>>> GetCompaniesAsync()
         {
             IEnumerable<Company> companies = await _companyRepository.GetAllAsync();

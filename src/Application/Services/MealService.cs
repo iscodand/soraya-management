@@ -1,10 +1,7 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.Dtos.Order;
-<<<<<<< HEAD
-=======
 using Application.Parameters;
->>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 using Application.Wrappers;
 using Domain.Entities;
 using Infrastructure.Data.Repositories;
