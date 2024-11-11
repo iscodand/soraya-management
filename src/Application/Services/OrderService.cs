@@ -157,6 +157,8 @@ namespace Application.Services
             };
         }
 
+<<<<<<< HEAD
+=======
         public async Task<PagedResponse<IEnumerable<GetOrderDto>>> GetOrdersByDateRangePagedAsync(int companyId, RequestParameter parameter)
         {
             Company company = await _companyRepository.GetByIdAsync(companyId);
@@ -187,6 +189,7 @@ namespace Application.Services
             );
         }
 
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         public async Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByCompanyAsync(int companyId)
         {
             if (companyId <= 0)
@@ -209,7 +212,11 @@ namespace Application.Services
             };
         }
 
+<<<<<<< HEAD
+        public async Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByDateAsync(int companyId, DateTime? date)
+=======
         public async Task<PagedResponse<IEnumerable<GetOrderDto>>> GetOrdersByDateAsync(int companyId, DateTime? date)
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         {
             if (companyId <= 0)
             {

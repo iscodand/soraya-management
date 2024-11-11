@@ -1,7 +1,10 @@
 using Application.Contracts.Services;
 using Application.Dtos.Meal;
 using Application.DTOs.Authentication;
+<<<<<<< HEAD
+=======
 using Application.Parameters;
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +28,15 @@ namespace Presentation.Controllers
         [Route("")]
         public async Task<IActionResult> Meals(int pageNumber = 1)
         {
+<<<<<<< HEAD
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+            Response<IEnumerable<GetMealDto>> meals = await _mealService.GetMealsByCompanyAsync(authenticatedUser.CompanyId);
+
+            List<GetMealViewModel> viewModelCollection = new();
+            foreach (GetMealDto meal in meals.Data)
+=======
             RequestParameter parameters = new()
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
             {
                 PageNumber = pageNumber,
                 PageSize = 10,
@@ -61,14 +72,38 @@ namespace Presentation.Controllers
 
                 Response<CreateMealDto> result = await _mealService.CreateMealAsync(request);
 
+<<<<<<< HEAD
+                Response<CreateMealDto> result = await _mealService.CreateMealAsync(createMealDto);
+=======
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
                 ViewData["Message"] = result.Message;
 
                 if (result.Succeeded)
                 {
                     ViewData["Succeeded"] = true;
+<<<<<<< HEAD
+                    return View();
+                }
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("detalhes/{mealId}")]
+        public async Task<IActionResult> Detail(int mealId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                Response<DetailMealDto> result = await _mealService.DetailMealAsync(mealId, authenticatedUser.CompanyId);
+
+                if (result.Succeeded)
+=======
                     return RedirectToAction(nameof(Meals));
                 }
                 else
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
                 {
                     return View();
                 }

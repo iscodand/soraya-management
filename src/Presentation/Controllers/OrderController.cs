@@ -35,12 +35,39 @@ namespace Presentation.Controllers
 
             GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
 
+<<<<<<< HEAD
+            // Getting today orders
+            Response<IEnumerable<GetOrderDto>> orders = await _orderService.GetOrdersByDateAsync(authenticatedUser.CompanyId, DateTime.Today.Date);
+
+            List<GetOrderViewModel> getOrderViewModelsCollection = new();
+            foreach (GetOrderDto order in orders.Data)
+            {
+                GetOrderViewModel getOrderViewModel = new()
+                {
+                    Id = order.Id,
+                    Description = order.Description,
+                    Price = order.Price,
+                    IsPaid = order.IsPaid,
+                    PaidAt = order.PaidAt,
+                    PaymentType = order.PaymentType,
+                    Meal = order.Meal,
+                    Customer = order.Customer,
+                    CreatedBy = order.CreatedBy,
+                    CreatedAt = order.CreatedAt
+                };
+
+                getOrderViewModelsCollection.Add(getOrderViewModel);
+            }
+
+            return View(getOrderViewModelsCollection);
+=======
             var result = await _orderService.GetOrdersByDateRangePagedAsync(
                 authenticatedUser.CompanyId,
                 parameters
             );
 
             return View(result);
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         }
 
         [HttpGet]
@@ -153,7 +180,65 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+<<<<<<< HEAD
+        [Route("detalhes/{orderId}")]
+        public async Task<IActionResult> Detail(int orderId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                Response<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
+
+                if (result.Succeeded)
+                {
+                    GetOrderViewModel getOrderViewModel = new()
+                    {
+                        Id = result.Data.Id,
+                        Description = result.Data.Description,
+                        Price = result.Data.Price,
+                        IsPaid = result.Data.IsPaid,
+                        PaidAt = result.Data.PaidAt,
+                        PaymentType = result.Data.PaymentType,
+                        Meal = result.Data.Meal,
+                        Customer = result.Data.Customer,
+                        CreatedBy = result.Data.CreatedBy,
+                        CreatedAt = result.Data.CreatedAt
+                    };
+
+                    return PartialView("_Detail", getOrderViewModel);
+                }
+            }
+
+            return RedirectToAction(nameof(Orders));
+        }
+
+        [HttpDelete]
+        [Route("deletar/{orderId}")]
+        public async Task<IActionResult> Delete(int orderId)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                Response<GetOrderDto> result = await _orderService.DeleteOrderAsync(orderId, authenticatedUser.CompanyId);
+                ViewData["Message"] = result.Message;
+
+                if (result.Succeeded)
+                {
+                    ViewData["Succeeded"] = result.Succeeded;
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, message = result.Message });
+            }
+
+            return Json(new { success = false, message = "Falha ao excluir o pedido." });
+        }
+
+        [HttpGet]
+        [Route("editar/{orderId}")]
+=======
         [Route("{orderId}")]
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         public async Task<IActionResult> Update(int orderId)
         {
             if (ModelState.IsValid)
@@ -163,7 +248,11 @@ namespace Presentation.Controllers
 
                 if (result.Succeeded)
                 {
+<<<<<<< HEAD
+                    Response<GetCreateOrderItemsDto> orderItems = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+=======
                     var dropdownResult = await _orderService.GetCreateOrdersItemsAsync(authenticatedUser.CompanyId);
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 
                     CreateOrderDropdown dropdownViewModel = new()
                     {
@@ -205,6 +294,14 @@ namespace Presentation.Controllers
                 };
 
                 Response<UpdateOrderDto> result = await _orderService.UpdateOrderAsync(updateOrderDto);
+<<<<<<< HEAD
+                ViewData["Message"] = result.Message;
+
+                if (result.Succeeded)
+                {
+                    ViewData["Succeeded"] = result.Succeeded;
+                    return RedirectToAction(nameof(Orders));
+=======
 
                 ViewData["Message"] = result.Message;
                 ViewData["Succeeded"] = result.Succeeded;
@@ -212,6 +309,7 @@ namespace Presentation.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Update), new { OrderId = orderId });
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
                 }
             }
 

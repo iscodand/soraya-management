@@ -1,7 +1,10 @@
 using Application.Contracts.Services;
 using Application.Dtos.User;
 using Application.DTOs.Authentication;
+<<<<<<< HEAD
+=======
 using Application.Parameters;
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,12 +39,19 @@ namespace Presentation.Controllers
                 PageSize = 10,
             };
 
+<<<<<<< HEAD
+                if (result.Succeeded)
+                {
+                    return View(result.Data);
+                }
+=======
             var authenticatedUser = SessionService.RetrieveUserSession();
             var result = await _userService.GetUsersByCompanyPagedAsync(authenticatedUser.CompanyId, parameter);
 
             if (result.Succeeded)
             {
                 return View(result);
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
             }
 
             return View("Home");
@@ -98,6 +108,27 @@ namespace Presentation.Controllers
             return View(registerUserViewModel);
         }
 
+<<<<<<< HEAD
+        [HttpGet]
+        [Route("{employeeUsername}/")]
+        public async Task<IActionResult> DetailEmployee(string employeeUsername)
+        {
+            if (ModelState.IsValid)
+            {
+                GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+                Response<DetailUserDto> result = await _userService.DetailUserAsync(employeeUsername,
+                                                                                     authenticatedUser.CompanyId);
+
+                if (result.Succeeded)
+                {
+                    return View(result.Data);
+                }
+            }
+
+            return RedirectToAction(nameof(Employees));
+        }
+=======
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
 
         [HttpGet]
         [Route("{employeeUsername}")]

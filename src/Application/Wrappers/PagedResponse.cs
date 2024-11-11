@@ -1,6 +1,12 @@
 namespace Application.Wrappers
 {
     public class PagedResponse<T> : Response<T> where T : class
+<<<<<<< HEAD
+    {    
+        public PagedResponse()
+        {
+
+=======
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
@@ -37,6 +43,7 @@ namespace Application.Wrappers
             Succeeded = false;
             TotalPages = 0;
             TotalItems = 0;
+>>>>>>> 7c9e06914913873b4bb993389b5b4c0d7fb94650
         }
     }
 }
