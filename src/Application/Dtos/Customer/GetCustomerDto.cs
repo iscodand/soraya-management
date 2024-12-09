@@ -19,8 +19,8 @@ namespace Application.Dtos.Customer
                 Name = x.Name,
                 Phone = x.Phone,
                 IsActive = x.IsActive,
-                CreatedBy = x.User is not null ? x.User.Name : "Não identificado.",
-                OrdersCount = x.Orders.Count
+                // CreatedBy = x.User is not null ? x.User.Name : "Não identificado.",
+                // OrdersCount = x.Orders.Count
             });
         }
     }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Application.Contracts.Services;
 using Application.Dtos.User;
 using Application.DTOs.Authentication;

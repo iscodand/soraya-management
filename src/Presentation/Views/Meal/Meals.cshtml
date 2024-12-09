@@ -9,6 +9,24 @@
     Layout = "_Layout";
 }
 
+@* <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: `/sabores/buscar?name=Carne`,
+            method: "GET",
+            contentType: "application/json",
+            success: function (response) {
+                console.log("Requisição bem-sucedida!", response);
+                alert("Requisição enviada com sucesso!");
+            },
+            error: function (xhr, status, error) {
+                console.error("Erro na requisição:", status, error);
+                alert("Ocorreu um erro. Verifique o console para mais detalhes.");
+            }
+        });
+    });
+</script> *@
+
 <section>
 
     <h1 class="text-3xl font-bold mb-6">Sabores</h1>
@@ -95,7 +113,7 @@
                                         </td>
                                     }
                                     <td class="px-6 py-4">
-                                        @meal.OrdersCount
+                                        @meal.OrdersCount pedido(s)
                                     </td>
                                     <td scope="row" class="px-6 py-4">
                                         <a asp-controller="Meal" asp-action="Update" asp-route-mealId="@meal.Id"

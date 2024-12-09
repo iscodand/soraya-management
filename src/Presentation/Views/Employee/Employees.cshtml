@@ -87,7 +87,7 @@
                                         @employee.Username
                                     </td>
                                     <td class="px-6 py-4">
-                                        @employee.Roles
+                                        @employee.Roles.ToList()
                                     </td>
                                     <td scope="row" class="flex gap-10 px-6 py-4">
                                         <a asp-controller="Employee" asp-action="UpdateEmployee"

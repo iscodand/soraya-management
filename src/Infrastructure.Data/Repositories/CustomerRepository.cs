@@ -93,5 +93,15 @@ namespace Infrastructure.Data.Repositories
 
             return (customers, totalCustomers);
         }
+
+        public async Task<ICollection<Customer>> SearchByCustomerAsync(string name)
+        {
+            return await _customers.AsNoTracking()
+                                   .Include(x => x.User)
+                                   .Include(x => x.Orders)
+                                   .Where(x => x.Name.ToUpper().Trim().Contains(name.ToUpper().Trim()))
+                                   .ToListAsync()
+                                   .ConfigureAwait(false);
+        }
     }
 }

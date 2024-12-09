@@ -44,6 +44,14 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Route("buscar")]
+        public async Task<IActionResult> SearchByCustomerAsync([FromQuery] string name)
+        {
+            var result = await _customerService.SearchByCustomerAsync(name);
+            return Json(result);
+        }
+
+        [HttpGet]
         [Route("novo/")]
         public IActionResult Create()
         {

@@ -40,6 +40,13 @@ namespace Presentation.Controllers
             return View(meals);
         }
 
+        [HttpGet("buscar")]
+        public async Task<IActionResult> SearchByMealAsync([FromQuery] string name)
+        {
+            var result = await _mealService.SearchByMealAsync(name);
+            return Json(result);
+        }
+
         [HttpGet]
         [Route("novo/")]
         public IActionResult Create()

@@ -5,6 +5,7 @@ using Domain.Entities;
 using Application.Contracts.Repositories;
 using Application.Contracts.Services;
 using Application.Parameters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Services
 {
@@ -49,6 +50,20 @@ namespace Application.Services
             return new Response<CreateCustomerDto>()
             {
                 Message = "Cliente criado com sucesso",
+                Succeeded = true
+            };
+        }
+
+        public async Task<Response<IEnumerable<GetCustomerDto>>> SearchByCustomerAsync(string name)
+        {
+            ICollection<Customer> customers = await _customerRepository.SearchByCustomerAsync(name);
+
+            IEnumerable<GetCustomerDto> mappedCustomers = GetCustomerDto.Map(customers);
+
+            return new Response<IEnumerable<GetCustomerDto>>()
+            {
+                Data = mappedCustomers,
+                Message = "Clientes recuperados com sucesso.",
                 Succeeded = true
             };
         }

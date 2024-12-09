@@ -231,7 +231,7 @@
     generateDoughnutChart("meals-chart", mealsData, mealsLabels);
 
     const customersJsonData = @Json.Serialize(data.Customers)
-    const customersLabels = customersJsonData.map(item => item.name);
+        const customersLabels = customersJsonData.map(item => item.name);
     const customersData = customersJsonData.map(item => item.ordersCount);
     generateDoughnutChart("customers-chart", customersData, customersLabels);
 </script>

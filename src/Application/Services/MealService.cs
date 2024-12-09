@@ -55,6 +55,18 @@ namespace Application.Services
             };
         }
 
+        public async Task<Response<IEnumerable<GetMealDto>>> SearchByMealAsync(string name)
+        {
+            IEnumerable<Meal> meals = await _mealRepository.SearchByMealAsync(name);
+            var mappedMeals = GetMealDto.Map(meals);
+
+            return new Response<IEnumerable<GetMealDto>>(
+                message: "Sabores recuperados com sucesso.",
+                data: mappedMeals,
+                status: 200
+            );
+        }
+
         public async Task<Response<DetailMealDto>> DetailMealAsync(int mealId, int userCompanyId)
         {
             Meal meal = await _mealRepository.DetailMealAsync(mealId);

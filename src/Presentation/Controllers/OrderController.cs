@@ -141,15 +141,9 @@ namespace Presentation.Controllers
                 GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
                 Response<UpdateOrderDto> result = await _orderService.MakeOrderPaymentAsync(orderId, authenticatedUser.CompanyId);
 
-                if (result.Succeeded)
-                {
-                    return Json(new { success = true, message = result.Message });
-                }
-
-                return Json(new { success = false, message = result.Message });
             }
 
-            return Json(new { success = false, message = "Falha ao atualizar o pedido." });
+            return RedirectToAction(nameof(Orders));
         }
 
         [HttpGet]

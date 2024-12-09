@@ -27,6 +27,14 @@ namespace Infrastructure.Data.Repositories
                                 .ConfigureAwait(false);
         }
 
+        public async Task<IEnumerable<Meal>> SearchByMealAsync(string name)
+        {
+            return await _meals.AsNoTracking()
+                               .Where(x => x.Description.ToUpper().Trim().Contains(name.ToUpper().Trim()))
+                               .ToListAsync()
+                               .ConfigureAwait(false);
+        }
+
         public async Task<(IEnumerable<Meal> meals, int count)> GetByCompanyPagedAsync(int companyId, int pageNumber, int pageSize)
         {
             IEnumerable<Meal> meals = await _meals.AsNoTracking()
@@ -43,7 +51,7 @@ namespace Infrastructure.Data.Repositories
                                     .Where(x => x.CompanyId == companyId)
                                     .CountAsync()
                                     .ConfigureAwait(false);
- 
+
             return (meals, count);
         }
 
