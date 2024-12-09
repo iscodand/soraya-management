@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minha Marmita - @ViewData["Title"]</title>
+
+    <!-- FONT AWESOME STUFF -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/761a28cb00.js" crossorigin="anonymous"></script>
+
+    <!-- JQUERY STUFF -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- JAVASCRIPT STUFF -->
+    <script type="module" src="~/js/site.js"></script>
+
+    <!-- CSS STUFF -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- TAILWIND STUFF -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CHART JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <link rel="stylesheet" href="~/css/preloader/preloader.css" asp-append-version="true" />
+    <script type="module" src="~/js/utils/preloader.js"></script>
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
