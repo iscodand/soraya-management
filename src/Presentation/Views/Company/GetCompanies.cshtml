@@ -80,10 +80,10 @@
                                         @company.CNPJ
                                     </td>
                                     <td class="px-6 py-4">
-                                        @* @company *@
+                                        @* @company. *@
                                     </td>
                                     <td scope="row" class="flex gap-10 px-6 py-4">
-                                        <a class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                                        <a asp-action="Detail" asp-route-companyId=@company.Id class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
                                             Detalhes
                                         </a>
                                     </td>

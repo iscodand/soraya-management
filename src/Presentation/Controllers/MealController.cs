@@ -100,7 +100,8 @@ namespace Presentation.Controllers
                         Id = result.Data.Id,
                         Description = result.Data.Description,
                         Accompaniments = result.Data.Accompaniments,
-                        UserCompanyId = authenticatedUser.CompanyId
+                        UserCompanyId = authenticatedUser.CompanyId,
+                        Meal = DetailMealViewModel.Map(result.Data),
                     };
 
                     return View(updateMealViewModel);

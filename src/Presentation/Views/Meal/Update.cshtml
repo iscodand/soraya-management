@@ -2,6 +2,8 @@
 
 @{
     var meal = Model;
+    var mealDetails = Model.Meal;
+    var orders = Model.Meal.Orders;
     ViewData["Title"] = $"Sabores - {meal.Description}";
     Layout = "_Layout";
 }
@@ -69,7 +71,100 @@
         </div>
 
         <div class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
-            <h1 class="text-3xl font-bold mb-6">Sabor - @meal.Description</h1>
+            
+            <div class="text-center mb-4">
+                <h1 class="text-3xl font-bold mb-6">
+                    Detalhes do Sabor
+                </h1>
+
+                <span class="text-gray-400">Últimos 30 dias</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                    Data
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Cliente
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Sabor
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Valor
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Pagamento
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+
+                        @if (!orders.Any())
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="text-center p-6">
+                                        @* <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
+                                alt="Nenhum pedido" class="w-64 h-64 mx-auto"> *@
+                                        <p class="text-gray-500 text-lg mt-4">Nenhum pedido encontrado</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                @foreach (var order in orders)
+                                {
+                                    <tr class="bg-white">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            @order.CreatedAt
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            @order.Customer
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @order.Meal
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @* R$ @formatPrice(order.Price) *@ Teste
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @order.PaymentType
+                                        </td>
+
+                                        @if (order.IsPaid)
+                                        {
+                                            <td class="px-6 py-4">
+                                                <span
+                                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">
+                                                    Pago
+                                                </span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="px-6 py-4">
+                                                <span
+                                                    class="bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">
+                                                    Pendente
+                                                </span>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </section>

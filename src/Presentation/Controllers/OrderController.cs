@@ -44,6 +44,32 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Route("{orderId}/detalhes")]
+        public async Task<IActionResult> DetailAsync(int orderId)
+        {
+            GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
+            Response<DetailOrderDto> result = await _orderService.GetOrderDetailsAsync(orderId, authenticatedUser.CompanyId);
+
+            var order = result.Data;
+
+            GetOrderViewModel mappedOrder = new()
+            {
+                Id = order.Id,
+                Description = order.Description,
+                Price = order.Price,
+                IsPaid = order.IsPaid,
+                PaidAt = order.PaidAt,
+                PaymentType = order.PaymentType,
+                Meal = order.Meal,
+                Customer = order.Customer,
+                CreatedBy = order.CreatedBy,
+                CreatedAt = order.CreatedAt
+            };
+
+            return View(mappedOrder);
+        }
+
+        [HttpGet]
         [Route("buscar/")]
         public async Task<IActionResult> FilteringOrders(DateTime? createdAt)
         {

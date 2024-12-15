@@ -131,28 +131,12 @@ namespace Application.Services
                 };
             }
 
-            DetailOrderDto detailOrderDto = new()
-            {
-                Id = order.Id,
-                Description = order.Description,
-                Price = order.Price,
-                IsPaid = order.IsPaid,
-                PaidAt = order.PaidAt,
-                PaymentType = order.PaymentType.Description,
-                PaymentTypeId = order.PaymentType.Id,
-                MealId = order.Meal.Id,
-                Meal = order.Meal.Description,
-                CustomerId = order.Customer.Id,
-                Customer = order.Customer.Name,
-                CreatedBy = order.User.Name,
-                CreatedAt = order.CreatedAt,
-                UpdatedAt = order.UpdatedAt
-            };
+            DetailOrderDto detailOrderDto = DetailOrderDto.Map(order);
 
             return new Response<DetailOrderDto>()
             {
                 Data = detailOrderDto,
-                Message = $"Pedido {detailOrderDto.Id} encontrado com sucesso.",
+                Message = "Pedido encontrado com sucesso.",
                 Succeeded = true
             };
         }
@@ -240,16 +224,6 @@ namespace Application.Services
         public async Task<Response<IEnumerable<GetOrderDto>>> GetOrdersByDateRangeAsync(int companyId, DateTime? initialDate, DateTime? finalDate)
         {
             ICollection<Order> orders = await _orderRepository.GetOrdersByDateRangeAsync(companyId, initialDate, finalDate);
-
-            if (orders == null)
-            {
-                return new()
-                {
-                    Message = "Pedidos não encontrados com o filtro atual.",
-                    Succeeded = false
-                };
-            }
-
             IEnumerable<GetOrderDto> getOrderDtoCollection = GetOrderDto.Map(orders);
 
             return new()

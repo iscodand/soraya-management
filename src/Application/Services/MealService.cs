@@ -19,7 +19,7 @@ namespace Application.Services
 
         public async Task<Response<GetMealDto>> GetMealByIdAsync(int mealId, int userCompanyId)
         {
-            Meal meal = await _mealRepository.GetByIdAsync(mealId);
+            Meal meal = await _mealRepository.DetailMealAsync(mealId);
 
             if (meal == null)
             {
@@ -39,19 +39,13 @@ namespace Application.Services
                 };
             }
 
-            GetMealDto getMealDto = new()
-            {
-                Id = meal.Id,
-                Description = meal.Description,
-                Accompaniments = meal.Accompaniments,
-                CreatedBy = meal.UserId
-            };
+            var mappedMeal = GetMealDto.Map(meal);
 
             return new Response<GetMealDto>()
             {
                 Message = "Sabor encontrado com sucesso",
                 Succeeded = true,
-                Data = getMealDto
+                Data = mappedMeal
             };
         }
 

@@ -15,10 +15,9 @@ namespace Presentation.Controllers
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
 
-        public CompanyController(
-            IAuthenticationService authenticationService,
-            IUserService userService,
-            ICompanyService companyService)
+        public CompanyController(IAuthenticationService authenticationService,
+                                 IUserService userService,
+                                 ICompanyService companyService)
         {
             _authenticationService = authenticationService;
             _userService = userService;
@@ -35,16 +34,17 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _companyService.GetCompaniesAsync();
+
             return View(companies.Data);
         }
 
         [HttpGet("{companyId}")]
-        public async Task<IActionResult> DetailCompany(int companyId)
+        public async Task<IActionResult> Detail(int companyId)
         {
             if (ModelState.IsValid)
             {
                 var result = await _companyService.GetCompanyByIdAsync(companyId);
-                
+
                 if (result.Succeeded)
                 {
                     return View(result.Data);

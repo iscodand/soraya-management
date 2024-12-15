@@ -108,7 +108,8 @@
                     </svg>
                     <h2 class="text-xl font-bold mb-4">Últimos Pedidos</h2>
                 </div>
-                <a asp-controller="Order" asp-action="Orders" class="mb-4">Ver mais pedidos >>></a>
+                <a asp-controller="Order" asp-action="Orders"
+                   class="mb-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Ver mais pedidos >>></a>
             </div>
 
             <div class="relative overflow-x-auto">
@@ -231,7 +232,7 @@
     generateDoughnutChart("meals-chart", mealsData, mealsLabels);
 
     const customersJsonData = @Json.Serialize(data.Customers)
-        const customersLabels = customersJsonData.map(item => item.name);
+                const customersLabels = customersJsonData.map(item => item.name);
     const customersData = customersJsonData.map(item => item.ordersCount);
     generateDoughnutChart("customers-chart", customersData, customersLabels);
 </script>

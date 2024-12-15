@@ -38,6 +38,13 @@ namespace Presentation.Controllers
             return RedirectToAction("Login", "Authentication");
         }
 
+        [HttpGet]
+        [Route("eu")]
+        public async Task<IActionResult> MyProfile()
+        {
+            return View();
+        }
+
         // TODO => get a better name for controller and route
         [HttpGet]
         [Route("data/")]
