@@ -29,7 +29,7 @@ namespace Infrastructure.Data.Repositories
                                    .Include(x => x.Company).AsNoTracking()
                                    .Include(x => x.Orders)
                                    .ThenInclude(x => x.Meal).AsNoTracking()
-                                   .Include(x => x.Orders)
+                                   .Include(x => x.Orders.Skip((1 - 1) * 10).Take(10))
                                    .ThenInclude(x => x.PaymentType).AsNoTracking()
                                    .Where(x => x.Id == customerId).AsNoTracking()
                                    .FirstOrDefaultAsync()

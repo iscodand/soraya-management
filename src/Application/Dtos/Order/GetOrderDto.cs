@@ -23,8 +23,8 @@ namespace Application.Dtos.Order
                 IsPaid = x.IsPaid,
                 PaidAt = x.PaidAt,
                 PaymentType = (x.PaymentType is not null) ? x.PaymentType.Description : "",
-                Meal = (x.Meal is not null) ? x.Meal.Description : "Não Identificado",
-                Customer = (x.Customer is not null) ? x.Customer.Name : "Não Identificado" ,
+                Meal = (x.Meal is not null) ? x.Meal.Description : "NÃ£o Identificado",
+                Customer = (x.Customer is not null) ? x.Customer.Name : "NÃ£o Identificado" ,
                 CreatedBy = "",
                 CreatedAt = x.CreatedAt,
             });;

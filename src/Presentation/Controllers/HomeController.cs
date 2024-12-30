@@ -8,7 +8,7 @@ using Presentation.Controllers.Common;
 
 namespace Presentation.Controllers
 {
-    [Route("/")]
+    [Route("")]
     [Authorize]
     public class HomeController : BaseController
     {
@@ -20,8 +20,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("/")]
-        public async Task<IActionResult> Home()
+        public async Task<IActionResult> Home([FromQuery] string date)
         {
             GetAuthenticatedUserDto authenticatedUser = await AuthenticatedUser.GetAuthenticatedUserAsync();
             SessionService.AddUserSession(authenticatedUser);
@@ -29,8 +28,22 @@ namespace Presentation.Controllers
             if (authenticatedUser is not null)
             {
                 DateTime today = DateTime.Today.Date;
+                DateTime dateFilter = DateTime.Today.Date;
 
-                var result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, today, today);
+                if (date == "today")
+                {
+                    dateFilter = DateTime.Today.Date;
+                }
+                else if (date == "lastMonth")
+                {
+                    dateFilter = DateTime.Today.Date.AddMonths(-1);
+                }
+                else
+                {
+                    dateFilter = DateTime.Today.Date.AddDays(-7);
+                }
+
+                var result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, dateFilter, today);
 
                 return View(result.Data);
             }
@@ -40,46 +53,9 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("eu")]
-        public async Task<IActionResult> MyProfile()
+        public IActionResult MyProfile()
         {
             return View();
-        }
-
-        // TODO => get a better name for controller and route
-        [HttpGet]
-        [Route("data/")]
-        public async Task<IActionResult> GetData(string selectedDate, DateTime initialDate)
-        {
-            // if (ModelState.IsValid)
-            // {
-            //     GetAuthenticatedUserDto authenticatedUser = SessionService.RetrieveUserSession();
-
-            //     DateTime today = DateTime.Today.Date;
-
-            //     Dictionary<string, int> dateMappings = new()
-            //     {
-            //         { "today", 0 },
-            //         { "lastWeek", -7 },
-            //         { "last15Days", -15 },
-            //         { "lastMonth", -365 }
-            //     };
-
-            //     if (dateMappings.TryGetValue(selectedDate, out int daysToSubtract))
-            //     {
-            //         initialDate = today.AddDays(daysToSubtract);
-            //     }
-
-            //     Response<GetDataDto> result = await _dataService.GetDataAsync(authenticatedUser.CompanyId, initialDate, today);
-
-            //     if (result.Succeeded)
-            //     {
-            //         return Json(new { success = true, message = result.Message, data = result.Data });
-            //     }
-
-            //     return Json(new { success = false, message = result.Message });
-            // }
-
-            return Json(new { success = false, message = "Ocorreu um erro ao processar a solicitação" });
         }
     }
 }

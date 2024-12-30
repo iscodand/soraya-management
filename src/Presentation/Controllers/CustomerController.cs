@@ -103,7 +103,8 @@ namespace Presentation.Controllers
                     {
                         Id = result.Data.Id,
                         Name = result.Data.Name,
-                        Phone = result.Data.Phone
+                        Phone = result.Data.Phone,
+                        DetailCustomer = result.Data
                     };
 
                     return View(updateCustomerViewModel);

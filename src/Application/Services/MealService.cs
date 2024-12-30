@@ -121,11 +121,12 @@ namespace Application.Services
 
         public async Task<Response<CreateMealDto>> CreateMealAsync(CreateMealDto createMealDto)
         {
-            if (createMealDto == null)
+            bool mealExists = await _mealRepository.MealExistsByDescriptionAsync(createMealDto.Description, createMealDto.CompanyId);
+            if (mealExists)
             {
                 return new Response<CreateMealDto>()
                 {
-                    Message = "Cliente não pode ser nulo.",
+                    Message = "Esse sabor já está cadastrado",
                     Succeeded = false
                 };
             }

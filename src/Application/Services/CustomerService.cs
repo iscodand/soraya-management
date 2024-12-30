@@ -115,16 +115,7 @@ namespace Application.Services
 
         public async Task<Response<GetCustomerDto>> GetCustomerByIdAsync(int customerId, int userCompanyId)
         {
-            if (userCompanyId <= 0)
-            {
-                return new Response<GetCustomerDto>()
-                {
-                    Message = "Empresa não encontrada. Verifique e tente novamente.",
-                    Succeeded = false
-                };
-            }
-
-            Customer customer = await _customerRepository.GetCustomerByIdAsync(customerId);
+            Customer customer = await _customerRepository.DetailCustomerAsync(customerId);
 
             if (userCompanyId != customer.CompanyId)
             {
@@ -135,35 +126,18 @@ namespace Application.Services
                 };
             }
 
-            GetCustomerDto getCustomerDto = new()
-            {
-                Id = customer.Id,
-                Name = customer.Name,
-                Phone = customer.Phone,
-                IsActive = customer.IsActive,
-                CreatedBy = customer.User.Name
-            };
+            GetCustomerDto mappedCustomer = GetCustomerDto.Map(customer);
 
             return new Response<GetCustomerDto>()
             {
                 Message = "Cliente encontrado com sucesso.",
                 Succeeded = true,
-                Data = getCustomerDto
+                Data = mappedCustomer
             };
         }
 
         public async Task<PagedResponse<IEnumerable<GetCustomerDto>>> GetCustomersByCompanyAsync(int companyId, RequestParameter parameter)
         {
-            // shit validation
-            if (companyId <= 0)
-            {
-                return new()
-                {
-                    Message = "Empresa não encontrada. Verifique e tente novamente.",
-                    Succeeded = false
-                };
-            }
-
             var customers = await _customerRepository.GetByCompanyPagedAsync(
                 companyId,
                 parameter.PageNumber,

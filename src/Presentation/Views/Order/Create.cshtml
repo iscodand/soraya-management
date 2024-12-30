@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="md:w-2/3">
-                    <select asp-for="CustomerId" id="customer-dynamic-select" style="width: 100%;"
+                    <select asp-for="CustomerId" id="customer-dynamic-select" style="width=100%;"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     </select>
                 </div>
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="md:w-2/3">
-                    <select asp-for="MealId" id="dynamic-select" style="width: 100%;"
+                    <select asp-for="MealId" id="dynamic-select" style="width=100%;"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     </select>
                 </div>
@@ -67,7 +67,6 @@
                              SelectList(dropdown.PaymentTypes, "Id",
                              "Description")
                              , new { @class = "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" })
-                    @* <p class="py-2 text-sm text-gray-600">add notes about populating the field</p> *@
                 </div>
             </div>
 
@@ -124,11 +123,11 @@
         $('#dynamic-select').select2({
             language: {
                 inputTooShort: function () {
-                    return "Insira 2 ou mais caracteres...";
+                    return "Insira 1 ou mais caracteres...";
                 }
             },
             placeholder: 'Digite para buscar...',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '/sabores/buscar',
                 dataType: 'json',
@@ -141,8 +140,6 @@
                 processResults: function (response) {
                     return {
                         results: response.data.map(function (item) {
-                            console.log(item)
-
                             return {
                                 id: item.id,
                                 text: item.id + " - " + item.description
@@ -161,7 +158,7 @@
         $('#customer-dynamic-select').select2({
             language: {
                 inputTooShort: function () {
-                    return "Insira 2 ou mais caracteres...";
+                    return "Insira 1 ou mais caracteres...";
                 }
             },
             placeholder: 'Digite para buscar...',
@@ -178,8 +175,6 @@
                 processResults: function (response) {
                     return {
                         results: response.data.map(function (item) {
-                            console.log(item)
-
                             return {
                                 id: item.id,
                                 text: item.id + " - " + item.name
@@ -192,3 +187,20 @@
         });
     });
 </script>
+
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 2.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 2.5rem;
+            color: #374151;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 2.5rem;
+        }
+</style>
